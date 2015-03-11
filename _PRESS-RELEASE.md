@@ -18,27 +18,36 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Kango – Funding for Animal Shelters
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Kango is a non-profit* crowdsourcing platform that enables individual donors to directly fund animal shelters in need.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  Kango allows donors to support animal shelters in need.  Donors can sponsor a particular pet and see their donation in action.  Shelters send donors information about how their donation saved the life of their sponsored animal.  Donors also receive tax deductions, improved public persona, and eternal gratitude.
 
 ## Problem ##
   > Describe the problem your product solves.
+  Animal shelters are overcrowded and do not have enough resources to deal with their high demand.
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  Kango allows donors to directly help animal shelters receive the food, blankets, medical supplies and general upkeep that they need.
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  "Free Puppies*" - Thomas
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Create an account, find a shelter in need, and donate.
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  "I saved a dog's life.  Thanks Kango!" -Lisa
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  Sign up and sponsor an animal today!
