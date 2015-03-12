@@ -30,12 +30,12 @@ module.exports = function (grunt) {
         'public/js/app.min.js': ['public/vendor/jquery/dist/jquery.min.js', 'public/vendor/bootstrap/dist/js/bootstrap.min.js', 'public/js/main.js']
       }
     },
-    less: {
-      src: {
+    sass: {
+      dist: {
         files: [{
           expand: true,
           cwd: 'public/less',
-          src: '**/*.less',
+          src: ['**/*.less'],
           dest: 'public/css',
           ext: '.css'
         }]
@@ -93,5 +93,13 @@ module.exports = function (grunt) {
 
   // Load the tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  grunt.registerTask('default', ['jshint', 'uglify', 'less', 'cssmin', 'concat:css', 'concurrent']);
+
+  grunt.registerTask('default', [
+    'jshint', 
+    'uglify', 
+    'sass', 
+    'cssmin', 
+    'concat:css', 
+    'concurrent'
+    ]);
 };
