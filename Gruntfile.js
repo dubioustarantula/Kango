@@ -41,6 +41,11 @@ module.exports = function (grunt) {
         }]
       }
     },
+    nodemon: {
+      dev: {
+        script: 'app.js'
+      }
+    },
     cssmin: {
       src: {
         files: [{
@@ -95,6 +100,10 @@ module.exports = function (grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('default', [
+
+    ]);
+
+  grunt.registerTask('build', [
     'jshint', 
     'uglify', 
     'sass', 
@@ -102,4 +111,17 @@ module.exports = function (grunt) {
     'concat:css', 
     'concurrent'
     ]);
+
+  grunt.registerTask('deploy', function(n) {
+    if(grunt.option('prod')) {
+      grunt.task.run([
+        'build'
+      ]);
+    } else {
+      grunt.task.run([
+        'build',
+        'nodemon'
+      ]);
+    }
+  });
 };
