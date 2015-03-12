@@ -1,7 +1,5 @@
-var Bookshelf = require('bookshelf');
 var path = require('path');
-
-var db = Bookshelf.initialize({
+var knex = require('knex')({
   client: 'sqlite3',
   connection: {
     host: '127.0.0.1',
@@ -13,7 +11,9 @@ var db = Bookshelf.initialize({
   }
 });
 
-db.knex.schema.hasTable('animals').then(function(exists) {
+var Bookshelf = require('bookshelf')(knex);
+
+knex.schema.hasTable('animals').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('animals', function (animal) {
       animal.increments('id').primary();
@@ -30,7 +30,7 @@ db.knex.schema.hasTable('animals').then(function(exists) {
   }
 });
 
-db.knex.schema.hasTable('animals_users').then(function(exists) {
+knex.schema.hasTable('animals_users').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('animals_users', function (animal_user) {
       animal_user.integer('animal_id').primary();
@@ -41,7 +41,7 @@ db.knex.schema.hasTable('animals_users').then(function(exists) {
   }
 });
 
-db.knex.schema.hasTable('shelters').then(function(exists) {
+knex.schema.hasTable('shelters').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('shelters', function (shelter) {
       shelter.increments('id').primary();
@@ -54,26 +54,27 @@ db.knex.schema.hasTable('shelters').then(function(exists) {
       shelter.integer('telephone', 12);
       shelter.string('email', 150);
       shelter.string('bio');
-      shelter.integer('goal' 10);
-      shelter.integer('raised' 10);
+      shelter.integer('goal', 10);
+      shelter.integer('raised', 10);
     }).then(function (table) {
       console.log('Created Table', table);
     });
   }
 });
 
-db.knex.schema.hasTable('shelters_users').then(function(exists) {
+knex.schema.hasTable('shelters_users').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('shelters_users', function (shelter_user) {
       shelter_user.integer('shelter_id', 10).primary();
       shelter_user.integer('user_id', 10);
+      shelter_user.integer('donation', 10);
     }).then(function (table) {
       console.log('Created Table', table);
     });
   }
 });
 
-db.knex.schema.hasTable('users').then(function(exists) {
+knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('users', function (user) {
       user.increments('id').primary();
@@ -94,4 +95,4 @@ db.knex.schema.hasTable('users').then(function(exists) {
   }
 });
 
-module.exports = db;
+module.exports = knex;

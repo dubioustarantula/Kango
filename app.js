@@ -2,16 +2,17 @@
  * Module dependencies.
  */
 
-var express        = require('express'),
-    path           = require('path'),
-    logger         = require('morgan'),
-    bodyParser     = require('body-parser'),
-    compress       = require('compression'),
-    favicon        = require('static-favicon'),
-    methodOverride = require('method-override'),
-    errorHandler   = require('errorhandler'),
-    config         = require('./config'),
-    routes         = require('./routes');
+var express = require('express');
+var path = require('path');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var compress = require('compression');
+var favicon = require('static-favicon');
+var methodOverride = require('method-override');
+var errorHandler = require('errorhandler');
+var config = require('./config');
+var routes = require('./routes');
+var db = require('./app/config');
 
 
 var app = express();
