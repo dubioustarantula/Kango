@@ -3,25 +3,25 @@ var config = {
     server: {
       port: 3000,
     },
-    database: {
-      url: 'mongodb://localhost/greenfield_dev'
-    }
+    // database: {
+    //   url: 'mongodb://localhost/greenfield_dev'
+    // }
   },
   testing: {
     server: {
       port: 3001
     },
-    database: {
-      url: 'mongodb://localhost/greenfield_test'
-    }
+    // database: {
+    //   url: 'mongodb://localhost/greenfield_test'
+    // }
   },
   production: {
     server: {
       port: 8080
     },
-    database: {
-      url: 'mongodb://localhost/greenfield'
-    }
+    // database: {
+    //   url: 'mongodb://localhost/greenfield'
+    // }
   }
 };
 
