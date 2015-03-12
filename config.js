@@ -1,7 +1,7 @@
 var config = {
   development: {
     server: {
-      port: 3000,
+      port: 3000
     },
     // database: {
     //   url: 'mongodb://localhost/greenfield_dev'
@@ -17,7 +17,7 @@ var config = {
   },
   production: {
     server: {
-      port: 8080
+      port: process.env.port
     },
     // database: {
     //   url: 'mongodb://localhost/greenfield'
