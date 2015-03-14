@@ -8,10 +8,10 @@ var fs = require('fs');
 var url = require('url');
 
 var shelterList = {
-    'berkley': {name: 'berkley'},
-    'sunnyvale': {},
-    'oakland': {},
-    'napa': {}
+    'berkley': {name: 'Berkley', bio: 'cool stuff', img: 'http://firebrand.me.berkeley.edu/~combustion/uploads/Comb_Res_Lab/img/berkeleyCampanile.jpg'},
+    'sunnyvale': {name: 'Sunnvale', bio: 'boring stuff', img: 'http://www.newcyberian.com/images/sunnyvale.jpg'},
+    'oakland': {name: 'Oakland', bio: 'guns n stuff', img: 'http://www.layoverguide.com/wp-content/uploads/2012/07/Oakland-view-of-Bay-Bridge-and-San-Francisco.jpg'},
+    'napa': {name: 'Napa', bio:'wine n stuff', img: 'http://www.manzanitamtb.com/wp-content/uploads/2013/03/Napa-Vineyard.jpg'}
 };
 
 exports.index = function(req, res) {
