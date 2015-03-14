@@ -5,13 +5,14 @@
 
 var express = require('express');
 var fs = require('fs');
+var url = require('url');
 
-var productList = [
-    {product: "Salt", about: "Salt is a mineral substance composed primarily of sodium chloride (NaCl), a chemical compound belonging to the larger class of ionic salts",quantity:"1"},
-    {product: "Sugar", about: "Sugar is the generalized name for sweet, short-chain, soluble carbohydrates, many of which are used in food.",quantity:"2"},
-    {product: "Spice", about: "A spice is a dried seed, fruit, root, bark, or vegetable substance primarily used for flavoring, coloring or preserving food.",quantity:"3"},
-    {product: "Bread", about: "Bread is a staple food prepared from a dough of flour and water",quantity:"4"}
-];
+var shelterList = {
+    'berkley': {name: 'Berkley', bio: 'cool stuff', img: 'http://firebrand.me.berkeley.edu/~combustion/uploads/Comb_Res_Lab/img/berkeleyCampanile.jpg'},
+    'sunnyvale': {name: 'Sunnvale', bio: 'boring stuff', img: 'http://www.newcyberian.com/images/sunnyvale.jpg'},
+    'oakland': {name: 'Oakland', bio: 'guns n stuff', img: 'http://www.layoverguide.com/wp-content/uploads/2012/07/Oakland-view-of-Bay-Bridge-and-San-Francisco.jpg'},
+    'napa': {name: 'Napa', bio:'wine n stuff', img: 'http://www.manzanitamtb.com/wp-content/uploads/2013/03/Napa-Vineyard.jpg'}
+};
 
 exports.index = function(req, res) {
     res.set('Content-Type', 'text/html');
@@ -27,8 +28,10 @@ exports.index = function(req, res) {
     });
 };
 
-exports.getProducts = function(req, res) {
+exports.getShelters = function(req, res) {
+    var shelter = url.parse(req.url);
+    shelter = shelter.query;
     res.set('Content-Type', 'application/json');
-
-    res.send(productList);
+    console.log(shelterList[shelter]);
+    res.send(shelterList[shelter]);
 };
