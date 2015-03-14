@@ -19,6 +19,7 @@ knex.schema.hasTable('animals').then(function(exists) {
       animal.increments('id').primary();
       animal.string('shelter_id', 255);
       animal.string('name', 255);
+      animal.blob('image');
       animal.string('species', 100);
       animal.string('breed', 255);
       animal.integer('age');
@@ -46,6 +47,7 @@ knex.schema.hasTable('shelters').then(function(exists) {
     db.knex.schema.createTable('shelters', function (shelter) {
       shelter.increments('id').primary();
       shelter.string('name', 150);
+      shelter.blob('image');
       shelter.string('address_1', 150);
       shelter.string('address_2', 150);
       shelter.string('city', 150);
@@ -79,9 +81,14 @@ knex.schema.hasTable('users').then(function(exists) {
     db.knex.schema.createTable('users', function (user) {
       user.increments('id').primary();
       user.string('username', 150);
+      user.string('password', 150);
+      user.blob('image');
+      user.string('twitter_id', 150);
+      user.string('twitter_token', 150);
+      user.string('twitter_displayname', 150);
+      user.string('twitter_handle', 150);
       user.string('firstname', 150);
       user.string('surname', 150);
-      user.string('password', 150);
       user.string('email', 150);
       user.string('address_1', 150);
       user.string('address_2', 150);
