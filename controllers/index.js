@@ -29,9 +29,7 @@ exports.index = function(req, res) {
 };
 
 exports.getShelters = function(req, res) {
-    var shelter = url.parse(req.url);
-    shelter = shelter.query;
+    var shelter = url.parse(req.url).query;
     res.set('Content-Type', 'application/json');
-    console.log(shelterList[shelter]);
     res.send(shelterList[shelter]);
 };
