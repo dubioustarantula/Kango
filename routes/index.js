@@ -15,7 +15,7 @@ var indexRouter = express.Router();
  */
 indexRouter.route('/')
   .all(controllers.index);
-indexRouter.route('/products')
-  .all(controllers.getProducts);
+indexRouter.route('/shelters')
+  .all(controllers.getShelters);
 
 exports.indexRouter = indexRouter;
