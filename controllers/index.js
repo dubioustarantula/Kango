@@ -1,9 +1,4 @@
-/**
- * do something with the user model
- * var User = require('../models/user');
- */
-
-var express = require('express');
+// var express = require('express');
 var fs = require('fs');
 var url = require('url');
 
@@ -19,8 +14,8 @@ exports.index = function(req, res) {
 
     fs.readFile(__dirname + '/../views/grid.html', function(err, data) {
         if (err) {
-            console.log("err: " + err);
-            res.send("<html><head/><body>empty: " + __dirname + "</body></html>");
+            console.log('err: ' + err);
+            res.send('<html><head/><body>empty: ' + __dirname + '</body></html>');
             return;
         }
 
@@ -29,9 +24,7 @@ exports.index = function(req, res) {
 };
 
 exports.getShelters = function(req, res) {
-    var shelter = url.parse(req.url);
-    shelter = shelter.query;
+    var shelter = url.parse(req.url).query;
     res.set('Content-Type', 'application/json');
-    console.log(shelterList[shelter]);
     res.send(shelterList[shelter]);
 };
