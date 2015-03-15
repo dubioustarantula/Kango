@@ -12,7 +12,7 @@ var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var config = require('./config');
 var routes = require('./routes');
-var db = require('./app/config');
+// var db = require('./app/config');
 
 
 var app = express();

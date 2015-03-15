@@ -2,17 +2,15 @@ module.exports = function (grunt) {
   var config = {
     jshint: {
       options: {
-        ignores: ['node_modules/**', 'public/vendor/**', '**/*.min.js'],
+        ignores: ['node_modules/**', 'public/vendor/**', '**/*.min.js', './app/config.js'],
         jshintrc: '.jshintrc'
       },
       gruntfile: 'Gruntfile.js',
-      server: ['controllers/**/*.js', 'models/**/*.js', 'routes/**/*.js', 'app.js', 'config.js'],
+      server: ['app/**/*.js', 'controllers/**/*.js', 'models/**/*.js', 'routes/**/*.js', 'app.js', 'config.js'],
       client: 'public/js/**/*.js'
     },
     concat: {
       css: {
-        // add your css files over here to concatenate all css files
-        // let's save our site users some bandwith
         files: {
           src: ['public/vendor/bootstrap/dist/css/bootstrap.min.css', 'public/css/styles.min.css'],
           dest: 'public/css/app.styles.min.css'
@@ -26,7 +24,6 @@ module.exports = function (grunt) {
         }
       },
       target: {
-        // add your js files over here to minify them into one javascript source file
         'public/js/app.min.js': ['public/vendor/jquery/dist/jquery.min.js', 'public/vendor/bootstrap/dist/js/bootstrap.min.js', 'public/js/main.js']
       }
     },
@@ -64,7 +61,7 @@ module.exports = function (grunt) {
     },
     watch: {
       all: {
-        files: ['public/**/*', 'views/**', '!**/node_modules/**', '!public/vendor/**/*', '!**/*.min.*'],
+        files: ['public/**/*', 'views/**', 'app/**/*', '!**/node_modules/**', '!public/vendor/**/*', '!**/*.min.*'],
         options: {
           livereload: 3006
         }
@@ -81,9 +78,9 @@ module.exports = function (grunt) {
         files: '<%= jshint.server %>',
         tasks: 'jshint:server'
       },
-      less: {
-        files: ['public/less/**/*.less'],
-        tasks: ['less', 'cssmin', 'concat:css']
+      sass: {
+        files: ['public/sass/**/*.sass'],
+        tasks: ['sass', 'cssmin', 'concat:css']
       }
     },
     concurrent: {
@@ -100,19 +97,20 @@ module.exports = function (grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('default', [
-
+    'jshint',
+    'nodemon'
     ]);
 
   grunt.registerTask('build', [
     'jshint', 
     'uglify', 
-    'sass', 
+    // 'sass', 
     'cssmin', 
     'concat:css', 
     'concurrent'
     ]);
 
-  grunt.registerTask('deploy', function(n) {
+  grunt.registerTask('deploy', function() {
     if(grunt.option('prod')) {
       grunt.task.run([
         'build'

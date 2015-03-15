@@ -15,7 +15,7 @@ var Bookshelf = require('bookshelf')(knex);
 
 knex.schema.hasTable('animals').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('animals', function (animal) {
+    knex.schema.createTable('animals', function (animal) {
       animal.increments('id').primary();
       animal.string('shelter_id', 255);
       animal.string('name', 255);
@@ -33,7 +33,7 @@ knex.schema.hasTable('animals').then(function(exists) {
 
 knex.schema.hasTable('animals_users').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('animals_users', function (animal_user) {
+    knex.schema.createTable('animals_users', function (animal_user) {
       animal_user.integer('animal_id').primary();
       animal_user.integer('user_id');
     }).then(function (table) {
@@ -44,7 +44,7 @@ knex.schema.hasTable('animals_users').then(function(exists) {
 
 knex.schema.hasTable('shelters').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('shelters', function (shelter) {
+    knex.schema.createTable('shelters', function (shelter) {
       shelter.increments('id').primary();
       shelter.string('name', 150);
       shelter.blob('image');
@@ -66,7 +66,7 @@ knex.schema.hasTable('shelters').then(function(exists) {
 
 knex.schema.hasTable('shelters_users').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('shelters_users', function (shelter_user) {
+    knex.schema.createTable('shelters_users', function (shelter_user) {
       shelter_user.integer('shelter_id', 10).primary();
       shelter_user.integer('user_id', 10);
       shelter_user.integer('donation', 10);
@@ -78,7 +78,7 @@ knex.schema.hasTable('shelters_users').then(function(exists) {
 
 knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('users', function (user) {
+    knex.schema.createTable('users', function (user) {
       user.increments('id').primary();
       user.string('username', 150);
       user.string('password', 150);
