@@ -1,8 +1,9 @@
-var db = require('../config');
 var Shelter = require('./shelter');
 var User = require('./user');
 
-var ShelterUser = db.Model.extend({
+var bookshelf = app.get('bookshelf');
+
+var ShelterUser = bookshelf.Model.extend({
   tableName: 'urls',
   shelter: function() {
     return this.belongsTo(Shelter, 'shelter_id');
