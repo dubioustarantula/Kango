@@ -10,12 +10,17 @@ var controllers = require('../controllers');
  */
 var indexRouter = express.Router();
 
+
+
 /**
  * this accepts all request methods to the `/` path
  */
 indexRouter.route('/')
   .all(controllers.index);
-indexRouter.route('/shelters')
-  .all(controllers.getShelters);
+
+indexRouter.get('/shelters', controllers.getShelters);
+indexRouter.post('/shelter', controllers.postShelter);
+
+indexRouter.get('/users', controllers.getUsers);
 
 exports.indexRouter = indexRouter;

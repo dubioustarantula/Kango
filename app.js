@@ -5,6 +5,7 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+var url = require('url');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var favicon = require('static-favicon');
@@ -29,6 +30,10 @@ app
   .use(favicon())
   .use(logger('dev'))
   .use(bodyParser())
+  .use(function(req, res, next) {
+    req.parsed = url.parse(req.url);
+    next();
+  })
   .use(methodOverride())
   .use(express.static(path.join(__dirname, 'public')))
   .use(routes.indexRouter);
