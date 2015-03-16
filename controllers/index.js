@@ -38,7 +38,11 @@ exports.getShelters = function(req, res) {
 };
 
 exports.postShelter = function(req, res) {
+  var data = req.body;
 
+  //insert data to db
+
+  res.send(201, "Shelter has been added to our database");
 };
 
 exports.getUsers = function(req,res) {
