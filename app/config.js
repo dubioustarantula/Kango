@@ -19,7 +19,7 @@ bookshelf.knex.schema.hasTable('animals').then(function(exists) {
       animal.increments('id').primary();
       animal.string('shelter_id', 255);
       animal.string('name', 255);
-      animal.string('image', 255);
+      animal.string('image_url', 255);
       animal.string('species', 100);
       animal.string('breed', 255);
       animal.integer('age');
@@ -47,7 +47,7 @@ bookshelf.knex.schema.hasTable('shelters').then(function(exists) {
     bookshelf.knex.schema.createTable('shelters', function (shelter) {
       shelter.increments('id').primary();
       shelter.string('name', 150);
-      shelter.string('image', 255);
+      shelter.string('image_url', 255);
       shelter.string('address_1', 150);
       shelter.string('address_2', 150);
       shelter.string('city', 150);
@@ -82,7 +82,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       user.increments('id').primary();
       user.string('username', 150);
       user.string('password', 150);
-      user.string('image', 255);
+      user.string('image_url', 255);
       user.string('twitter_id', 150);
       user.string('twitter_token', 150);
       user.string('twitter_displayname', 150);
