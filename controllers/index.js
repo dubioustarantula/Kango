@@ -42,6 +42,9 @@ exports.postShelter = function(req, res) {
 };
 
 exports.getUsers = function(req,res) {
-
+  var query = req.parsed.query;
+  res.set('Content-Type', 'application/json');
+  //db queries here
+  userList[query] ? res.send(userList[query]) : res.send(userList);
 };
 
