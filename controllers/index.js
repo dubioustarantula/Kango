@@ -19,10 +19,21 @@ exports.index = function(req, res) {
 };
 
 exports.getShelters = function(req, res) {
-  // var query = req.parsed.query;
-  res.set('Content-Type', 'application/json');
-
-  //add db queries here
+  var query = req.parsed.query;
+  
+  if(query) {
+    new Shelter({ name: query }).fetch().then(function(shelter) {
+      if(shelter) {
+        res.send(200, shelter);
+      } else {
+        res.send(404, 'Shelter name does not appear in our database');
+      }
+    });
+  } else {
+    Shelters.reset().fetch().then(function(shelters) {
+        res.send(200, shelters.models);
+    });
+  }
 };
 
 exports.postShelter = function(req, res) {
