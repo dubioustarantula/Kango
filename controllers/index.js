@@ -1,5 +1,6 @@
 var fs = require('fs');
 var url = require('url');
+var dbHelper = require('../lib/dbutils');
 
 var bookshelf = require('../app/config');
 var Shelter = require('../app/models/shelter');
@@ -49,34 +50,13 @@ exports.postShelter = function(req, res) {
     if (found) {
       res.send(200, found);
     } else {
-      var shelter = new Shelter({
-        name: name,
-        image_url: data.imageUrl,
-        address_1: data.address1,
-        city: data.city,
-        state: data.state,
-        zip: data.zip,
-        email: data.email,
-        bio: data.bio,
-        goal: data.goal,
-        raised: 0
-      });
-        
-      if(data.address_2) {
-        shelter.address_2 = data.address2;
-      }
-      if(data.telephone) {
-        shelter.telephone = data.telephone;
-      }
-
-      shelter.save().then(function(newShelter) {
+      dbHelper.createShelter(name, data, function(newShelter) {
         Shelters.add(newShelter);
         res.send(200, newShelter);
       });
     }
   });
 };  
-
 
 exports.getUsers = function(req,res) {
   var query = req.parsed.query;
