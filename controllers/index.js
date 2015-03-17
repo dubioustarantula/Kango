@@ -3,8 +3,10 @@ var dbHelper = require('../lib/dbutils');
 
 var Shelter = require('../app/models/shelter');
 var User = require('../app/models/user');
+var Donation = require('../app/models/donation');
 var Shelters = require('../app/collections/shelters');
 var Users = require('../app/collections/users');
+var Donations = require('../app/collections/donations');
 
 exports.index = function(req, res) {
   res.set('Content-Type', 'text/html');
@@ -21,10 +23,10 @@ exports.index = function(req, res) {
 };
 
 exports.getShelters = function(req, res) {
-  var query = req.parsed.query;
+  var sheltername = req.parsed.query;
   
-  if(query) {
-    new Shelter({ sheltername: query }).fetch().then(function(shelter) {
+  if(sheltername) {
+    new Shelter({ sheltername: sheltername }).fetch().then(function(shelter) {
       if(shelter) {
         res.send(200, shelter);
       } else {
@@ -55,10 +57,10 @@ exports.postShelter = function(req, res) {
 };  
 
 exports.getUsers = function(req,res) {
-  var query = req.parsed.query;
+  var username = req.parsed.query;
 
-  if(query) {
-    new User({ username: query }).fetch().then(function(user) {
+  if(username) {
+    new User({ username: username }).fetch().then(function(user) {
       if(user) {
         res.send(200, user);
       } else {
@@ -73,13 +75,24 @@ exports.getUsers = function(req,res) {
 };
 
 exports.getDonations = function(req, res) {
+  var sheltername = req.parsed.query;
 
+  new Donation({ sheltername: sheltername }).fetchAll().then(function(donations) {
+    if(donations) {
+      donations.models.sort(function(a, b) {
+        return b.attributes.donation > a.attributes.donation;
+      });
+      res.send(200, donations);
+    } else {
+      res.send(404, 'Username does not appear in our database');
+    }
+  });
 };
 
 exports.postDonation = function(req, res) {
   var data = req.body;
-  dbHelper.createDonation(sheltername, data, function(newShelter) {
-    Shelters.add(newShelter);
-    res.send(200, newShelter);
+  dbHelper.createDonation(data, function(newDonation) {
+    Donations.add(newDonation);
+    res.send(200, newDonation);
   });
 };
