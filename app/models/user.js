@@ -1,10 +1,11 @@
-var ShelterUser = require('./shelteruser');
+var Donation = require('./donation');
 var bookshelf = require('../config');
 
 var User = bookshelf.Model.extend({
+  
   tableName: 'users',
-  shelteruser: function() {
-    return this.hasMany(ShelterUser);
+  donation: function() {
+    return this.hasMany(Donation);
   },
   initialize: function(){
     console.log('user initialized');

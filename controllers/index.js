@@ -77,5 +77,9 @@ exports.getDonations = function(req, res) {
 };
 
 exports.postDonation = function(req, res) {
-
+  var data = req.body;
+  dbHelper.createDonation(sheltername, data, function(newShelter) {
+    Shelters.add(newShelter);
+    res.send(200, newShelter);
+  });
 };

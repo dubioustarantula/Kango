@@ -64,9 +64,9 @@ bookshelf.knex.schema.hasTable('shelters').then(function(exists) {
   }
 });
 
-bookshelf.knex.schema.hasTable('shelters_users').then(function(exists) {
+bookshelf.knex.schema.hasTable('donations').then(function(exists) {
   if (!exists) {
-    bookshelf.knex.schema.createTable('shelters_users', function (shelter_user) {
+    bookshelf.knex.schema.createTable('donations', function (shelter_user) {
       shelter_user.integer('sheltername', 10).primary();
       shelter_user.integer('username', 10);
       shelter_user.integer('donation', 10);
