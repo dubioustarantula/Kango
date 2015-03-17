@@ -2,7 +2,9 @@ var fs = require('fs');
 var dbHelper = require('../lib/dbutils');
 
 var Shelter = require('../app/models/shelter');
+var User = require('../app/models/user');
 var Shelters = require('../app/collections/shelters');
+var Users = require('../app/collections/users');
 
 exports.index = function(req, res) {
   res.set('Content-Type', 'text/html');
@@ -53,9 +55,21 @@ exports.postShelter = function(req, res) {
 };  
 
 exports.getUsers = function(req,res) {
-  // var query = req.parsed.query;
-  res.set('Content-Type', 'application/json');
-  //db queries here
+  var query = req.parsed.query;
+
+  if(query) {
+    new User({ username: query }).fetch().then(function(user) {
+      if(user) {
+        res.send(200, user);
+      } else {
+        res.send(404, 'Username does not appear in our database');
+      }
+    });
+  } else {
+    Users.reset().fetch().then(function(users) {
+        res.send(200, users.models);
+    });
+  }
 };
 
 exports.getDonations = function(req, res) {
