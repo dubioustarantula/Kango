@@ -1,7 +1,7 @@
-var db = require('../config');
+var bookshelf = require('../config');
 var Shelter = require('../models/shelter');
 
-var Shelters = new db.Collection();
+var Shelters = new bookshelf.Collection();
 
 Shelters.model = Shelter;
 
