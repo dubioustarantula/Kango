@@ -1,7 +1,7 @@
-var db = require('../config');
+var bookshelf = require('../config');
 var User = require('../models/user');
 
-var Users = new db.Collection();
+var Users = new bookshelf.Collection();
 
 Users.model = User;
 

@@ -1,6 +1,10 @@
 var fs = require('fs');
 var url = require('url');
 
+var bookshelf = require('../app/config');
+var Shelter = require('../app/models/shelter');
+var Shelters = require('../app/collections/shelters');
+
 var shelterList = {
   'berkley': {name: 'Berkley', bio: 'cool stuff', img: 'http://firebrand.me.berkeley.edu/~combustion/uploads/Comb_Res_Lab/img/berkeleyCampanile.jpg'},
   'sunnyvale': {name: 'Sunnvale', bio: 'boring stuff', img: 'http://www.newcyberian.com/images/sunnyvale.jpg'},
@@ -39,11 +43,40 @@ exports.getShelters = function(req, res) {
 
 exports.postShelter = function(req, res) {
   var data = req.body;
+  var name = req.parsed.query;
 
-  //insert data to db
+  new Shelter({ name: name }).fetch().then(function(found) {
+    if (found) {
+      res.send(200, found);
+    } else {
+      var shelter = new Shelter({
+        name: name,
+        image_url: data.imageUrl,
+        address_1: data.address1,
+        city: data.city,
+        state: data.state,
+        zip: data.zip,
+        email: data.email,
+        bio: data.bio,
+        goal: data.goal,
+        raised: 0
+      });
+        
+      if(data.address_2) {
+        shelter.address_2 = data.address2;
+      }
+      if(data.telephone) {
+        shelter.telephone = data.telephone;
+      }
 
-  res.send(201, "Shelter has been added to our database");
-};
+      shelter.save().then(function(newShelter) {
+        Shelters.add(newShelter);
+        res.send(200, newShelter);
+      });
+    }
+  });
+};  
+
 
 exports.getUsers = function(req,res) {
   var query = req.parsed.query;

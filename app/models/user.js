@@ -1,6 +1,5 @@
 var ShelterUser = require('./shelteruser');
-
-var bookshelf = app.get('bookshelf');
+var bookshelf = require('../config');
 
 var User = bookshelf.Model.extend({
   tableName: 'users',

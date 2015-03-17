@@ -1,6 +1,5 @@
 var ShelterUser = require('./shelteruser.js');
-
-var bookshelf = app.get('bookshelf');
+var bookshelf = require('../config');
 
 var Shelter = bookshelf.Model.extend({
 
