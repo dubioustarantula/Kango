@@ -24,7 +24,7 @@ exports.getShelters = function(req, res) {
   var query = req.parsed.query;
   
   if(query) {
-    new Shelter({ name: query }).fetch().then(function(shelter) {
+    new Shelter({ sheltername: query }).fetch().then(function(shelter) {
       if(shelter) {
         res.send(200, shelter);
       } else {
@@ -40,13 +40,13 @@ exports.getShelters = function(req, res) {
 
 exports.postShelter = function(req, res) {
   var data = req.body;
-  var name = req.parsed.query;
+  var sheltername = req.parsed.query;
 
-  new Shelter({ name: name }).fetch().then(function(found) {
+  new Shelter({ sheltername: sheltername }).fetch().then(function(found) {
     if (found) {
       res.send(200, found);
     } else {
-      dbHelper.createShelter(name, data, function(newShelter) {
+      dbHelper.createShelter(sheltername, data, function(newShelter) {
         Shelters.add(newShelter);
         res.send(200, newShelter);
       });
