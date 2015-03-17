@@ -12,14 +12,14 @@ var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var config = require('./config');
 var routes = require('./routes');
-// var db = require('./app/config');
-
+var bookshelf = require('./app/config');
 
 var app = express();
 
 /**
  * Express configuration.
  */
+app.set('bookshelf', bookshelf);
 app.set('port', config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
