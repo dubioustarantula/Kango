@@ -11,7 +11,7 @@ indexRouter.get('/shelters', controllers.getShelters);
 
 indexRouter.get('/users', controllers.getUsers);
 
-indexRouter.post('/donation', controllers.postDonation);
-indexRouter.get('/donation', controllers.getDonations);
+indexRouter.post('/donate', controllers.postDonation);
+indexRouter.get('/donations', controllers.getDonations);
 
 exports.indexRouter = indexRouter;
