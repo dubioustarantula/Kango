@@ -1,6 +1,9 @@
-var db = require('../config');
 var ShelterUser = require('./shelteruser.js');
-var Shelter = db.Model.extend({
+
+var bookshelf = app.get('bookshelf');
+
+var Shelter = bookshelf.Model.extend({
+
   tableName: 'shelters',
   shelteruser: function() {
     return this.hasMany(ShelterUser);
