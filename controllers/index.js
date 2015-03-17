@@ -52,3 +52,10 @@ exports.getUsers = function(req,res) {
   userList[query] ? res.send(userList[query]) : res.send(userList);
 };
 
+exports.getDonations = function(req, res) {
+
+};
+
+exports.postDonation = function(req, res) {
+
+};
