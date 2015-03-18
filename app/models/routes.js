@@ -1,8 +1,8 @@
 module.exports = function(app, passport) {
 
     //HOME PAGE
-    app.get('/', function(req, res) {
-        res.render('index.html'); //this was originally index.ejs, ask about this
+    app.get('/home', function(req, res) { //this was originally just '/'
+        res.render('home.ejs'); //this was originally index.ejs, ask about this
     });
 
     // LOGIN
