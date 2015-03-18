@@ -1,6 +1,6 @@
 var React = require('react');
 var main = require('./App.jsx');
-
+// var $ = require('jquery');
 // (function ($) {
 //   $(document).ready(function () {
 //     // you awesome code goes here
