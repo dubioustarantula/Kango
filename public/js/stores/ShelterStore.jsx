@@ -68,6 +68,7 @@ var ShelterStore = Reflux.createStore({
 		});
 	},
 	getShelters: function() {
+		console.log('shelters', shelters);
 		return shelters;
 	}
 });

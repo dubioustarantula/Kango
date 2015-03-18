@@ -3,8 +3,16 @@ body {
   font-weight: normal;
   -webkit-font-smoothing: antialiased; }
 
-nav li {
-  display: inline-block;
-  list-style: none; }
+nav {
+	& li {
+	  display: inline-block;
+	  list-style: none; 
+	}
+}
 
+a.navbar-brand {
+	font-weight: normal;
+	letter-spacing: 0.05em;
+	font-family: 'Quicksand', sans-serif;
+}
 /*# sourceMappingURL=styles.css.map */

@@ -81,10 +81,10 @@ module.exports = function (grunt) {
     },
     watch: {
       all: {
-        files: ['public/**/*', 'views/**', 'app/**/*', '!**/node_modules/**', '!public/vendor/**/*', '!**/*.min.*'],
-        options: {
-          livereload: 3006
-        }
+        files: ['public/**/*', 'views/**', 'app/**/*', '!**/node_modules/**', '!public/vendor/**/*', '!**/*.min.*']
+        // options: {
+        //   livereload: 3006
+        // }
       },
       gruntfile: {
         files: 'Gruntfile.js',
