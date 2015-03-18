@@ -59,6 +59,26 @@ module.exports = function (grunt) {
         'save-live-edit': true
       }
     },
+    browserify: {
+      dev: {
+        options: {
+          debug: true,
+          transform: ['reactify']
+        },
+        files: {
+          'public/build/build.js': ['public/js/**/*.jsx', 'public/js/**/*.js']
+        }
+      },
+      build: {
+        options: {
+          debug: false,
+          transform: ['reactify']
+        },
+        files: {
+          'public/build/build.js': ['public/js/**/*.jsx', 'public/js/**/*.js']
+        }
+      }
+    },
     watch: {
       all: {
         files: ['public/**/*', 'views/**', 'app/**/*', '!**/node_modules/**', '!public/vendor/**/*', '!**/*.min.*'],
@@ -81,6 +101,10 @@ module.exports = function (grunt) {
       sass: {
         files: ['public/sass/**/*.sass'],
         tasks: ['sass', 'cssmin', 'concat:css']
+      },
+      browserify: {
+        files: ['public/js/**/*.js', 'public/js/**/*.jsx'],
+        tasks: ['browserify:dev']
       }
     },
     concurrent: {
@@ -106,6 +130,7 @@ module.exports = function (grunt) {
     // 'sass', 
     'cssmin', 
     'concat:css', 
+    'browserify',
     'concurrent'
     ]);
 
