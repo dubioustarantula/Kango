@@ -1,5 +1,9 @@
 ###Node###
 
+# Misc.
+src
+dest
+
 # Logs
 logs
 *.log
