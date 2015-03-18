@@ -1,12 +1,12 @@
 /** @jsx React.DOM */
 var React = require('react');
 var request = require('superagent');
-var ShelterStore = require('./stores/ShelterStore.jsx')
 
 var Main = React.createClass({
 	getInitialState: function() {
 		return {
-			nearbyShelters: ShelterStore.getShelters()
+			shelter: "Berkeley",
+			nearbyShelters: ['San Francisco', 'West Oakland', 'South Bay']
 		}
 	},
 	addShelter: function(shelter) {
