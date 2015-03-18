@@ -3,26 +3,25 @@
 <head>
     <title>Kango</title>
     <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css"/>
-    <!-- your own minifed css -->
-    <link href='http://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>    
     <link rel="stylesheet" href="/css/styles.min.css"/>    
 </head>
 <body>
-<nav>
+<nav class="navbar navbar-default">
   <div class='container'>
-    <ul>
-      <li>Home</li>
-      <li>Shelters</li>
-      <li>Account</li>
+    <div class="navbar-header">
+      <a href="#" class="navbar-brand">kango</a>  
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Shelters</a></li>
+      <li><button type="button" class="btn btn-default navbar-btn">Sign In</button></li>
     </ul>
-  </div>
-</nav>
+  </div> <!-- /.container -->
+</nav> <!-- /.navbar -->
+
 <div id="content"></div>
-<footer>
-  <div class="container">
-    Footer.
-  </div>
-</footer>
+
 <!-- Dependencies -->
 <script src="build/build.js"></script>
 

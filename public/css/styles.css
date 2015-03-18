@@ -7,4 +7,11 @@ nav li {
   display: inline-block;
   list-style: none; }
 
+a.navbar-brand {
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  font-family: 'Quicksand', sans-serif; }
+
+/*# sourceMappingURL=styles.css.map */
+
 /*# sourceMappingURL=styles.css.map */
