@@ -31,8 +31,8 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: 'public/less',
-          src: ['**/*.less'],
+          cwd: 'public/sass',
+          src: ['**/*.scss'],
           dest: 'public/css',
           ext: '.css'
         }]
@@ -99,7 +99,7 @@ module.exports = function (grunt) {
         tasks: 'jshint:server'
       },
       sass: {
-        files: ['public/sass/**/*.sass'],
+        files: ['public/sass/**/*.scss'],
         tasks: ['sass', 'cssmin', 'concat:css']
       },
       browserify: {
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'jshint', 
     'uglify', 
-    // 'sass', 
+    'sass', 
     'cssmin', 
     'concat:css', 
     'browserify',
