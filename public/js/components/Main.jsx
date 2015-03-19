@@ -1,7 +1,6 @@
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
-
 var Main = React.createClass({
 	getInitialState: function() {
 		return {
