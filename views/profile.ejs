@@ -28,6 +28,10 @@
                         <strong>email</strong>: <%= user.local.email %><br>
                         <strong>password</strong>: <%= user.local.password %>
                     </p>
+                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                    <% } else { %>
+                    <a href="/connect/local" class="btn btn-default">Connect Local</a>
+                <% } %>
 
             </div>
         </div>
@@ -36,13 +40,18 @@
         <div class="col-sm-6">
             <div class="well">
                 <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
-
+                    <!-- check if the user has this token (is the user authenticated with this social account) -->
+                    <% if (user.twitter.token) { %>
                     <p>
                         <strong>id</strong>: <%= user.twitter.id %><br>
                         <strong>token</strong>: <%= user.twitter.token %><br>
                         <strong>username</strong>: <%= user.twitter.username %><br>
                         <strong>displayName</strong>: <%= user.twitter.displayName %>
                     </p>
+                    <a href="/unlink/twitter" class="btn btn-primary">Unlink</a>
+                <% } else { %>
+                    <a href="/connect/twitter" class="btn btn-primary">Connect Twitter</a>
+                <% } %>
 
             </div>
         </div>

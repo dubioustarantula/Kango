@@ -59,7 +59,7 @@ module.exports = function(app, passport) {
 
     // TWITTER ROUTES
     // route for twitter authentication and login
-    app.get('/auth/twitter', passport.authenticate('twitter'));
+    app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
 
     // handle the callback after twitter has authenticated the user
     app.get('/auth/twitter/callback',
@@ -95,6 +95,30 @@ module.exports = function(app, passport) {
                 failureRedirect : '/'
             }));
 
+
+    //UNLINK ACCOUNTS
+    //used to unlink acounts.  For social accounts, just remove the token
+    //For local account, remove email and password
+    //User account will stay active in case they want to reconnect in the future
+
+        //local
+        app.get('/unlink/local', function(req, res) {
+            var user = req.user;
+            user.local.email = undefined;
+            user.local.password = undefined;
+            user.save(function(err) {
+                res.redirect('/profile');
+            });
+        });
+
+        //twitter
+        app.get('/unlink/twitter', function(req, res) {
+            var user = req.user;
+            user.twitter.token = undefined;
+            user.save(function(err) {
+                res.redirect('/profile');
+            });
+        });
 
 
 };
