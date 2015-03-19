@@ -4,6 +4,9 @@
 src
 dest
 
+# Authentication
+keys/auth.js
+
 # Logs
 logs
 *.log
