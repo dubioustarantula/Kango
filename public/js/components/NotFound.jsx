@@ -3,7 +3,9 @@ var React = require('react');
 var NotFound = React.createClass({
 	render: function() {
 		return (
-			<h1>Page not found.</h1>
+			<div className="container">
+				<h1>Page not found.</h1>
+			</div>
 		)
 	}
 });

@@ -8,9 +8,10 @@ var NotFound = require('./components/NotFound.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
-var DefaultRoute = Route.DefaultRoute;
 var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
 
 var App = React.createClass({
 	render: function() {
@@ -20,7 +21,7 @@ var App = React.createClass({
 					<nav className="navbar navbar-default">
 						<div className="container">
 							<div className="navbar-header">
-								<Link to="app" className="navbar-brand">
+								<Link to="main" className="navbar-brand">
 								  kango
 								</Link>
 							</div>
@@ -32,8 +33,6 @@ var App = React.createClass({
 						</div>
 					</nav>
 				</header>
-				<Link to="main">home</Link>
-				<Link to="fund-shelters">shelters</Link>
 				<RouteHandler/>
 			</div>
 		)	
@@ -44,6 +43,7 @@ var routes = (
   <Route name="app" handler={App}>
   	<Route name="main" path="/" handler={Main} />
     <Route name="fund-shelters" handler={Shelters}/>
+    <NotFoundRoute handler={NotFound} />
   </Route>
 );
 
