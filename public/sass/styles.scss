@@ -1,7 +1,12 @@
+/* config */
+$default : #E33B2E;
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
   -webkit-font-smoothing: antialiased; }
+
+/* Header */
 
 nav {
 	& li {
@@ -14,5 +19,10 @@ a.navbar-brand {
 	font-weight: normal;
 	letter-spacing: 0.05em;
 	font-family: 'Quicksand', sans-serif;
+}
+
+.navbar, .navbar-default .navbar-brand {
+	border-radius: none;
+	color: $default;
 }
 /*# sourceMappingURL=styles.css.map */

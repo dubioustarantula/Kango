@@ -31658,9 +31658,10 @@ var NotFound = require('./components/NotFound.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
-var DefaultRoute = Route.DefaultRoute;
 var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
 
 var App = React.createClass({displayName: "App",
 	render: function() {
@@ -31670,7 +31671,7 @@ var App = React.createClass({displayName: "App",
 					React.createElement("nav", {className: "navbar navbar-default"}, 
 						React.createElement("div", {className: "container"}, 
 							React.createElement("div", {className: "navbar-header"}, 
-								React.createElement(Link, {to: "app", className: "navbar-brand"}, 
+								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
 								  "kango"
 								)
 							), 
@@ -31682,8 +31683,6 @@ var App = React.createClass({displayName: "App",
 						)
 					)
 				), 
-				React.createElement(Link, {to: "main"}, "home"), 
-				React.createElement(Link, {to: "fund-shelters"}, "shelters"), 
 				React.createElement(RouteHandler, null)
 			)
 		)	
@@ -31693,7 +31692,8 @@ var App = React.createClass({displayName: "App",
 var routes = (
   React.createElement(Route, {name: "app", handler: App}, 
   	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
-    React.createElement(Route, {name: "fund-shelters", handler: Shelters})
+    React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
+    React.createElement(NotFoundRoute, {handler: NotFound})
   )
 );
 
@@ -31768,7 +31768,9 @@ var React = require('react');
 var NotFound = React.createClass({displayName: "NotFound",
 	render: function() {
 		return (
-			React.createElement("h1", null, "Page not found.")
+			React.createElement("div", {className: "container"}, 
+				React.createElement("h1", null, "Page not found.")
+			)
 		)
 	}
 });
