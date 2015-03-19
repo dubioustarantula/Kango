@@ -1,0 +1,29 @@
+
+.navbar {
+	background: transparent;
+	border: none;
+	padding: 2.8125rem 1.25rem 0;
+}
+
+.navbar, .navbar-default .navbar-brand {
+	border-radius: 0;
+	color: $default;
+}
+
+.navbar-brand {
+	padding: 15px 0;
+	font-size: 2em;
+}
+
+/* Media Queries */
+
+@media (min-width: 992px) {
+  .container {
+    width: 900px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 900px;
+  }
+}

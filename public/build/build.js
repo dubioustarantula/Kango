@@ -31655,6 +31655,7 @@ var ShelterStore = require('./stores/ShelterStore.jsx');
 var ShowList = require('./components/ShowList.jsx');
 var Shelters = require('./components/Shelters.jsx');
 var NotFound = require('./components/NotFound.jsx');
+var NavBar = require('./components/NavBar.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -31667,22 +31668,7 @@ var App = React.createClass({displayName: "App",
 	render: function() {
 		return (
 			React.createElement("div", null, 
-				React.createElement("header", null, 
-					React.createElement("nav", {className: "navbar navbar-default"}, 
-						React.createElement("div", {className: "container"}, 
-							React.createElement("div", {className: "navbar-header"}, 
-								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
-								  "kango"
-								)
-							), 
-							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-								React.createElement("li", null, React.createElement(Link, {to: "main"}, "Home")), 
-								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "Shelters")), 
-								React.createElement("li", null, React.createElement("button", {type: "button", className: "btn btn-default navbar-btn"}, "Sign In"))
-							)
-						)
-					)
-				), 
+				React.createElement(NavBar, null), 
 				React.createElement(RouteHandler, null)
 			)
 		)	
@@ -31703,7 +31689,7 @@ Router.run(routes,function (Handler) {
 
 
 
-},{"./components/Main.jsx":212,"./components/NotFound.jsx":213,"./components/Shelters.jsx":214,"./components/ShowList.jsx":215,"./stores/ShelterStore.jsx":217,"react":189,"react-router":30}],211:[function(require,module,exports){
+},{"./components/Main.jsx":212,"./components/NavBar.jsx":213,"./components/NotFound.jsx":214,"./components/Shelters.jsx":215,"./components/ShowList.jsx":216,"./stores/ShelterStore.jsx":218,"react":189,"react-router":30}],211:[function(require,module,exports){
 var React = require('react');
 
 var AddShelter = React.createClass({displayName: "AddShelter",
@@ -31740,6 +31726,7 @@ module.exports = AddShelter;
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
+
 var Main = React.createClass({displayName: "Main",
 	getInitialState: function() {
 		return {
@@ -31762,7 +31749,41 @@ var Main = React.createClass({displayName: "Main",
 
 module.exports = Main;
 
-},{"../stores/ShelterStore.jsx":217,"./ShowList.jsx":215,"react":189}],213:[function(require,module,exports){
+},{"../stores/ShelterStore.jsx":218,"./ShowList.jsx":216,"react":189}],213:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
+
+var NavBar = React.createClass({displayName: "NavBar",
+	render: function() {
+		return (
+			React.createElement("header", null, 
+				React.createElement("nav", {className: "navbar navbar-default container"}, 
+					React.createElement("div", {className: "wrapper"}, 
+						React.createElement("div", {className: "navbar-header"}, 
+							React.createElement(Link, {to: "main", className: "navbar-brand"}, 
+							  "kango"
+							)
+						), 
+						React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
+							React.createElement("li", null, React.createElement(Link, {to: "main"}, "Home")), 
+							React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "Shelters")), 
+							React.createElement("li", null, React.createElement("button", {type: "button", className: "btn btn-default navbar-btn"}, "Sign In"))
+						)
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = NavBar;
+
+},{"react":189,"react-router":30}],214:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -31777,7 +31798,7 @@ var NotFound = React.createClass({displayName: "NotFound",
 
 module.exports = NotFound;
 
-},{"react":189}],214:[function(require,module,exports){
+},{"react":189}],215:[function(require,module,exports){
 var React = require('react');
 
 var Shelters = React.createClass({displayName: "Shelters",
@@ -31792,7 +31813,7 @@ var Shelters = React.createClass({displayName: "Shelters",
 
 module.exports = Shelters;
 
-},{"react":189}],215:[function(require,module,exports){
+},{"react":189}],216:[function(require,module,exports){
 var React = require('react');
 
 var ShowList = React.createClass({displayName: "ShowList",
@@ -31814,7 +31835,7 @@ var ShowList = React.createClass({displayName: "ShowList",
 module.exports = ShowList;
 
 
-},{"react":189}],216:[function(require,module,exports){
+},{"react":189}],217:[function(require,module,exports){
 // var React = require('react');
 // var main = require('./App.jsx');
 
@@ -31827,7 +31848,7 @@ module.exports = ShowList;
 // React.render(main(), document.getElementById('content'));
 
 
-},{}],217:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 var Reflux = require('reflux');
 var $ = require('jquery');
 // require action here.
@@ -31905,4 +31926,4 @@ var ShelterStore = Reflux.createStore({
 
 module.exports = ShelterStore;
 
-},{"jquery":2,"reflux":190}]},{},[210,211,212,213,214,215,217,216]);
+},{"jquery":2,"reflux":190}]},{},[210,211,212,213,214,215,216,218,217]);

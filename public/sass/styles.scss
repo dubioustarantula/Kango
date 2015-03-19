@@ -1,5 +1,5 @@
-/* config */
-$default : #E33B2E;
+@import 'config',
+				'bootstrap_overrides';
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -21,8 +21,4 @@ a.navbar-brand {
 	font-family: 'Quicksand', sans-serif;
 }
 
-.navbar, .navbar-default .navbar-brand {
-	border-radius: none;
-	color: $default;
-}
-/*# sourceMappingURL=styles.css.map */
+

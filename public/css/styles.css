@@ -1,4 +1,24 @@
-/* config */
+/* Primary Colors */
+.navbar {
+  background: transparent;
+  border: none;
+  padding: 2.8125rem 1.25rem 0; }
+
+.navbar, .navbar-default .navbar-brand {
+  border-radius: 0;
+  color: #E33B2E; }
+
+.navbar-brand {
+  padding: 15px 0;
+  font-size: 2em; }
+
+/* Media Queries */
+@media (min-width: 992px) {
+  .container {
+    width: 900px; } }
+@media (min-width: 1200px) {
+  .container {
+    width: 900px; } }
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -13,11 +33,5 @@ a.navbar-brand {
   font-weight: normal;
   letter-spacing: 0.05em;
   font-family: 'Quicksand', sans-serif; }
-
-.navbar, .navbar-default .navbar-brand {
-  border-radius: none;
-  color: #E33B2E; }
-
-/*# sourceMappingURL=styles.css.map */
 
 /*# sourceMappingURL=styles.css.map */
