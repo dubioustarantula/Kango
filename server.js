@@ -1,7 +1,7 @@
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
+
 var passport = require('passport');
 var flash    = require('connect-flash');
 
@@ -12,13 +12,16 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+var path = require('path');
+var knex = require('knex');
+
 // configuration
 //connect to our database
 //**CHANGE THIS**
 //mongoose.connect(configDB.url);
 
 //pass passport for configuration
-require('./config/passport')(passport);
+require('./keys/passport')(passport);
 
 // set up our express application
 //**PROBABLY CHANGE THIS**

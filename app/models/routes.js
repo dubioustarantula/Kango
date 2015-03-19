@@ -104,8 +104,8 @@ module.exports = function(app, passport) {
         //local
         app.get('/unlink/local', function(req, res) {
             var user = req.user;
-            user.local.email = undefined;
-            user.local.password = undefined;
+            user.email = undefined;
+            user.password = undefined;
             user.save(function(err) {
                 res.redirect('/profile');
             });
@@ -114,7 +114,7 @@ module.exports = function(app, passport) {
         //twitter
         app.get('/unlink/twitter', function(req, res) {
             var user = req.user;
-            user.twitter.token = undefined;
+            user.twitter_token = undefined;
             user.save(function(err) {
                 res.redirect('/profile');
             });

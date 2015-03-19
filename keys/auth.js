@@ -2,8 +2,8 @@
 module.exports = {
 
     'twitterAuth' : {
-        'consumerKey'       : 'your-consumer-key-here',
-        'consumerSecret'    : 'your-client-secret-here',
-        'callbackURL'       : 'http://localhost:8080/auth/twitter/callback'
+        'consumerKey'       : '9T6wNoiCgdZuO9wtLMhun7LPl',
+        'consumerSecret'    : 'yzKOCTz6mjVV8SZUvKLW0kAlRe4d2dU6W99WPahUxJzyYY5AM6',
+        'callbackURL'       : 'http://www.kango.com/profile'
     }
 };

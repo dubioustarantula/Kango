@@ -24,9 +24,9 @@
                 <h3><span class="fa fa-user"></span> Local</h3>
 
                     <p>
-                        <strong>id</strong>: <%= user._id %><br>
-                        <strong>email</strong>: <%= user.local.email %><br>
-                        <strong>password</strong>: <%= user.local.password %>
+                        <strong>id</strong>: <%= user.twitter_id %><br>
+                        <strong>email</strong>: <%= user.email %><br>
+                        <strong>password</strong>: <%= user.password %>
                     </p>
                     <a href="/unlink/local" class="btn btn-default">Unlink</a>
                     <% } else { %>
@@ -43,10 +43,10 @@
                     <!-- check if the user has this token (is the user authenticated with this social account) -->
                     <% if (user.twitter.token) { %>
                     <p>
-                        <strong>id</strong>: <%= user.twitter.id %><br>
-                        <strong>token</strong>: <%= user.twitter.token %><br>
-                        <strong>username</strong>: <%= user.twitter.username %><br>
-                        <strong>displayName</strong>: <%= user.twitter.displayName %>
+                        <strong>id</strong>: <%= user.twitter_id %><br>
+                        <strong>token</strong>: <%= user.twitter_token %><br>
+                        <strong>handle</strong>: <%= user.twitter_handle %><br>
+                        <strong>displayname</strong>: <%= user.twitter_displayname %>
                     </p>
                     <a href="/unlink/twitter" class="btn btn-primary">Unlink</a>
                 <% } else { %>

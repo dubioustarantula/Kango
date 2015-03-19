@@ -1,5 +1,5 @@
 module.exports = {
 
-    'url' : 'myurlhere' // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
+    'url' : 'http://www.kango.com' // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
 
 };

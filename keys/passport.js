@@ -17,12 +17,12 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user.twitter_id);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
+    passport.deserializeUser(function(twitter_id, done) {
+        User.findById(twitter_id, function(err, user) {
             done(err, user);
         });
     });
@@ -47,7 +47,7 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'email' :  email }, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -59,8 +59,8 @@ module.exports = function(passport) {
             
             if (req.user) {
                 var user = req.user;
-                user.local.email = email;
-                user.local.password = user.generateHash(password);
+                user.email = email;
+                user.password = user.generateHash(password);
                 user.save(function(err) {
                     if (err)
                         throw err;
@@ -76,8 +76,8 @@ module.exports = function(passport) {
                 var newUser            = new User();
 
                 // set the user's local credentials
-                newUser.local.email    = email;
-                newUser.local.password = newUser.generateHash(password);
+                newUser.email    = email;
+                newUser.password = newUser.generateHash(password);
 
                 // save the user
                 newUser.save(function(err) {
@@ -109,7 +109,7 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
         //asynchronous
         process.nextTick(function() {
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'email' :  email }, function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -151,7 +151,7 @@ module.exports = function(passport) {
         process.nextTick(function() {
 
            if (!req.user) {
-            User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+            User.findOne({ 'twitter_id' : profile.twitter_id }, function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -161,9 +161,9 @@ module.exports = function(passport) {
                 // if the user is found then log them in
                 if (user) {
                    if(!user.twitter.token) {
-                    user.twitter.token = token;
-                    user.twitter.username = profile.username;
-                    user.twitter.displayName = profile.displayName;
+                    user.twitter_token = twitter_token;
+                    user.twitter_handle = profile.twitter_handle;
+                    user.twitter_displayname = profile.twitter_displayname;
 
                     user.save(function(err) {
                         if(err)
@@ -177,10 +177,10 @@ module.exports = function(passport) {
                     var newUser                 = new User();
 
                     // set all of the user data that we need
-                    newUser.twitter.id          = profile.id;
-                    newUser.twitter.token       = token;
-                    newUser.twitter.username    = profile.username;
-                    newUser.twitter.displayName = profile.displayName;
+                    newUser.twitter_id          = profile.twitter_id;
+                    newUser.twitter_token       = twitter_token;
+                    newUser.twitter_handle    = profile.twitter_handle;
+                    newUser.twitter_displayname = profile.twitter_displayname;
 
                     // save our user into the database
                     newUser.save(function(err) {
@@ -194,10 +194,10 @@ module.exports = function(passport) {
             //user already exists and is logged in, we have to link accounts
             var user = req.user; //pull the user out of the session
             //update the current users twitter credentials
-            user.twitter.id          = profile.id;
-            user.twitter.token       = token;
-            user.twitter.username    = profile.username;
-            user.twitter.displayName = profile.displayName;
+            user.twitter_id          = profile.twitter_id;
+            user.twitter_token       = twitter_token;
+            user.twitter_handle   = profile.twitter_handle;
+            user.twitter_displayname = profile.twitter_displayname;
 
             //save the user
             user.save(function(err) {
