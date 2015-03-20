@@ -3,6 +3,10 @@
 # Misc.
 src
 dest
+.DS_Store
+.sass-cache/
+public/css/styles.css.map
+public/js/components/.DS_Store
 
 # Logs
 logs
