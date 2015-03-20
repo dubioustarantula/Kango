@@ -20,7 +20,14 @@
 
 ## Usage
 
-> Some usage instructions
+How Kango Works:
+> Individual users can browse local animal shelters that are need of monetary donations for food, healthcare, blankets, and general upkeep. Users can then sign up for an account and donate to the shelter(s) of their choice. Kango keeps track of how much each user donates and top donors for each animal shelter.
+
+Stack:
+> Kango uses the FRENS stack (Flux, React, Express, Node, and SQL).
+
+Authentication:
+> Kango uses Passport, OAuth, and Twitter to authenticate users. Users are able to sign up/sign in using either a local username and password or their Twitter account. Users can also connect their local login information with their Twitter account.
 
 ## Requirements
 
