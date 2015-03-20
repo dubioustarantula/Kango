@@ -10,6 +10,13 @@ var errorHandler = require('errorhandler');
 var config = require('./config');
 var routes = require('./routes');
 var bookshelf = require('./app/config');
+var passport = require('passport');
+var flash = require('connect-flash');
+var morgan = require('morgan');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var configDB = require('./config/database.js');
+var knex = require('knex');
 
 var app = express();
 
@@ -17,19 +24,35 @@ app.set('bookshelf', bookshelf);
 app.set('port', config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+//app.set('view engine', 'ejs'); // set up ejs for templating
+
+//pass passport for configuration
+require('./keys/passport')(passport);
+
+// routes
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
+//**we need to connect to our database i.e. mongoose.connect(configDB.url)**
 
 app
   .use(compress())
   .use(favicon())
   .use(logger('dev'))
-  .use(bodyParser())
+  .use(morgan('dev')) // log every request to the console
+  .use(cookieParser()) // read cookies (needed for auth)
+  .use(bodyParser()) //get information from html forms
   .use(function(req, res, next) {
     req.parsed = url.parse(req.url);
     next();
   })
   .use(methodOverride())
   .use(express.static(path.join(__dirname, 'public')))
-  .use(routes.indexRouter);
+  .use(routes.indexRouter)
+  // required for passport
+  .use(session({ secret: 'teamdubioustarantula' })) // session secret
+  .use(passport.initialize())
+  .use(passport.session()) // persistent login sessions
+  .use(flash()); // use connect-flash for flash messages stored in session;
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());
