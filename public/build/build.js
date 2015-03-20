@@ -31655,7 +31655,7 @@ var ShelterStore = require('./stores/ShelterStore.jsx');
 var ShowList = require('./components/ShowList.jsx');
 var Shelters = require('./components/Shelters.jsx');
 var NotFound = require('./components/NotFound.jsx');
-var NavBar = require('./components/NavBar.jsx');
+var NavBarDefault = require('./components/NavBarDefault.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -31668,8 +31668,9 @@ var App = React.createClass({displayName: "App",
 	render: function() {
 		return (
 			React.createElement("div", null, 
-				React.createElement(NavBar, null), 
-				React.createElement(RouteHandler, null)
+				React.createElement("div", {className: "main-wrapper"}, 
+					React.createElement(RouteHandler, null)
+				)
 			)
 		)	
 	}
@@ -31689,7 +31690,7 @@ Router.run(routes,function (Handler) {
 
 
 
-},{"./components/Main.jsx":212,"./components/NavBar.jsx":213,"./components/NotFound.jsx":214,"./components/Shelters.jsx":215,"./components/ShowList.jsx":216,"./stores/ShelterStore.jsx":218,"react":189,"react-router":30}],211:[function(require,module,exports){
+},{"./components/Main.jsx":215,"./components/NavBarDefault.jsx":216,"./components/NotFound.jsx":217,"./components/Shelters.jsx":218,"./components/ShowList.jsx":219,"./stores/ShelterStore.jsx":221,"react":189,"react-router":30}],211:[function(require,module,exports){
 var React = require('react');
 
 var AddShelter = React.createClass({displayName: "AddShelter",
@@ -31724,8 +31725,18 @@ module.exports = AddShelter;
 
 },{"react":189}],212:[function(require,module,exports){
 var React = require('react');
+
+},{"react":189}],213:[function(require,module,exports){
+
+
+},{}],214:[function(require,module,exports){
+
+
+},{}],215:[function(require,module,exports){
+var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
+var NavBarDefault = require('./NavBarDefault.jsx');
 
 var Main = React.createClass({displayName: "Main",
 	getInitialState: function() {
@@ -31740,8 +31751,33 @@ var Main = React.createClass({displayName: "Main",
 	},
 	render: function() {
 		return (
-			React.createElement("div", {className: "App container"}, 
-				React.createElement(ShowList, {shelters: this.state.nearbyShelters})
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid hero"}, 
+					React.createElement(NavBarDefault, null), 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("div", {className: "hero-description"}, 
+							React.createElement("h1", {className: "hero-headline"}, "Connecting donors to animal shelters in need"), 
+							React.createElement("div", {className: "button-group"}, 
+								React.createElement("a", {className: "btn hero-btn more", href: "#"}, 
+									React.createElement("span", null, "Learn More")
+								), 
+								React.createElement("a", {className: "btn hero-btn view", href: ""}, 
+									React.createElement("span", null, "View Shelters")
+								)
+							)
+						)
+					)
+				), 
+				React.createElement("section", {className: "devoted"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("h2", null, "100% of your donation fund Bay Area animal shelters.")
+					)
+				), 
+				React.createElement("section", {className: "three-shelters"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement(ShowList, {shelters: this.state.nearbyShelters})
+					)
+				)
 			)
 		)
 	}
@@ -31749,7 +31785,7 @@ var Main = React.createClass({displayName: "Main",
 
 module.exports = Main;
 
-},{"../stores/ShelterStore.jsx":218,"./ShowList.jsx":216,"react":189}],213:[function(require,module,exports){
+},{"../stores/ShelterStore.jsx":221,"./NavBarDefault.jsx":216,"./ShowList.jsx":219,"react":189}],216:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -31758,7 +31794,7 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var NavBar = React.createClass({displayName: "NavBar",
+var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 	render: function() {
 		return (
 			React.createElement("header", null, 
@@ -31770,9 +31806,9 @@ var NavBar = React.createClass({displayName: "NavBar",
 							)
 						), 
 						React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-							React.createElement("li", null, React.createElement(Link, {to: "main"}, "Home")), 
-							React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "Shelters")), 
-							React.createElement("li", null, React.createElement("button", {type: "button", className: "btn btn-default navbar-btn"}, "Sign In"))
+							React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
+							React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
+							React.createElement("li", null, React.createElement(Link, {to: "main"}, "Sign In"))
 						)
 					)
 				)
@@ -31781,9 +31817,9 @@ var NavBar = React.createClass({displayName: "NavBar",
 	}
 });
 
-module.exports = NavBar;
+module.exports = NavBarDefault;
 
-},{"react":189,"react-router":30}],214:[function(require,module,exports){
+},{"react":189,"react-router":30}],217:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -31798,7 +31834,7 @@ var NotFound = React.createClass({displayName: "NotFound",
 
 module.exports = NotFound;
 
-},{"react":189}],215:[function(require,module,exports){
+},{"react":189}],218:[function(require,module,exports){
 var React = require('react');
 
 var Shelters = React.createClass({displayName: "Shelters",
@@ -31813,19 +31849,27 @@ var Shelters = React.createClass({displayName: "Shelters",
 
 module.exports = Shelters;
 
-},{"react":189}],216:[function(require,module,exports){
+},{"react":189}],219:[function(require,module,exports){
 var React = require('react');
 
 var ShowList = React.createClass({displayName: "ShowList",
 	render: function() {
 		var listShelters = this.props.shelters.map(function(shelter){
-			return React.createElement("li", null, " ", shelter.name, " ")
+			return (
+				React.createElement("li", {className: "col-md-4"}, 
+					React.createElement("div", {className: "shelter-card"}, 
+						shelter.name
+					)
+				)
+			)
 		});
 		return (
 			React.createElement("div", null, 
-				React.createElement("h3", null, " Shelters "), 
-				React.createElement("ul", null, 
-					listShelters
+				React.createElement("h3", {className: "section-header"}, " Meet the Animal Shelters "), 
+				React.createElement("ul", {className: "shelter-list-home"}, 
+					React.createElement("div", {className: "row"}, 
+						listShelters
+					)
 				)
 			)
 		)
@@ -31835,7 +31879,7 @@ var ShowList = React.createClass({displayName: "ShowList",
 module.exports = ShowList;
 
 
-},{"react":189}],217:[function(require,module,exports){
+},{"react":189}],220:[function(require,module,exports){
 // var React = require('react');
 // var main = require('./App.jsx');
 
@@ -31848,7 +31892,7 @@ module.exports = ShowList;
 // React.render(main(), document.getElementById('content'));
 
 
-},{}],218:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 var Reflux = require('reflux');
 var $ = require('jquery');
 // require action here.
@@ -31904,6 +31948,7 @@ var shelters = [
 var ShelterStore = Reflux.createStore({
 	init: function() {
 		this.load();
+		this.getShelters();
 		// listen to actions
 		// this.listenToMany(actions);
 	},
@@ -31913,8 +31958,7 @@ var ShelterStore = Reflux.createStore({
 			type: 'GET',
 			url: '/shelters',
 		}).done(function(data) {
-			console.log(data);
-			shelters = data;
+			console.log('load', data);
 			// context.trigger(shelters);
 		});
 	},
@@ -31926,4 +31970,4 @@ var ShelterStore = Reflux.createStore({
 
 module.exports = ShelterStore;
 
-},{"jquery":2,"reflux":190}]},{},[210,211,212,213,214,215,216,218,217]);
+},{"jquery":2,"reflux":190}]},{},[210,211,212,213,214,215,216,217,218,219,221,220]);

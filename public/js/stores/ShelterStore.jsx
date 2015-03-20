@@ -53,6 +53,7 @@ var shelters = [
 var ShelterStore = Reflux.createStore({
 	init: function() {
 		this.load();
+		this.getShelters();
 		// listen to actions
 		// this.listenToMany(actions);
 	},
@@ -62,8 +63,7 @@ var ShelterStore = Reflux.createStore({
 			type: 'GET',
 			url: '/shelters',
 		}).done(function(data) {
-			console.log(data);
-			shelters = data;
+			console.log('load', data);
 			// context.trigger(shelters);
 		});
 	},

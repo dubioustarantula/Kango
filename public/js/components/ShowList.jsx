@@ -3,13 +3,21 @@ var React = require('react');
 var ShowList = React.createClass({
 	render: function() {
 		var listShelters = this.props.shelters.map(function(shelter){
-			return <li> {shelter.name} </li>
+			return (
+				<li className="col-md-4"> 
+					<div className="shelter-card">
+						{shelter.name}
+					</div>
+				</li>
+			)
 		});
 		return (
 			<div>
-				<h3> Shelters </h3>
-				<ul>
-					{listShelters}
+				<h3 className="section-header"> Meet the Animal Shelters </h3>
+				<ul className="shelter-list-home">
+					<div className="row">
+						{listShelters}
+					</div>
 				</ul>
 			</div>
 		)

@@ -6,7 +6,7 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var NavBar = React.createClass({
+var NavBarDefault = React.createClass({
 	render: function() {
 		return (
 			<header>
@@ -18,9 +18,9 @@ var NavBar = React.createClass({
 							</Link>
 						</div>
 						<ul className="nav navbar-nav navbar-right">
-							<li><Link to="main">Home</Link></li>
-							<li><Link to="fund-shelters">Shelters</Link></li>
-							<li><button type="button" className="btn btn-default navbar-btn">Sign In</button></li>
+							<li><Link to="fund-shelters">View Shelters</Link></li>
+							<li><Link to="main">About</Link></li>
+							<li><Link to="main">Sign In</Link></li>
 						</ul>
 					</div>
 				</nav>
@@ -29,4 +29,4 @@ var NavBar = React.createClass({
 	}
 });
 
-module.exports = NavBar;
+module.exports = NavBarDefault;

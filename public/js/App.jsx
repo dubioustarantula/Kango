@@ -5,7 +5,7 @@ var ShelterStore = require('./stores/ShelterStore.jsx');
 var ShowList = require('./components/ShowList.jsx');
 var Shelters = require('./components/Shelters.jsx');
 var NotFound = require('./components/NotFound.jsx');
-var NavBar = require('./components/NavBar.jsx');
+var NavBarDefault = require('./components/NavBarDefault.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -18,8 +18,9 @@ var App = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<NavBar />
-				<RouteHandler/>
+				<div className="main-wrapper">
+					<RouteHandler />
+				</div>
 			</div>
 		)	
 	}

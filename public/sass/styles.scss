@@ -2,9 +2,13 @@
 				'bootstrap_overrides';
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   font-weight: normal;
   -webkit-font-smoothing: antialiased; }
+
+a {
+	color: inherit;
+}
 
 /* Header */
 
@@ -16,9 +20,80 @@ nav {
 }
 
 a.navbar-brand {
-	font-weight: normal;
-	letter-spacing: 0.05em;
-	font-family: 'Quicksand', sans-serif;
+	font-weight: bold;
+	letter-spacing: -2px;
+}
+
+.main-wrapper {
+	margin-top: -20px;
+}
+
+.section-header {
+	text-align: center;
+}
+
+/* Hero */
+.hero-description {
+	color: #fff;
+	max-width: 500px;
+	position: absolute;
+	top: 400px;
+	text-align: left;
+
+	.hero-headline {
+		font-weight: 300;
+		line-height: 1.3em;
+	}
+
+	p.hero-short {
+		opacity: 0.75;
+	}
+}
+
+.button-group {
+	margin: 25px 0;
+	.hero-btn.view {
+		margin-left: 20px;
+		background: rgba(255,255,255, 0.89);
+		color: #000;
+	}
+}
+
+.btn {
+	padding: 10px 20px;
+	border: 1px solid #fff;
+	border-radius: 5px;
+}
+
+/* Section – Devoted */
+section.devoted {
+	text-align: center;
+	border-bottom: 1px rgba(242,244,246,0.6) solid;
+	padding: 20px 0;
+
+	& > .container > h2 {
+		font-size: 16px;
+		color: #ccc;
+	}
+}
+
+/* Section – Three Shelters */
+section.three-shelters {
+	height: 500px;
+}
+
+.shelter-list-home {
+	margin-top: 35px;
+	padding-left: 0;
+}
+
+.shelter-card {
+	list-style: none;
+	display: inline-block;
+	background: #f4f7f8;
+	border-radius: 2px;
+	width: 100%;
+	padding: 20px;
 }
 
 
