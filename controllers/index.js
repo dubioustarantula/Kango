@@ -30,12 +30,15 @@ exports.getShelters = function(req, res) {
       if(shelter) {
         res.send(200, shelter);
       } else {
-        res.send(404, 'Shelter name does not appear in our database');
+        res.send(404, 'Shelter name does not appear in our database. Get /shelters for list of availabl shelters');
       }
     });
   } else {
     Shelters.reset().fetch().then(function(shelters) {
-        res.send(200, shelters.models);
+      if(she.models === []) {
+        res.send(418, 'There are no shelters');
+      }
+      res.send(200, shelters.models);
     });
   }
 };
