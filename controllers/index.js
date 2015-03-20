@@ -35,7 +35,7 @@ exports.getShelters = function(req, res) {
     });
   } else {
     Shelters.reset().fetch().then(function(shelters) {
-      if(she.models === []) {
+      if(shelters.models === []) {
         res.send(418, 'There are no shelters');
       }
       res.send(200, shelters.models);

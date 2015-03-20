@@ -28,7 +28,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 require('./keys/passport')(passport);
 
 // routes
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/models/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 app
   .use(compress())
@@ -48,7 +48,7 @@ app
   .use(passport.initialize())
   .use(passport.session()) // persistent login sessions
   .use(flash()) // use connect-flash for flash messages stored in session;
-  .use(express.static(path.join(__dirname, 'public')));
+  .use(express.static(path.join(__dirname, 'public')))
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());
