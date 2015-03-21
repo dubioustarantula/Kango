@@ -120,13 +120,15 @@ module.exports = function(app, passport) {
             });
         });
 
-    //DATABASE ENPOINTS
+    //Shelter requests
 
     app.post('/shelter', controllers.postShelter);
     app.get('/shelters', controllers.getShelters);
 
     // insecure enpoint disabled
     // app.get('/users', controllers.getUsers);
+
+    //Donation requests
 
     app.post('/donate', controllers.postDonation);
     app.get('/donations', controllers.getDonations);
