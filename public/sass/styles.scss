@@ -32,6 +32,18 @@ a.navbar-brand {
 	text-align: center;
 }
 
+.modal-popup {
+	position: relative;
+	background: #fff;	
+	background-clip: padding-box;
+	border-radius: 0;
+
+	h2.modal-popup-header {
+		font-size: 1.5em;
+		font-weight: 300;
+	}
+}
+
 /* Hero */
 .hero-description {
 	color: #fff;
@@ -80,6 +92,10 @@ section.devoted {
 /* Section – Three Shelters */
 section.three-shelters {
 	height: 500px;
+}
+
+.section-short {
+	text-align: center;
 }
 
 .shelter-list-home {

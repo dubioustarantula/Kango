@@ -14,7 +14,8 @@ var ShowList = React.createClass({
 		});
 		return (
 			<div>
-				<h3 className="section-header"> Meet the Animal Shelters </h3>
+				<h3 className="section-header">Meet the Animal Shelters</h3>
+				<p className="section-short">San Francisco • Oakland • South Bay</p>
 				<ul className="shelter-list-home">
 					<div className="row">
 						{listShelters}
