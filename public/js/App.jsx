@@ -8,7 +8,7 @@ var NotFound = require('./components/NotFound.jsx');
 var NavBarDefault = require('./components/NavBarDefault.jsx');
 var Login = require('./components/Login.jsx');
 var Signup = require('./components/Signup.jsx');
-var Twitter = require('./components/Twitter.jsx');
+var Twitter = require('./components/TwitterLogin.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;

@@ -32813,6 +32813,9 @@ var ShowList = require('./components/ShowList.jsx');
 var Shelters = require('./components/Shelters.jsx');
 var NotFound = require('./components/NotFound.jsx');
 var NavBarDefault = require('./components/NavBarDefault.jsx');
+var Login = require('./components/Login.jsx');
+var Signup = require('./components/Signup.jsx');
+var Twitter = require('./components/TwitterLogin.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -32837,6 +32840,9 @@ var routes = (
   React.createElement(Route, {name: "app", handler: App}, 
   	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
     React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
+    React.createElement(Route, {name: "login", handler: Login}), 
+    React.createElement(Route, {name: "signup", handler: Signup}), 
+    React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
     React.createElement(NotFoundRoute, {handler: NotFound})
   )
 );
@@ -32847,7 +32853,7 @@ Router.run(routes,function (Handler) {
 
 
 
-},{"./components/Main.jsx":228,"./components/NavBarDefault.jsx":229,"./components/NotFound.jsx":230,"./components/Shelters.jsx":231,"./components/ShowList.jsx":232,"./stores/ShelterStore.jsx":234,"react":202,"react-router":43}],224:[function(require,module,exports){
+},{"./components/Login.jsx":228,"./components/Main.jsx":229,"./components/NavBarDefault.jsx":230,"./components/NotFound.jsx":231,"./components/Shelters.jsx":233,"./components/ShowList.jsx":234,"./components/Signup.jsx":235,"./components/TwitterLogin.jsx":236,"./stores/ShelterStore.jsx":237,"react":202,"react-router":43}],224:[function(require,module,exports){
 var React = require('react');
 
 var AddShelter = React.createClass({displayName: "AddShelter",
@@ -32890,6 +32896,39 @@ var React = require('react');
 
 
 },{}],228:[function(require,module,exports){
+var React = require('react');
+
+var Login = React.createClass({displayName: "Login",
+  render: function() {
+    return (
+      React.createElement("div", {class: "col-sm-6 col-sm-offset-3"}, 
+
+          React.createElement("h1", null, React.createElement("span", {class: "fa fa-sign-in"}), " Login"), 
+
+          React.createElement("form", {action: "/login", method: "post"}, 
+              React.createElement("div", {class: "form-group"}, 
+                  React.createElement("label", null, "Email"), 
+                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
+              ), 
+              React.createElement("div", {class: "form-group"}, 
+                  React.createElement("label", null, "Password"), 
+                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
+              ), 
+
+              React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+          ), 
+
+          React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup")), 
+          React.createElement("p", null, "Or go ", React.createElement("a", {href: "/"}, "home"), ".")
+
+      )
+    )
+  }
+});
+
+module.exports = Login;
+
+},{"react":202}],229:[function(require,module,exports){
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
@@ -32942,7 +32981,7 @@ var Main = React.createClass({displayName: "Main",
 
 module.exports = Main;
 
-},{"../stores/ShelterStore.jsx":234,"./NavBarDefault.jsx":229,"./ShowList.jsx":232,"react":202}],229:[function(require,module,exports){
+},{"../stores/ShelterStore.jsx":237,"./NavBarDefault.jsx":230,"./ShowList.jsx":234,"react":202}],230:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -32981,7 +33020,7 @@ var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 			React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
 			  React.createElement("div", {className: "modal-dialog"}, 
 					React.createElement("div", {className: "modal-popup modal-content"}, 
-					  React.createElement("h2", {className: "modal-popup-header"}, "Sign In")
+					  React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango")
 					)
 			  )
 			)
@@ -33004,7 +33043,7 @@ var SignInModal = React.createClass({displayName: "SignInModal",
 
 module.exports = NavBarDefault;
 
-},{"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],230:[function(require,module,exports){
+},{"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],231:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -33019,7 +33058,10 @@ var NotFound = React.createClass({displayName: "NotFound",
 
 module.exports = NotFound;
 
-},{"react":202}],231:[function(require,module,exports){
+},{"react":202}],232:[function(require,module,exports){
+var React = require('react');
+
+},{"react":202}],233:[function(require,module,exports){
 var React = require('react');
 
 var Shelters = React.createClass({displayName: "Shelters",
@@ -33034,11 +33076,12 @@ var Shelters = React.createClass({displayName: "Shelters",
 
 module.exports = Shelters;
 
-},{"react":202}],232:[function(require,module,exports){
+},{"react":202}],234:[function(require,module,exports){
 var React = require('react');
 
 var ShowList = React.createClass({displayName: "ShowList",
 	render: function() {
+		console.log('this.props',this.props);
 		var listShelters = this.props.shelters.map(function(shelter){
 			return (
 				React.createElement("li", {className: "col-md-4"}, 
@@ -33065,20 +33108,73 @@ var ShowList = React.createClass({displayName: "ShowList",
 module.exports = ShowList;
 
 
-},{"react":202}],233:[function(require,module,exports){
-// var React = require('react');
-// var main = require('./App.jsx');
+},{"react":202}],235:[function(require,module,exports){
+var React = require('react');
 
-// // (function ($) {
-// //   $(document).ready(function () {
-// //     // you awesome code goes here
-// //   });
-// // });
-// console.log('hey');
-// React.render(main(), document.getElementById('content'));
+var Signup = React.createClass({displayName: "Signup",
+  render: function() {
+    return (
+      React.createElement("div", {class: "col-sm-6 col-sm-offset-3"}, 
+
+          React.createElement("h1", null, React.createElement("span", {class: "fa fa-sign-in"}), " Signup"), 
+
+          React.createElement("form", {action: "/signup", method: "post"}, 
+              React.createElement("div", {class: "form-group"}, 
+                  React.createElement("label", null, "Email"), 
+                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
+              ), 
+              React.createElement("div", {class: "form-group"}, 
+                  React.createElement("label", null, "Password"), 
+                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
+              ), 
+
+              React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
+          ), 
 
 
-},{}],234:[function(require,module,exports){
+          React.createElement("p", null, "Already have an account? ", React.createElement("a", {href: "/login"}, "Login")), 
+          React.createElement("p", null, "Or go ", React.createElement("a", {href: "/"}, "home"), ".")
+
+      )
+    )
+  }
+});
+
+module.exports = Signup;
+
+},{"react":202}],236:[function(require,module,exports){
+var React = require('react');
+
+var TwitterLogin = React.createClass({displayName: "TwitterLogin",
+  render: function() {
+    return (
+      React.createElement("div", {className: "col-sm-6 col-sm-offset-3"}, 
+
+          React.createElement("h1", null, React.createElement("span", {className: "fa fa-user"}), " Add Local Account"), 
+
+          React.createElement("form", {action: "/connect/local", method: "post"}, 
+              React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Email"), 
+                  React.createElement("input", {type: "text", className: "form-control", name: "email"})
+              ), 
+              React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Password"), 
+                  React.createElement("input", {type: "password", className: "form-control", name: "password"})
+              ), 
+
+              React.createElement("button", {type: "submit", className: "btn btn-warning btn-lg"}, "Add Local")
+          ), 
+
+          React.createElement("p", null, React.createElement("a", {href: "/profile"}, "Go back to profile"))
+
+      )
+    )
+  }
+});
+
+module.exports = TwitterLogin;
+
+},{"react":202}],237:[function(require,module,exports){
 var Reflux = require('reflux');
 var $ = require('jquery');
 // require action here.
@@ -33143,17 +33239,18 @@ var ShelterStore = Reflux.createStore({
 		$.ajax({
 			type: 'GET',
 			url: '/shelters',
-		}).done(function(data) {
-			console.log('load', data);
+		}).done(function(shelterList) {
+			shelters = shelterList;
+			console.log('changing sheltesr');
 			// context.trigger(shelters);
 		});
 	},
 	getShelters: function() {
-		console.log('shelters', shelters);
+		// console.log('shelters', shelters);
 		return shelters;
 	}
 });
 
 module.exports = ShelterStore;
 
-},{"jquery":2,"reflux":203}]},{},[223,224,225,226,227,228,229,230,231,232,234,233]);
+},{"jquery":2,"reflux":203}]},{},[223,224,225,226,227,228,229,230,231,232,233,234,235,236,237]);

@@ -36,7 +36,7 @@ var NavBarDefault = React.createClass({
 			<div className="modal fade" id="signIn" tabindex="-1" 	role="dialog">
 			  <div className="modal-dialog">
 					<div className="modal-popup modal-content">
-					  <h2 className="modal-popup-header">Sign In</h2>
+					  <h2 className="modal-popup-header">Sign In to Kango</h2>
 					</div>
 			  </div>
 			</div>
