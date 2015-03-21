@@ -1,11 +1,10 @@
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
 var url = require('url');
 var bodyParser = require('body-parser');
-var compress = require('compression');
-var favicon = require('static-favicon');
-var methodOverride = require('method-override');
+// var compress = require('compression');
+// var favicon = require('static-favicon');
+// var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var config = require('./config');
 var routes = require('./routes');
@@ -28,11 +27,11 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 require('./keys/passport')(passport);
 
 // routes
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/models/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 app
-  .use(compress())
-  .use(favicon())
+  // .use(compress())
+  // .use(favicon())
   .use(logger('dev'))
   .use(morgan('dev')) // log every request to the console
   .use(cookieParser()) // read cookies (needed for auth)
@@ -41,14 +40,14 @@ app
     req.parsed = url.parse(req.url);
     next();
   })
-  .use(methodOverride())
+  // .use(methodOverride())
   .use(routes.indexRouter)
   //required for passport
   .use(session({ secret: 'teamdubioustarantula' })) // session secret
   .use(passport.initialize())
   .use(passport.session()) // persistent login sessions
   .use(flash()) // use connect-flash for flash messages stored in session;
-  .use(express.static(path.join(__dirname, 'public')));
+  .use(express.static(path.join(__dirname, 'public')))
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());

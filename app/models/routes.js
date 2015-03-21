@@ -1,9 +1,9 @@
+var controllers = require('../../controllers/index');
+
 module.exports = function(app, passport) {
 
     //HOME PAGE
-    app.get('/home', function(req, res) { //this was originally just '/'
-        res.render('home.ejs'); //this was originally index.ejs, ask about this
-    });
+    app.get('/', controllers.index);
 
     // LOGIN
     // show the login form
