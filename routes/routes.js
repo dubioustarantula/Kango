@@ -1,5 +1,17 @@
 var controllers = require('../controllers/index');
 
+// route middleware to make sure a user is logged in
+var isLoggedIn = function(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+};
+
 module.exports = function(app, passport) {
 
     //HOME PAGE
@@ -106,7 +118,7 @@ module.exports = function(app, passport) {
             var user = req.user;
             user.email = undefined;
             user.password = undefined;
-            user.save(function(err) {
+            user.save(function() {
                 res.redirect('/profile');
             });
         });
@@ -115,7 +127,7 @@ module.exports = function(app, passport) {
         app.get('/unlink/twitter', function(req, res) {
             var user = req.user;
             user.twitter_token = undefined;
-            user.save(function(err) {
+            user.save(function() {
                 res.redirect('/profile');
             });
         });
@@ -135,13 +147,3 @@ module.exports = function(app, passport) {
 
 };
 
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}

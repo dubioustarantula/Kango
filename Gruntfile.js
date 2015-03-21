@@ -2,7 +2,7 @@ module.exports = function (grunt) {
   var config = {
     jshint: {
       options: {
-        ignores: ['node_modules/**', 'public/vendor/**', '**/*.min.js', './app/config.js'],
+        ignores: ['node_modules/**', 'public/vendor/**', '**/*.min.js', './app/config.js', './routes/routes.js'],
         jshintrc: '.jshintrc'
       },
       gruntfile: 'Gruntfile.js',
