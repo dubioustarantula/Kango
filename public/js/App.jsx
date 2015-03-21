@@ -6,6 +6,9 @@ var ShowList = require('./components/ShowList.jsx');
 var Shelters = require('./components/Shelters.jsx');
 var NotFound = require('./components/NotFound.jsx');
 var NavBarDefault = require('./components/NavBarDefault.jsx');
+var Login = require('./components/Login.jsx');
+var Signup = require('./components/Signup.jsx');
+var Twitter = require('./components/Twitter.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -30,6 +33,9 @@ var routes = (
   <Route name="app" handler={App}>
   	<Route name="main" path="/" handler={Main} />
     <Route name="fund-shelters" handler={Shelters}/>
+    <Route name="login" handler={Login}/>
+    <Route name="signup" handler={Signup}/>
+    <Route name="twitter" handler={TwitterLogin}/>
     <NotFoundRoute handler={NotFound} />
   </Route>
 );
