@@ -12,6 +12,7 @@ var ModalTrigger = require('react-bootstrap/lib/ModalTrigger');
 var NavBarDefault = React.createClass({
 	render: function() {
 		return (
+			<div>
 			<header>
 				<nav className="navbar navbar-default container">
 					<div className="wrapper">
@@ -23,10 +24,23 @@ var NavBarDefault = React.createClass({
 						<ul className="nav navbar-nav navbar-right">
 							<li><Link to="fund-shelters">View Shelters</Link></li>
 							<li><Link to="main">About</Link></li>
+							<li>
+							<Link to="main" data-toggle="modal" data-target="#signIn">
+									Sign In
+							</Link>
+							</li>
 						</ul>
 					</div>
 				</nav>
 			</header>
+			<div className="modal fade" id="signIn" tabindex="-1" 	role="dialog">
+			  <div className="modal-dialog">
+					<div className="modal-popup modal-content">
+					  <h2 className="modal-popup-header">Sign In</h2>
+					</div>
+			  </div>
+			</div>
+			</div>
 		)
 	}
 });

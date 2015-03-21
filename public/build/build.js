@@ -32957,6 +32957,7 @@ var ModalTrigger = require('react-bootstrap/lib/ModalTrigger');
 var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 	render: function() {
 		return (
+			React.createElement("div", null, 
 			React.createElement("header", null, 
 				React.createElement("nav", {className: "navbar navbar-default container"}, 
 					React.createElement("div", {className: "wrapper"}, 
@@ -32967,10 +32968,23 @@ var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 						), 
 						React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
 							React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
-							React.createElement("li", null, React.createElement(Link, {to: "main"}, "About"))
+							React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
+							React.createElement("li", null, 
+							React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
+									"Sign In"
+							)
+							)
 						)
 					)
 				)
+			), 
+			React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
+			  React.createElement("div", {className: "modal-dialog"}, 
+					React.createElement("div", {className: "modal-popup modal-content"}, 
+					  React.createElement("h2", {className: "modal-popup-header"}, "Sign In")
+					)
+			  )
+			)
 			)
 		)
 	}
