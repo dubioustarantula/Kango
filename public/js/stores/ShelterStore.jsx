@@ -62,13 +62,14 @@ var ShelterStore = Reflux.createStore({
 		$.ajax({
 			type: 'GET',
 			url: '/shelters',
-		}).done(function(data) {
-			console.log('load', data);
+		}).done(function(shelterList) {
+			shelters = shelterList;
+			console.log('changing sheltesr');
 			// context.trigger(shelters);
 		});
 	},
 	getShelters: function() {
-		console.log('shelters', shelters);
+		// console.log('shelters', shelters);
 		return shelters;
 	}
 });
