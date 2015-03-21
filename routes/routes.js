@@ -1,4 +1,4 @@
-var controllers = require('../../controllers/index');
+var controllers = require('../controllers/index');
 
 module.exports = function(app, passport) {
 
@@ -120,6 +120,16 @@ module.exports = function(app, passport) {
             });
         });
 
+    //DATABASE ENPOINTS
+
+    app.post('/shelter', controllers.postShelter);
+    app.get('/shelters', controllers.getShelters);
+
+    // insecure enpoint disabled
+    // app.get('/users', controllers.getUsers);
+
+    app.post('/donate', controllers.postDonation);
+    app.get('/donations', controllers.getDonations);
 
 };
 
