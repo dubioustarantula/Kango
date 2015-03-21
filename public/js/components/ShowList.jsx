@@ -2,6 +2,7 @@ var React = require('react');
 
 var ShowList = React.createClass({
 	render: function() {
+		console.log('this.props',this.props);
 		var listShelters = this.props.shelters.map(function(shelter){
 			return (
 				<li className="col-md-4"> 

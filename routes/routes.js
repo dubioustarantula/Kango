@@ -1,9 +1,9 @@
+var controllers = require('../controllers/index');
+
 module.exports = function(app, passport) {
 
     //HOME PAGE
-    app.get('/home', function(req, res) { //this was originally just '/'
-        res.render('home.ejs'); //this was originally index.ejs, ask about this
-    });
+    app.get('/', controllers.index);
 
     // LOGIN
     // show the login form
@@ -120,6 +120,18 @@ module.exports = function(app, passport) {
             });
         });
 
+    //Shelter requests
+
+    app.post('/shelter', controllers.postShelter);
+    app.get('/shelters', controllers.getShelters);
+
+    // insecure enpoint disabled
+    // app.get('/users', controllers.getUsers);
+
+    //Donation requests
+
+    app.post('/donate', controllers.postDonation);
+    app.get('/donations', controllers.getDonations);
 
 };
 
