@@ -31971,7 +31971,7 @@ var TwitterLogin = React.createClass({displayName: "TwitterLogin",
       React.createElement("div", {className: "modal-popup modal-content"}, 
         React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
         React.createElement("form", {action: "/auth/twitter", method: "get"}, 
-          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+          React.createElement("button", {type: "submit"}, "Login")
         )
       )
     )

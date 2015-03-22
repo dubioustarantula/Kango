@@ -6,7 +6,7 @@ var TwitterLogin = React.createClass({
       <div className="modal-popup modal-content">
         <h2 className="modal-popup-header">Login with Twitter</h2>
         <form action="/auth/twitter" method="get">
-          <button type="submit" class="btn btn-warning btn-lg">Login</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     )
