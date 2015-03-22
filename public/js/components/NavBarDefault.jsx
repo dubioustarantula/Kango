@@ -6,12 +6,7 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var Main = require('./Main.jsx');
 var TwitterLogin = require('./TwitterLogin.jsx');
-
-var Modal = require('react-bootstrap/lib/Modal');
-var ModalTrigger = require('react-bootstrap/lib/ModalTrigger');
-var Login = require('./Login.jsx');
 
 var NavBarDefault = React.createClass({
 	render: function() {
