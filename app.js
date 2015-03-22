@@ -30,7 +30,7 @@ app.set('view engine', 'jade');
 require('./keys/passport')(passport);
 
 // routes
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/models/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 //**we need to connect to our database i.e. mongoose.connect(configDB.url)**
 
