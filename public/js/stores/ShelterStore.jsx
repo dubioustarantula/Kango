@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var $ = require('jquery');
+var ShelterActions = require('../actions/shelterActions.jsx');
 // require action here.
 
 var shelters = [
@@ -51,27 +52,40 @@ var shelters = [
 ];
 
 var ShelterStore = Reflux.createStore({
-	init: function() {
-		this.load();
-		this.getShelters();
-		// listen to actions
-		// this.listenToMany(actions);
-	},
-	load: function() {
-		var context = this;
-		$.ajax({
-			type: 'GET',
-			url: '/shelters',
-		}).done(function(shelterList) {
-			shelters = shelterList;
-			console.log('changing sheltesr');
-			// context.trigger(shelters);
-		});
-	},
-	getShelters: function() {
-		// console.log('shelters', shelters);
-		return shelters;
-	}
+	init: function(){
+	   this.load();
+	   this.listenTo(ShelterActions.loadShelters, this.load)
+	   this.listenTo(ShelterActions.createShelter, this.onCreate);
+	 },
+	 load: function(){
+	   var context = this;
+	     $.ajax({
+	       type: "GET",
+	       url: '/shelters',
+	       headers: {'x-access-token': "TOKEN GOES HERE"}
+	     }).done(function(data){
+	         console.log(data);
+	         for (var i = 0; i < data.length; i++) {
+	         	shelters.push(data[i]);
+	         }
+					 //push data to store
+	         context.trigger(shelters);
+	     });
+	 },
+	 onCreate: function(shelter) {
+	   shelters.push(shelter);
+
+	   this.trigger(shelters);
+	 },
+	 toggle: function(e, toggled, job){
+	   console.log(e, toggled, job);
+
+	 },
+	 getShelters: function() {
+	   //req to /api/listings
+	   return shelters;
+	 },
+
 });
 
 module.exports = ShelterStore;

@@ -6,9 +6,6 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var Modal = require('react-bootstrap/lib/Modal');
-var ModalTrigger = require('react-bootstrap/lib/ModalTrigger');
-
 var NavBarDefault = React.createClass({
 	render: function() {
 		return (

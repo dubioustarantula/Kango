@@ -32853,7 +32853,18 @@ Router.run(routes,function (Handler) {
 
 
 
-},{"./components/Login.jsx":228,"./components/Main.jsx":229,"./components/NavBarDefault.jsx":230,"./components/NotFound.jsx":231,"./components/Shelters.jsx":233,"./components/ShowList.jsx":234,"./components/Signup.jsx":235,"./components/TwitterLogin.jsx":236,"./stores/ShelterStore.jsx":237,"react":202,"react-router":43}],224:[function(require,module,exports){
+},{"./components/Login.jsx":229,"./components/Main.jsx":230,"./components/NavBarDefault.jsx":231,"./components/NotFound.jsx":232,"./components/Shelters.jsx":234,"./components/ShowList.jsx":236,"./components/Signup.jsx":237,"./components/TwitterLogin.jsx":238,"./stores/ShelterStore.jsx":239,"react":202,"react-router":43}],224:[function(require,module,exports){
+var Reflux = require('reflux');
+
+var ShelterActions = Reflux.createActions([
+  'createShelter',
+  'loadShelters'
+]);
+
+
+module.exports = ShelterActions;
+
+},{"reflux":203}],225:[function(require,module,exports){
 var React = require('react');
 
 var AddShelter = React.createClass({displayName: "AddShelter",
@@ -32886,16 +32897,16 @@ var AddShelter = React.createClass({displayName: "AddShelter",
 module.exports = AddShelter;
 
 
-},{"react":202}],225:[function(require,module,exports){
+},{"react":202}],226:[function(require,module,exports){
 var React = require('react');
 
-},{"react":202}],226:[function(require,module,exports){
-
-
-},{}],227:[function(require,module,exports){
+},{"react":202}],227:[function(require,module,exports){
 
 
 },{}],228:[function(require,module,exports){
+
+
+},{}],229:[function(require,module,exports){
 var React = require('react');
 
 var Login = React.createClass({displayName: "Login",
@@ -32928,7 +32939,7 @@ var Login = React.createClass({displayName: "Login",
 
 module.exports = Login;
 
-},{"react":202}],229:[function(require,module,exports){
+},{"react":202}],230:[function(require,module,exports){
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
@@ -32981,7 +32992,7 @@ var Main = React.createClass({displayName: "Main",
 
 module.exports = Main;
 
-},{"../stores/ShelterStore.jsx":237,"./NavBarDefault.jsx":230,"./ShowList.jsx":234,"react":202}],230:[function(require,module,exports){
+},{"../stores/ShelterStore.jsx":239,"./NavBarDefault.jsx":231,"./ShowList.jsx":236,"react":202}],231:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33043,7 +33054,7 @@ var SignInModal = React.createClass({displayName: "SignInModal",
 
 module.exports = NavBarDefault;
 
-},{"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],231:[function(require,module,exports){
+},{"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],232:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -33058,17 +33069,23 @@ var NotFound = React.createClass({displayName: "NotFound",
 
 module.exports = NotFound;
 
-},{"react":202}],232:[function(require,module,exports){
-var React = require('react');
-
 },{"react":202}],233:[function(require,module,exports){
 var React = require('react');
+
+},{"react":202}],234:[function(require,module,exports){
+var React = require('react');
+var NavBarDefault = require('./NavBarDefault.jsx');
 
 var Shelters = React.createClass({displayName: "Shelters",
 	render: function() {
 		return (
-			React.createElement("div", {className: "container"}, 
-				React.createElement("h1", null, " This is the Shelters view ")
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid header-default"}, 
+					React.createElement(NavBarDefault, null)
+				), 
+				React.createElement("div", {className: "container"}, 
+					React.createElement("h1", null, " This is the Shelters view ")
+				)
 			)
 		)
 	}
@@ -33076,7 +33093,18 @@ var Shelters = React.createClass({displayName: "Shelters",
 
 module.exports = Shelters;
 
-},{"react":202}],234:[function(require,module,exports){
+},{"./NavBarDefault.jsx":231,"react":202}],235:[function(require,module,exports){
+var React = require('react');
+
+var ShowAll = React.createClass({displayName: "ShowAll",
+	render: function() {
+		
+	}
+});
+
+module.exports = ShowAll;
+
+},{"react":202}],236:[function(require,module,exports){
 var React = require('react');
 
 var ShowList = React.createClass({displayName: "ShowList",
@@ -33086,7 +33114,10 @@ var ShowList = React.createClass({displayName: "ShowList",
 			return (
 				React.createElement("li", {className: "col-md-4"}, 
 					React.createElement("div", {className: "shelter-card"}, 
-						shelter.name
+						React.createElement("img", {src: "http://cdn.sheknows.com/articles/2013/04/Puppy_2.jpg"}), 
+						React.createElement("div", {className: "shelter-info"}, 
+							shelter.name
+						)
 					)
 				)
 			)
@@ -33108,7 +33139,7 @@ var ShowList = React.createClass({displayName: "ShowList",
 module.exports = ShowList;
 
 
-},{"react":202}],235:[function(require,module,exports){
+},{"react":202}],237:[function(require,module,exports){
 var React = require('react');
 
 var Signup = React.createClass({displayName: "Signup",
@@ -33142,7 +33173,7 @@ var Signup = React.createClass({displayName: "Signup",
 
 module.exports = Signup;
 
-},{"react":202}],236:[function(require,module,exports){
+},{"react":202}],238:[function(require,module,exports){
 var React = require('react');
 
 var TwitterLogin = React.createClass({displayName: "TwitterLogin",
@@ -33174,9 +33205,10 @@ var TwitterLogin = React.createClass({displayName: "TwitterLogin",
 
 module.exports = TwitterLogin;
 
-},{"react":202}],237:[function(require,module,exports){
+},{"react":202}],239:[function(require,module,exports){
 var Reflux = require('reflux');
 var $ = require('jquery');
+var ShelterActions = require('../actions/shelterActions.jsx');
 // require action here.
 
 var shelters = [
@@ -33228,29 +33260,45 @@ var shelters = [
 ];
 
 var ShelterStore = Reflux.createStore({
-	init: function() {
-		this.load();
-		this.getShelters();
-		// listen to actions
-		// this.listenToMany(actions);
-	},
-	load: function() {
-		var context = this;
-		$.ajax({
-			type: 'GET',
-			url: '/shelters',
-		}).done(function(shelterList) {
-			shelters = shelterList;
-			console.log('changing sheltesr');
-			// context.trigger(shelters);
-		});
-	},
-	getShelters: function() {
-		// console.log('shelters', shelters);
-		return shelters;
-	}
+	init: function(){
+	   this.load();
+	   this.listenTo(ShelterActions.loadShelters, this.load)
+	   this.listenTo(ShelterActions.createShelter, this.onCreate);
+	 },
+	 load: function(){
+	   var context = this;
+	     $.ajax({
+	       type: "GET",
+	       url: '/shelters',
+	       headers: {'x-access-token': "TOKEN GOES HERE"}
+	     }).done(function(data){
+	         console.log(data);
+	         for (var i = 0; i < data.length; i++) {
+	         	shelters.push(data[i]);
+	         }
+					 //push data to store
+	         context.trigger(shelters);
+	     });
+	 },
+	 onCreate: function(shelter) {
+	   shelters.push(shelter);
+
+	   this.trigger(shelters);
+	 },
+	 toggle: function(e, toggled, job){
+	   console.log(e, toggled, job);
+
+	 },
+	 getShelters: function() {
+	   //req to /api/listings
+	   return shelters;
+	 },
+
 });
 
 module.exports = ShelterStore;
 
-},{"jquery":2,"reflux":203}]},{},[223,224,225,226,227,228,229,230,231,232,233,234,235,236,237]);
+},{"../actions/shelterActions.jsx":224,"jquery":2,"reflux":203}],240:[function(require,module,exports){
+function countUp(a,b,c,d,e,f){for(var g=0,h=["webkit","moz","ms","o"],i=0;i<h.length&&!window.requestAnimationFrame;++i)window.requestAnimationFrame=window[h[i]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[h[i]+"CancelAnimationFrame"]||window[h[i]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(a){var c=(new Date).getTime(),d=Math.max(0,16-(c-g)),e=window.setTimeout(function(){a(c+d)},d);return g=c+d,e}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(a){clearTimeout(a)}),this.options=f||{useEasing:!0,useGrouping:!0,separator:",",decimal:"."},""==this.options.separator&&(this.options.useGrouping=!1),null==this.options.prefix&&(this.options.prefix=""),null==this.options.suffix&&(this.options.suffix="");var j=this;this.d="string"==typeof a?document.getElementById(a):a,this.startVal=Number(b),this.endVal=Number(c),this.countDown=this.startVal>this.endVal?!0:!1,this.startTime=null,this.timestamp=null,this.remaining=null,this.frameVal=this.startVal,this.rAF=null,this.decimals=Math.max(0,d||0),this.dec=Math.pow(10,this.decimals),this.duration=1e3*e||2e3,this.version=function(){return"1.3.2"},this.printValue=function(a){var b=isNaN(a)?"--":j.formatNumber(a);"INPUT"==j.d.tagName?this.d.value=b:"text"==j.d.tagName?this.d.textContent=b:this.d.innerHTML=b},this.easeOutExpo=function(a,b,c,d){return 1024*c*(-Math.pow(2,-10*a/d)+1)/1023+b},this.count=function(a){null===j.startTime&&(j.startTime=a),j.timestamp=a;var b=a-j.startTime;if(j.remaining=j.duration-b,j.options.useEasing)if(j.countDown){var c=j.easeOutExpo(b,0,j.startVal-j.endVal,j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.easeOutExpo(b,j.startVal,j.endVal-j.startVal,j.duration);else if(j.countDown){var c=(j.startVal-j.endVal)*(b/j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.startVal+(j.endVal-j.startVal)*(b/j.duration);j.frameVal=j.countDown?j.frameVal<j.endVal?j.endVal:j.frameVal:j.frameVal>j.endVal?j.endVal:j.frameVal,j.frameVal=Math.round(j.frameVal*j.dec)/j.dec,j.printValue(j.frameVal),b<j.duration?j.rAF=requestAnimationFrame(j.count):null!=j.callback&&j.callback()},this.start=function(a){return j.callback=a,isNaN(j.endVal)||isNaN(j.startVal)?(console.log("countUp error: startVal or endVal is not a number"),j.printValue()):j.rAF=requestAnimationFrame(j.count),!1},this.stop=function(){cancelAnimationFrame(j.rAF)},this.reset=function(){j.startTime=null,j.startVal=b,cancelAnimationFrame(j.rAF),j.printValue(j.startVal)},this.resume=function(){j.stop(),j.startTime=null,j.duration=j.remaining,j.startVal=j.frameVal,requestAnimationFrame(j.count)},this.formatNumber=function(a){a=a.toFixed(j.decimals),a+="";var b,c,d,e;if(b=a.split("."),c=b[0],d=b.length>1?j.options.decimal+b[1]:"",e=/(\d+)(\d{3})/,j.options.useGrouping)for(;e.test(c);)c=c.replace(e,"$1"+j.options.separator+"$2");return j.options.prefix+c+d+j.options.suffix},j.printValue(j.startVal)}
+
+},{}]},{},[223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240]);

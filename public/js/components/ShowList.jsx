@@ -7,7 +7,10 @@ var ShowList = React.createClass({
 			return (
 				<li className="col-md-4"> 
 					<div className="shelter-card">
-						{shelter.name}
+						<img src={"http://cdn.sheknows.com/articles/2013/04/Puppy_2.jpg"} />
+						<div className="shelter-info">
+							{shelter.name}
+						</div>
 					</div>
 				</li>
 			)
