@@ -32840,8 +32840,6 @@ var routes = (
   React.createElement(Route, {name: "app", handler: App}, 
   	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
     React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
-    React.createElement(Route, {name: "login", handler: Login}), 
-    React.createElement(Route, {name: "signup", handler: Signup}), 
     React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
     React.createElement(NotFoundRoute, {handler: NotFound})
   )
@@ -32897,30 +32895,29 @@ var React = require('react');
 
 },{}],228:[function(require,module,exports){
 var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
 
 var Login = React.createClass({displayName: "Login",
   render: function() {
     return (
-      React.createElement("div", {class: "col-sm-6 col-sm-offset-3"}, 
-
-          React.createElement("h1", null, React.createElement("span", {class: "fa fa-sign-in"}), " Login"), 
-
-          React.createElement("form", {action: "/login", method: "post"}, 
-              React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Email"), 
-                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
-              ), 
-              React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Password"), 
-                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
-              ), 
-
-              React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango"), 
+        React.createElement("form", {action: "/login", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
           ), 
 
-          React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup")), 
-          React.createElement("p", null, "Or go ", React.createElement("a", {href: "/"}, "home"), ".")
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+        ), 
 
+        React.createElement("p", null, "Need an account? ", React.createElement(Link, {to: "signup"}, "Sign Up"))
       )
     )
   }
@@ -32928,7 +32925,7 @@ var Login = React.createClass({displayName: "Login",
 
 module.exports = Login;
 
-},{"react":202}],229:[function(require,module,exports){
+},{"react":202,"react-router":43}],229:[function(require,module,exports){
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
@@ -32990,60 +32987,50 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
+var Main = require('./Main.jsx');
+var TwitterLogin = require('./TwitterLogin.jsx');
+
 var Modal = require('react-bootstrap/lib/Modal');
 var ModalTrigger = require('react-bootstrap/lib/ModalTrigger');
+var Login = require('./Login.jsx');
 
 var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 	render: function() {
 		return (
 			React.createElement("div", null, 
-			React.createElement("header", null, 
-				React.createElement("nav", {className: "navbar navbar-default container"}, 
-					React.createElement("div", {className: "wrapper"}, 
-						React.createElement("div", {className: "navbar-header"}, 
-							React.createElement(Link, {to: "main", className: "navbar-brand"}, 
-							  "kango`"
-							)
-						), 
-						React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-							React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
-							React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
-							React.createElement("li", null, 
-							React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
-									"Sign In"
-							)
+				React.createElement("header", null, 
+					React.createElement("nav", {className: "navbar navbar-default container"}, 
+						React.createElement("div", {className: "wrapper"}, 
+							React.createElement("div", {className: "navbar-header"}, 
+								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
+								  "kango`"
+								)
+							), 
+							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
+								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
+								React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
+								React.createElement("li", null, 
+								React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
+										"Sign In"
+								)
+								)
 							)
 						)
 					)
+				), 
+				React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
+				  React.createElement("div", {className: "modal-dialog"}, 
+				  	React.createElement(TwitterLogin, null)
+				  )
 				)
-			), 
-			React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
-			  React.createElement("div", {className: "modal-dialog"}, 
-					React.createElement("div", {className: "modal-popup modal-content"}, 
-					  React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango")
-					)
-			  )
-			)
 			)
 		)
 	}
 });
 
-var SignInModal = React.createClass({displayName: "SignInModal",
-	render: function() {
-		return (
-			React.createElement(Modal, {title: "Sign In", animation: true}, 
-				React.createElement("div", {className: "modal-body"}, 
-					React.createElement("h4", null, "Hi there")
-				)
-			)
-		);
-	}
-});
-
 module.exports = NavBarDefault;
 
-},{"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],231:[function(require,module,exports){
+},{"./Login.jsx":228,"./Main.jsx":229,"./TwitterLogin.jsx":236,"react":202,"react-bootstrap/lib/Modal":5,"react-bootstrap/lib/ModalTrigger":6,"react-router":43}],231:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -33114,27 +33101,22 @@ var React = require('react');
 var Signup = React.createClass({displayName: "Signup",
   render: function() {
     return (
-      React.createElement("div", {class: "col-sm-6 col-sm-offset-3"}, 
-
-          React.createElement("h1", null, React.createElement("span", {class: "fa fa-sign-in"}), " Signup"), 
-
-          React.createElement("form", {action: "/signup", method: "post"}, 
-              React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Email"), 
-                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
-              ), 
-              React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Password"), 
-                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
-              ), 
-
-              React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign Up for Kango"), 
+        React.createElement("form", {action: "/signup", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
           ), 
 
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
+        ), 
 
-          React.createElement("p", null, "Already have an account? ", React.createElement("a", {href: "/login"}, "Login")), 
-          React.createElement("p", null, "Or go ", React.createElement("a", {href: "/"}, "home"), ".")
-
+        "// ", React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup"))
       )
     )
   }
@@ -33148,26 +33130,22 @@ var React = require('react');
 var TwitterLogin = React.createClass({displayName: "TwitterLogin",
   render: function() {
     return (
-      React.createElement("div", {className: "col-sm-6 col-sm-offset-3"}, 
-
-          React.createElement("h1", null, React.createElement("span", {className: "fa fa-user"}), " Add Local Account"), 
-
-          React.createElement("form", {action: "/connect/local", method: "post"}, 
-              React.createElement("div", {className: "form-group"}, 
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+              React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
+              React.createElement("form", {action: "/auth/twitter", method: "get"}, 
+                React.createElement("div", {class: "form-group"}, 
                   React.createElement("label", null, "Email"), 
-                  React.createElement("input", {type: "text", className: "form-control", name: "email"})
-              ), 
-              React.createElement("div", {className: "form-group"}, 
+                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
+                ), 
+                React.createElement("div", {class: "form-group"}, 
                   React.createElement("label", null, "Password"), 
-                  React.createElement("input", {type: "password", className: "form-control", name: "password"})
-              ), 
+                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
+                ), 
 
-              React.createElement("button", {type: "submit", className: "btn btn-warning btn-lg"}, "Add Local")
-          ), 
+                React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+              )
 
-          React.createElement("p", null, React.createElement("a", {href: "/profile"}, "Go back to profile"))
-
-      )
+            )
     )
   }
 });
