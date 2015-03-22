@@ -7,7 +7,7 @@ var compress = require('compression');
 var favicon = require('static-favicon');
 var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
-var config = require('./config');
+var config = require('./keys');
 var routes = require('./routes');
 var bookshelf = require('./app/config');
 var passport = require('passport');
@@ -15,7 +15,7 @@ var flash = require('connect-flash');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var configDB = require('./config/database.js');
+var configDB = require('./keys/database.js');
 var knex = require('knex');
 
 var app = express();
