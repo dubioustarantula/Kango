@@ -9,6 +9,7 @@ public/css/styles.css.map
 public/js/components/.DS_Store
 
 # Authentication
+keys/auth.js
 
 # Logs
 logs
