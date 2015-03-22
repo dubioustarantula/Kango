@@ -1,3 +1,9 @@
+//load these exactly like controllers/index.js
+var fs = require('fs');
+var dbHelper = require('../lib/dbutils');
+var User = require('../app/models/user');
+var Users = require('../app/collections/users');
+
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
@@ -17,14 +23,20 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.twitter_id);
+        return done(null, user.twitter_id);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(twitter_id, done) {
-        User.findById(twitter_id, function(err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(function(twitter_id, res) {
+        if(twitter_id) {
+            new User({twitter_id: twitter_id}).fetch().then(function(user) {
+                if(user) {
+                    res.send(200, user);
+                } else {
+                    res.send(404, 'Username does not appear in our database');
+                }
+            });
+        }
     });
 
 
@@ -42,12 +54,12 @@ module.exports = function(passport) {
     function(req, email, password, done) {
 
         // asynchronous
-        // User.findOne wont fire unless data is sent back
+        // new User wont fire unless data is sent back
         process.nextTick(function() {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
+        new User({ 'email' :  email }).fetch().then(function(err, existingUser) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -73,10 +85,10 @@ module.exports = function(passport) {
 
                 // if there is no user with that email
                 // create the user
-                var newUser            = new User();
+                var newUser = new User();
 
                 // set the user's local credentials
-                newUser.email    = email;
+                newUser.email = email;
                 newUser.password = newUser.generateHash(password);
 
                 // save the user
@@ -109,7 +121,7 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
         //asynchronous
         process.nextTick(function() {
-        User.findOne({ 'email' :  email }, function(err, user) {
+        new User({ 'email' :  email }).fetch().then(function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -147,11 +159,11 @@ module.exports = function(passport) {
     function(req, token, tokenSecret, profile, done) {
 
     // make the code asynchronous
-    // User.findOne won't fire until we have all our data back from Twitter
+    // new User won't fire until we have all our data back from Twitter
         process.nextTick(function() {
 
            if (!req.user) {
-            User.findOne({ 'twitter_id' : profile.twitter_id }, function(err, user) {
+            new User({ 'twitter_id' : profile.twitter_id }).fetch().then(function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -194,9 +206,9 @@ module.exports = function(passport) {
             //user already exists and is logged in, we have to link accounts
             var user = req.user; //pull the user out of the session
             //update the current users twitter credentials
-            user.twitter_id          = profile.twitter_id;
-            user.twitter_token       = twitter_token;
-            user.twitter_handle   = profile.twitter_handle;
+            user.twitter_id = profile.twitter_id;
+            user.twitter_token = twitter_token;
+            user.twitter_handle = profile.twitter_handle;
             user.twitter_displayname = profile.twitter_displayname;
 
             //save the user
