@@ -31841,7 +31841,6 @@ var DefaultRoute = Route.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var Main = require('./Main.jsx');
 var TwitterLogin = require('./TwitterLogin.jsx');
 
 var NavBarDefault = React.createClass({displayName: "NavBarDefault",
@@ -31880,7 +31879,7 @@ var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 
 module.exports = NavBarDefault;
 
-},{"./Main.jsx":217,"./TwitterLogin.jsx":225,"react":189,"react-router":30}],219:[function(require,module,exports){
+},{"./TwitterLogin.jsx":225,"react":189,"react-router":30}],219:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -31940,7 +31939,7 @@ var ShowList = React.createClass({displayName: "ShowList",
 			return (
 				React.createElement("li", {className: "col-md-4"}, 
 					React.createElement("div", {className: "shelter-card"}, 
-						React.createElement("img", {src: "http://cdn.sheknows.com/articles/2013/04/Puppy_2.jpg"}), 
+						React.createElement("img", {src: shelter.image_url}), 
 						React.createElement("div", {className: "shelter-info"}, 
 							shelter.name
 						)
@@ -32001,21 +32000,11 @@ var TwitterLogin = React.createClass({displayName: "TwitterLogin",
   render: function() {
     return (
       React.createElement("div", {className: "modal-popup modal-content"}, 
-              React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
-              React.createElement("form", {action: "/auth/twitter", method: "get"}, 
-                React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Email"), 
-                  React.createElement("input", {type: "text", class: "form-control", name: "email"})
-                ), 
-                React.createElement("div", {class: "form-group"}, 
-                  React.createElement("label", null, "Password"), 
-                  React.createElement("input", {type: "password", class: "form-control", name: "password"})
-                ), 
-
-                React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
-              )
-
-            )
+        React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
+        React.createElement("form", {action: "/auth/twitter", method: "get"}, 
+          React.createElement("button", {type: "submit"}, "Login")
+        )
+      )
     )
   }
 });
@@ -32032,7 +32021,7 @@ var shelters = [
 	{
 		'sheltername' : 'berkeleyShelter',
 		'name' : 'Berkeley Animal Shelter',
-		'image_url' : 'imgur.com/1341434few.jpg',
+		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
 		'address_one' : '1 Telegraph Rd.',
 		'address_two' : null,
 		'city' : 'Berkeley',
@@ -32047,7 +32036,7 @@ var shelters = [
 	{
 		'sheltername' : 'sanFranciscoShelter',
 		'name' : 'San Francisco Animal Shelter',
-		'image_url' : 'imgur.com/1434hhew.jpg',
+		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
 		'address_one' : '875 Post St.',
 		'address_two' : null,
 		'city' : 'San Francisco',
@@ -32062,7 +32051,7 @@ var shelters = [
 	{
 		'sheltername' : 'westOaklandShelter',
 		'name' : 'West Oakland Animal Shelter',
-		'image_url' : 'imgur.com/1245hhrh.jpg',
+		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
 		'address_one' : '600 Geary St.',
 		'address_two' : null,
 		'city' : 'Oakland',
