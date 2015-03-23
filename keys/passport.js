@@ -2,6 +2,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
 
+
 // load up the user model
 var User = require('../app/models/user');
 
@@ -21,10 +22,11 @@ module.exports = function(passport) {
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(twitter_id, done) {
-        User.findById(twitter_id, function(err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(function(id, done) {
+        // new User({twitter_id: twitter_id}).fetch().then(function(err, user) {
+        //     done(err, user);
+        // });
+        done(null, id);
     });
 
 
@@ -47,7 +49,7 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
+        new User({ 'email' :  email }).fetch().then(function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -109,7 +111,7 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
         //asynchronous
         process.nextTick(function() {
-        User.findOne({ 'email' :  email }, function(err, user) {
+        new User({ 'email' :  email }).fetch().then(function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -146,68 +148,42 @@ module.exports = function(passport) {
     //twitter will send back token and profile
     function callback(req, token, tokenSecret, profile, done) {
 
-    // make the code asynchronous
+
+        // make the code asynchronous
     // User.findOne won't fire until we have all our data back from Twitter
         process.nextTick(function() {
 
-           if (!req.user) {
-            User.findOne({ 'twitter_id' : profile.twitter_id }, function(err, user) {
+            new User({ 'twitter_id' : profile.id }).fetch().then(function(user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
-                if (err)
-                    return done(err);
+                // if (err)
+                //     return done(err);
 
                 // if the user is found then log them in
                 if (user) {
-                   if(!user.twitter.token) {
-                    user.twitter_token = twitter_token;
-                    user.twitter_handle = profile.twitter_handle;
-                    user.twitter_displayname = profile.twitter_displayname;
-
-                    user.save(function(err) {
-                        if(err)
-                            throw err;
-                        return done(null, user);
-                    });
-                   }
-                   return done(null, user); //user found, return that user
+                    done(null, user); // user found, return that user
                 } else {
                     // if there is no user, create them
                     var newUser                 = new User();
 
                     // set all of the user data that we need
-                    newUser.twitter_id          = profile.twitter_id;
-                    newUser.twitter_token       = twitter_token;
-                    newUser.twitter_handle    = profile.twitter_handle;
-                    newUser.twitter_displayname = profile.twitter_displayname;
+                    newUser.twitter_id          = profile.id;
+                    newUser.twitter_token       = token;
+                    newUser.twitter_handle   = profile.username;
+                    newUser.twitter_displayname = profile.displayName;
 
                     // save our user into the database
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    newUser.save().then(function(newUser) {
+                        // if (err) {
+                        //     console.log('err', newUser);
+                        //     throw err;
+                        // }
+                        done(null, newUser);
                     });
                 }
             });
-        } else {
-            //user already exists and is logged in, we have to link accounts
-            var user = req.user; //pull the user out of the session
-            //update the current users twitter credentials
-            user.twitter_id          = profile.twitter_id;
-            user.twitter_token       = twitter_token;
-            user.twitter_handle   = profile.twitter_handle;
-            user.twitter_displayname = profile.twitter_displayname;
 
-            //save the user
-            user.save(function(err) {
-                if (err) 
-                    throw err;
-                return done(null, user);
-            });
-        }
     });
-
     }));
-
 };
