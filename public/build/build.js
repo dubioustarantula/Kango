@@ -33668,16 +33668,16 @@ var ShelterActions = require('../actions/shelterActions.jsx');
 
 var shelters = [
 	{
-		'sheltername' : 'rockridgeshelter',
-		'name' : 'Rockridge Animal Shelter',
+		'sheltername' : 'wonderdogrescue',
+		'name' : 'Wonder Dog Rescue',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '123 Blah Rd.',
+		'address_one' : '650 Fillmore St',
 		'address_two' : null,
-		'city' : 'Rockridge',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4509392684,
-		'email' : 'hello@bas.org',
+		'city' : 'San Francisco',
+		'state' : 'CA',
+		'zip' : 94140,
+		'telephone' : 4156213647,
+		'email' : 'adoption@wonderdogrescue.org',
 		'bio' : 'We are the Rockridge animal shelter',
 		'goal' : 1000,
 		'raised' : 400
