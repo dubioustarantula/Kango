@@ -100,11 +100,10 @@ exports.postDonation = function(req, res) {
   });
   new Shelter({ sheltername: data.sheltername }).fetch().then(function(shelter) {
     var raised = shelter.attributes.raised + data.donation;
-    console.log('raised', raised);
     if(shelter) {
-      shelter.save({raised: raised}, {patch: true}).then(function(shelter) {
+      shelter.save({raised: raised}, {patch: true}).then(function() {
         //updated
-        console.log('Shelter updated!', shelter);
+        console.log('Shelter updated!');
       });
     } else {
       res.send(404, 'Sheltername does not appear in our database');

@@ -6,16 +6,11 @@ var AsyncActions = Reflux.createActions({
 });
 
 AsyncActions.donation.listen( function(data) {
-  console.log(data);
-
-  // $.ajax({
-  //  type: "POST",
-  //  url: '/donate',
-  //  data:  data
-  // }).done( this.completed )
-  // .fail( this.failed );
-
+  $.ajax({
+   type: "GET",
+   url: '/shelters?' + data.sheltername
+  }).done( this.completed )
+  .fail( this.failed );
 });
-
 
 module.exports = AsyncActions;
