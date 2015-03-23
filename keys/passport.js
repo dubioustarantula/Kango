@@ -146,7 +146,7 @@ module.exports = function(passport) {
     },
 
     //twitter will send back token and profile
-    function(req, token, tokenSecret, profile, done) {
+    function callback(req, token, tokenSecret, profile, done) {
 
 
         // make the code asynchronous
