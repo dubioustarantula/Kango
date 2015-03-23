@@ -6,7 +6,7 @@ var ShelterActions = require('../actions/shelterActions.jsx');
 var shelters = [
 	{
 		'sheltername' : 'berkeleyShelter',
-		'name' : 'Berkeley Animal Shelter',
+		'name' : 'Berkeley Humane',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
 		'address_one' : '1 Telegraph Rd.',
 		'address_two' : null,
@@ -15,7 +15,7 @@ var shelters = [
 		'zip' : 94109,
 		'telephone' : 4509492684,
 		'email' : 'hello@bas.org',
-		'bio' : 'We are the Berkeley animal shelter',
+		'bio' : 'Berkeley Humane provides complete care for homeless animals, from rescue to rehabilitation to placement. We match animals with loving and committed adopters, strengthen the human-animal bond, and promote the humane treatment of animals.\n Our vision is to be an innovative leader in animal welfare and to provide critical resources to our community, leading the way with best practices in animal care to reduce the number of homeless animals in our community and beyond.',
 		'goal' : 1000,
 		'raised' : 400
 	},

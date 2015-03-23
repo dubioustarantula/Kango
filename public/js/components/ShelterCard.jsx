@@ -5,9 +5,15 @@ var Link = Router.Link;
 var $ = require('jquery');
 
 var ShelterCard = React.createClass({
+	componentDidMount: function() {
+		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
+		$('.shelter-progress-bar').css("width", progress);
+		console.log("hey");
+		console.log(progress);
+	},
 
 	render: function() {
-		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
+		
 		return (
 			<li className="col-md-4"> 
 				<div className="shelter-card">
@@ -18,7 +24,8 @@ var ShelterCard = React.createClass({
 						<div className="shelter-bio">
 							<h3>{this.props.data.name}</h3>
 						</div>
-						<div className="shelter-progress-bar"></div>
+						<div className={this.props.data.sheltername + " shelter-progress-bar"}>
+						</div>
 						<div className="shelter-fund-wrapper">
 							<span className="shelter-raised">
 								${this.props.data.raised} raised
