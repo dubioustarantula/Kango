@@ -17,7 +17,7 @@ var shelters = [
 		'email' : 'hello@bas.org',
 		'bio' : 'We are the Berkeley animal shelter',
 		'goal' : 1000,
-		'raised' : 0
+		'raised' : 400
 	},
 	{
 		'sheltername' : 'sanFranciscoShelter',
@@ -32,7 +32,7 @@ var shelters = [
 		'email' : 'hello@sas.org',
 		'bio' : 'We are the San Francisco animal shelter',
 		'goal' : 2100,
-		'raised' : 0
+		'raised' : 960
 	},
 	{
 		'sheltername' : 'westOaklandShelter',
@@ -47,12 +47,14 @@ var shelters = [
 		'email' : 'hello@woas.org',
 		'bio' : 'We are the West Oakland animal shelter',
 		'goal' : 1600,
-		'raised' : 0
+		'raised' : 870
 	}
 ];
 
 var ShelterStore = Reflux.createStore({
+	shelters: [],
 	init: function(){
+		 this.shelters = shelters;
 	   this.load();
 	   this.listenTo(ShelterActions.loadShelters, this.load)
 	   this.listenTo(ShelterActions.createShelter, this.onCreate);
@@ -63,8 +65,7 @@ var ShelterStore = Reflux.createStore({
 	       type: "GET",
 	       url: '/shelters',
 	       headers: {'x-access-token': "TOKEN GOES HERE"}
-	     }).done(function(data){
-	         console.log(data);
+	     }).done(function(data) {
 	         for (var i = 0; i < data.length; i++) {
 	         	shelters.push(data[i]);
 	         }

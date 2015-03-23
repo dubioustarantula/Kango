@@ -154,7 +154,7 @@ section.three-shelters {
     width: 100%;
     height: 8px;
     background-color: #2ecc71;
-    background: linear-gradient(to right, rgba(46, 204, 113, 0.55) 0%, rgba(46, 204, 113, 0.75) 49%, #2ecc71 100%); }
+    background: linear-gradient(to right, rgba(46, 204, 113, 0.55) 10%, rgba(46, 204, 113, 0.75) 49%, #2ecc71 100%); }
   .shelter-card .shelter-fund-wrapper {
     border-top: 1px solid #ddd; }
     .shelter-card .shelter-fund-wrapper .shelter-raised, .shelter-card .shelter-fund-wrapper .shelter-target {
