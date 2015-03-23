@@ -8,19 +8,19 @@ var shelters = [
 		'sheltername' : 'berkeleyShelter',
 		'name' : 'Berkeley Humane',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '1 Telegraph Rd.',
+		'address_one' : '123 Blah Rd.',
 		'address_two' : null,
-		'city' : 'Berkeley',
+		'city' : 'Rockridge',
 		'state' : 'ca',
 		'zip' : 94109,
-		'telephone' : 4509492684,
+		'telephone' : 4509392684,
 		'email' : 'hello@bas.org',
 		'bio' : 'Berkeley Humane provides complete care for homeless animals, from rescue to rehabilitation to placement. We match animals with loving and committed adopters, strengthen the human-animal bond, and promote the humane treatment of animals.\n Our vision is to be an innovative leader in animal welfare and to provide critical resources to our community, leading the way with best practices in animal care to reduce the number of homeless animals in our community and beyond.',
 		'goal' : 1000,
 		'raised' : 400
 	},
 	{
-		'sheltername' : 'sanFranciscoShelter',
+		'sheltername' : 'sanfranciscoshelter',
 		'name' : 'San Francisco Animal Shelter',
 		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
 		'address_one' : '875 Post St.',
@@ -35,7 +35,7 @@ var shelters = [
 		'raised' : 960
 	},
 	{
-		'sheltername' : 'westOaklandShelter',
+		'sheltername' : 'westoaklandshelter',
 		'name' : 'West Oakland Animal Shelter',
 		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
 		'address_one' : '600 Geary St.',

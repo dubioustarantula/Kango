@@ -7,7 +7,7 @@ var $ = require('jquery');
 var ShelterCard = React.createClass({
 	componentDidMount: function() {
 		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
-		$('.shelter-progress-bar').css("width", progress);
+		$('shelter-progress-bar').css("width", progress);
 		console.log("hey");
 		console.log(progress);
 	},

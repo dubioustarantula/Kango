@@ -96,6 +96,18 @@ exports.postDonation = function(req, res) {
   var data = req.body;
   dbHelper.createDonation(data, function(newDonation) {
     Donations.add(newDonation);
-    res.send(200, newDonation);
+    // res.send(200, newDonation);
   });
+  new Shelter({ sheltername: data.sheltername }).fetch().then(function(shelter) {
+    var raised = shelter.attributes.raised + data.donation;
+    console.log('raised', raised);
+    if(shelter) {
+      shelter.save({raised: raised}, {patch: true}).then(function(shelter) {
+        //updated
+        console.log('Shelter updated!', shelter);
+      });
+    } else {
+      res.send(404, 'Sheltername does not appear in our database');
+    }
+  });  
 };

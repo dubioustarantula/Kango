@@ -33239,7 +33239,30 @@ Router.run(routes,function (Handler) {
 
 
 
-},{"./components/Login.jsx":217,"./components/Main.jsx":218,"./components/NavBarDefault.jsx":219,"./components/NotFound.jsx":220,"./components/Shelter.jsx":222,"./components/Shelters.jsx":224,"./components/ShowList.jsx":226,"./components/Signup.jsx":227,"./components/TwitterLogin.jsx":228,"./stores/ShelterStore.jsx":229,"react":189,"react-router":30}],212:[function(require,module,exports){
+},{"./components/Login.jsx":218,"./components/Main.jsx":219,"./components/NavBarDefault.jsx":220,"./components/NotFound.jsx":221,"./components/Shelter.jsx":223,"./components/Shelters.jsx":225,"./components/ShowList.jsx":227,"./components/Signup.jsx":228,"./components/TwitterLogin.jsx":229,"./stores/ShelterStore.jsx":230,"react":189,"react-router":30}],212:[function(require,module,exports){
+var Reflux = require('reflux');
+var $ = require('jquery');
+
+var AsyncActions = Reflux.createActions({
+    "donation": {children: ["completed","failed"]}
+});
+
+AsyncActions.donation.listen( function(data) {
+  console.log(data);
+
+  // $.ajax({
+  //  type: "POST",
+  //  url: '/donate',
+  //  data:  data
+  // }).done( this.completed )
+  // .fail( this.failed );
+
+});
+
+
+module.exports = AsyncActions;
+
+},{"jquery":2,"reflux":190}],213:[function(require,module,exports){
 var Reflux = require('reflux');
 
 var ShelterActions = Reflux.createActions([
@@ -33251,7 +33274,7 @@ var ShelterActions = Reflux.createActions([
 
 module.exports = ShelterActions;
 
-},{"reflux":190}],213:[function(require,module,exports){
+},{"reflux":190}],214:[function(require,module,exports){
 var React = require('react');
 
 var AddShelter = React.createClass({displayName: "AddShelter",
@@ -33284,16 +33307,16 @@ var AddShelter = React.createClass({displayName: "AddShelter",
 module.exports = AddShelter;
 
 
-},{"react":189}],214:[function(require,module,exports){
+},{"react":189}],215:[function(require,module,exports){
 var React = require('react');
 
-},{"react":189}],215:[function(require,module,exports){
-
-
-},{}],216:[function(require,module,exports){
+},{"react":189}],216:[function(require,module,exports){
 
 
 },{}],217:[function(require,module,exports){
+
+
+},{}],218:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33325,7 +33348,7 @@ var Login = React.createClass({displayName: "Login",
 
 module.exports = Login;
 
-},{"react":189,"react-router":30}],218:[function(require,module,exports){
+},{"react":189,"react-router":30}],219:[function(require,module,exports){
 var React = require('react');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
@@ -33372,7 +33395,7 @@ var Main = React.createClass({displayName: "Main",
 
 module.exports = Main;
 
-},{"../stores/ShelterStore.jsx":229,"./NavBarDefault.jsx":219,"./ShowList.jsx":226,"react":189,"react-router":30}],219:[function(require,module,exports){
+},{"../stores/ShelterStore.jsx":230,"./NavBarDefault.jsx":220,"./ShowList.jsx":227,"react":189,"react-router":30}],220:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33419,7 +33442,7 @@ var NavBarDefault = React.createClass({displayName: "NavBarDefault",
 
 module.exports = NavBarDefault;
 
-},{"./TwitterLogin.jsx":228,"react":189,"react-router":30}],220:[function(require,module,exports){
+},{"./TwitterLogin.jsx":229,"react":189,"react-router":30}],221:[function(require,module,exports){
 var React = require('react');
 
 var NotFound = React.createClass({displayName: "NotFound",
@@ -33434,10 +33457,10 @@ var NotFound = React.createClass({displayName: "NotFound",
 
 module.exports = NotFound;
 
-},{"react":189}],221:[function(require,module,exports){
+},{"react":189}],222:[function(require,module,exports){
 var React = require('react');
 
-},{"react":189}],222:[function(require,module,exports){
+},{"react":189}],223:[function(require,module,exports){
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('underscore');
@@ -33445,8 +33468,26 @@ var $ = require('jquery');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var NavBarDefault = require('./NavBarDefault.jsx');
 var circleProgress = require('../vendor/circle-progress.js');
+var AsyncActions = require('../actions/asyncActions.jsx');
+
 
 var Shelter = React.createClass({displayName: "Shelter",
+   getInitialState: function() {
+    return null
+  },
+  componentDidMount: function() {
+  	$('#shelter--progress-circle').circleProgress({
+  		value: 0.8,
+  		size: 80
+  	});
+  },
+  updateState: function() {
+    console.log('great success');
+  },
+  submit: function() {
+    var amount = $('#donation').val();
+    AsyncActions.donation.triggerAsync(amount); 
+  },
 	render: function() {
 		/* Gets the shelterName and filters the contents */
 		var url = window.location.href.split('/');
@@ -33461,15 +33502,18 @@ var Shelter = React.createClass({displayName: "Shelter",
     var fullParagraph = [];
     
     for (var i = 0; i < paragraph.length; i++) {
-    	fullParagraph.push('<p>' + paragraph[i] + '</p>');
+    	fullParagraph.push(paragraph[i]);
     }
     console.log('fullPs', fullParagraph);
+
+
 		return (
 			React.createElement("div", null, 
 				React.createElement("div", {className: "container-fluid header-default"}, 
 					React.createElement(NavBarDefault, null)
 				), 
 				React.createElement("div", {className: "container"}, 
+
 					React.createElement("div", {className: "row"}, 
 						React.createElement("div", {className: "col-md-12"}, 
 							React.createElement("h1", {className: "shelter--name"}, shelter.name, " – ", shelter.city, ", ", React.createElement("span", {className: "caps"}, shelter.state))
@@ -33491,9 +33535,15 @@ var Shelter = React.createClass({displayName: "Shelter",
 								fullParagraph
 							)
 						), 
-						React.createElement("div", {className: "col-md-4"}
+						React.createElement("div", {className: "col-md-4"}, 		
+						React.createElement("form", {action: "/donate", method: "post", onSuccess: this.updateState, onSubmit: this.submit}, 
+						  React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
+						  React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: shelter.sheltername}), 
+						  React.createElement("button", {id: "donation-submit", type: "submit"}, "DONATE")
+						)
 						)
 					)
+
 				)
 			)
 		);
@@ -33502,7 +33552,7 @@ var Shelter = React.createClass({displayName: "Shelter",
 
 module.exports = Shelter;
 
-},{"../stores/ShelterStore.jsx":229,"../vendor/circle-progress.js":231,"./NavBarDefault.jsx":219,"jquery":2,"react":189,"reflux":190,"underscore":210}],223:[function(require,module,exports){
+},{"../actions/asyncActions.jsx":212,"../stores/ShelterStore.jsx":230,"../vendor/circle-progress.js":232,"./NavBarDefault.jsx":220,"jquery":2,"react":189,"reflux":190,"underscore":210}],224:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33512,7 +33562,7 @@ var $ = require('jquery');
 var ShelterCard = React.createClass({displayName: "ShelterCard",
 	componentDidMount: function() {
 		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
-		$('.shelter-progress-bar').css("width", progress);
+		$('shelter-progress-bar').css("width", progress);
 		console.log("hey");
 		console.log(progress);
 	},
@@ -33548,7 +33598,7 @@ var ShelterCard = React.createClass({displayName: "ShelterCard",
 
 module.exports = ShelterCard;
 
-},{"jquery":2,"react":189,"react-router":30}],224:[function(require,module,exports){
+},{"jquery":2,"react":189,"react-router":30}],225:[function(require,module,exports){
 var React = require('react');
 var NavBarDefault = require('./NavBarDefault.jsx');
 
@@ -33569,7 +33619,7 @@ var Shelters = React.createClass({displayName: "Shelters",
 
 module.exports = Shelters;
 
-},{"./NavBarDefault.jsx":219,"react":189}],225:[function(require,module,exports){
+},{"./NavBarDefault.jsx":220,"react":189}],226:[function(require,module,exports){
 var React = require('react');
 
 var ShowAll = React.createClass({displayName: "ShowAll",
@@ -33580,7 +33630,7 @@ var ShowAll = React.createClass({displayName: "ShowAll",
 
 module.exports = ShowAll;
 
-},{"react":189}],226:[function(require,module,exports){
+},{"react":189}],227:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33610,7 +33660,7 @@ var ShowList = React.createClass({displayName: "ShowList",
 module.exports = ShowList;
 
 
-},{"./ShelterCard.jsx":223,"react":189,"react-router":30}],227:[function(require,module,exports){
+},{"./ShelterCard.jsx":224,"react":189,"react-router":30}],228:[function(require,module,exports){
 var React = require('react');
 
 var Signup = React.createClass({displayName: "Signup",
@@ -33639,7 +33689,7 @@ var Signup = React.createClass({displayName: "Signup",
 
 module.exports = Signup;
 
-},{"react":189}],228:[function(require,module,exports){
+},{"react":189}],229:[function(require,module,exports){
 var React = require('react');
 
 var TwitterLogin = React.createClass({displayName: "TwitterLogin",
@@ -33657,7 +33707,7 @@ var TwitterLogin = React.createClass({displayName: "TwitterLogin",
 
 module.exports = TwitterLogin;
 
-},{"react":189}],229:[function(require,module,exports){
+},{"react":189}],230:[function(require,module,exports){
 var Reflux = require('reflux');
 var $ = require('jquery');
 var ShelterActions = require('../actions/shelterActions.jsx');
@@ -33668,19 +33718,19 @@ var shelters = [
 		'sheltername' : 'berkeleyShelter',
 		'name' : 'Berkeley Humane',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '1 Telegraph Rd.',
+		'address_one' : '123 Blah Rd.',
 		'address_two' : null,
-		'city' : 'Berkeley',
+		'city' : 'Rockridge',
 		'state' : 'ca',
 		'zip' : 94109,
-		'telephone' : 4509492684,
+		'telephone' : 4509392684,
 		'email' : 'hello@bas.org',
 		'bio' : 'Berkeley Humane provides complete care for homeless animals, from rescue to rehabilitation to placement. We match animals with loving and committed adopters, strengthen the human-animal bond, and promote the humane treatment of animals.\n Our vision is to be an innovative leader in animal welfare and to provide critical resources to our community, leading the way with best practices in animal care to reduce the number of homeless animals in our community and beyond.',
 		'goal' : 1000,
 		'raised' : 400
 	},
 	{
-		'sheltername' : 'sanFranciscoShelter',
+		'sheltername' : 'sanfranciscoshelter',
 		'name' : 'San Francisco Animal Shelter',
 		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
 		'address_one' : '875 Post St.',
@@ -33695,7 +33745,7 @@ var shelters = [
 		'raised' : 960
 	},
 	{
-		'sheltername' : 'westOaklandShelter',
+		'sheltername' : 'westoaklandshelter',
 		'name' : 'West Oakland Animal Shelter',
 		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
 		'address_one' : '600 Geary St.',
@@ -33751,7 +33801,7 @@ var ShelterStore = Reflux.createStore({
 
 module.exports = ShelterStore;
 
-},{"../actions/shelterActions.jsx":212,"jquery":2,"reflux":190}],230:[function(require,module,exports){
+},{"../actions/shelterActions.jsx":213,"jquery":2,"reflux":190}],231:[function(require,module,exports){
 // var Reflux = require('reflux');
 // var ShelterActions = require('../actions/shelterActions.jsx');
 
@@ -33769,7 +33819,7 @@ module.exports = ShelterStore;
 // module.exports = Store;
 
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 /*
 jquery-circle-progress - jQuery Plugin to draw animated circular progress bars
 
@@ -34171,7 +34221,7 @@ License: MIT
 })(jQuery);
 
 
-},{}],232:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 function countUp(a,b,c,d,e,f){for(var g=0,h=["webkit","moz","ms","o"],i=0;i<h.length&&!window.requestAnimationFrame;++i)window.requestAnimationFrame=window[h[i]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[h[i]+"CancelAnimationFrame"]||window[h[i]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(a){var c=(new Date).getTime(),d=Math.max(0,16-(c-g)),e=window.setTimeout(function(){a(c+d)},d);return g=c+d,e}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(a){clearTimeout(a)}),this.options=f||{useEasing:!0,useGrouping:!0,separator:",",decimal:"."},""==this.options.separator&&(this.options.useGrouping=!1),null==this.options.prefix&&(this.options.prefix=""),null==this.options.suffix&&(this.options.suffix="");var j=this;this.d="string"==typeof a?document.getElementById(a):a,this.startVal=Number(b),this.endVal=Number(c),this.countDown=this.startVal>this.endVal?!0:!1,this.startTime=null,this.timestamp=null,this.remaining=null,this.frameVal=this.startVal,this.rAF=null,this.decimals=Math.max(0,d||0),this.dec=Math.pow(10,this.decimals),this.duration=1e3*e||2e3,this.version=function(){return"1.3.2"},this.printValue=function(a){var b=isNaN(a)?"--":j.formatNumber(a);"INPUT"==j.d.tagName?this.d.value=b:"text"==j.d.tagName?this.d.textContent=b:this.d.innerHTML=b},this.easeOutExpo=function(a,b,c,d){return 1024*c*(-Math.pow(2,-10*a/d)+1)/1023+b},this.count=function(a){null===j.startTime&&(j.startTime=a),j.timestamp=a;var b=a-j.startTime;if(j.remaining=j.duration-b,j.options.useEasing)if(j.countDown){var c=j.easeOutExpo(b,0,j.startVal-j.endVal,j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.easeOutExpo(b,j.startVal,j.endVal-j.startVal,j.duration);else if(j.countDown){var c=(j.startVal-j.endVal)*(b/j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.startVal+(j.endVal-j.startVal)*(b/j.duration);j.frameVal=j.countDown?j.frameVal<j.endVal?j.endVal:j.frameVal:j.frameVal>j.endVal?j.endVal:j.frameVal,j.frameVal=Math.round(j.frameVal*j.dec)/j.dec,j.printValue(j.frameVal),b<j.duration?j.rAF=requestAnimationFrame(j.count):null!=j.callback&&j.callback()},this.start=function(a){return j.callback=a,isNaN(j.endVal)||isNaN(j.startVal)?(console.log("countUp error: startVal or endVal is not a number"),j.printValue()):j.rAF=requestAnimationFrame(j.count),!1},this.stop=function(){cancelAnimationFrame(j.rAF)},this.reset=function(){j.startTime=null,j.startVal=b,cancelAnimationFrame(j.rAF),j.printValue(j.startVal)},this.resume=function(){j.stop(),j.startTime=null,j.duration=j.remaining,j.startVal=j.frameVal,requestAnimationFrame(j.count)},this.formatNumber=function(a){a=a.toFixed(j.decimals),a+="";var b,c,d,e;if(b=a.split("."),c=b[0],d=b.length>1?j.options.decimal+b[1]:"",e=/(\d+)(\d{3})/,j.options.useGrouping)for(;e.test(c);)c=c.replace(e,"$1"+j.options.separator+"$2");return j.options.prefix+c+d+j.options.suffix},j.printValue(j.startVal)}
 
-},{}]},{},[211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232]);
+},{}]},{},[211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233]);

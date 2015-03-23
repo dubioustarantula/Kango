@@ -187,4 +187,21 @@ img.shelter--photo {
 	margin-top: 40px;
 }
 
+.shelter--story {
+	line-height: 36px;
+	font-size: 14px;
+}
+
+#donation-submit, #donation {
+	width: 50%;
+	line-height: 24px;
+	padding: 10px 12px;
+}
+
+button#donation-submit {
+	background: rgba(46, 204, 113, 1);
+	color: #fff;
+	border: none;
+	padding: 12px;
+}
 

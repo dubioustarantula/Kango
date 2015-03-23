@@ -190,4 +190,19 @@ img.shelter--photo {
   color: #4B5C66;
   margin-top: 40px; }
 
+.shelter--story {
+  line-height: 36px;
+  font-size: 14px; }
+
+#donation-submit, #donation {
+  width: 50%;
+  line-height: 24px;
+  padding: 10px 12px; }
+
+button#donation-submit {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  padding: 12px; }
+
 /*# sourceMappingURL=styles.css.map */
