@@ -9,7 +9,18 @@ var ShowList = React.createClass({
 					<div className="shelter-card">
 						<img src={shelter.image_url} />
 						<div className="shelter-info">
-							{shelter.name}
+							<div className="shelter-bio">
+								<h3>{shelter.name}</h3>
+							</div>
+							<div className="shelter-progress-bar"></div>
+							<div className="shelter-fund-wrapper">
+								<span className="shelter-raised">
+									$350 raised
+								</span>
+								<span className="shelter-target">
+									$400 to go
+								</span>
+							</div>
 						</div>
 					</div>
 				</li>
