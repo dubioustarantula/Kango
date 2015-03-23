@@ -45,7 +45,8 @@ bookshelf.knex.schema.hasTable('animals_users').then(function(exists) {
 bookshelf.knex.schema.hasTable('shelters').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('shelters', function (shelter) {
-      shelter.string('sheltername', 150).unique().primary();
+      shelter.increments('id')
+      shelter.string('sheltername', 150);
       shelter.string('name', 255);
       shelter.string('image_url', 255);
       shelter.string('address_1', 150);
@@ -67,6 +68,7 @@ bookshelf.knex.schema.hasTable('shelters').then(function(exists) {
 bookshelf.knex.schema.hasTable('donations').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('donations', function (shelter_user) {
+      shelter_user.increments('id');
       shelter_user.string('sheltername', 150);
       shelter_user.string('username', 150);
       shelter_user.integer('donation', 10);
@@ -79,7 +81,8 @@ bookshelf.knex.schema.hasTable('donations').then(function(exists) {
 bookshelf.knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('users', function (user) {
-      user.string('username', 150).unique().primary();
+      user.increments('id');
+      user.string('username', 150);
       user.string('password', 150);
       user.string('image_url', 255);
       user.string('twitter_id', 150);

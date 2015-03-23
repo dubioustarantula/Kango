@@ -1,18 +1,19 @@
 var Reflux = require('reflux');
 var $ = require('jquery');
 
-var Actions = Reflux.createActions({
+var AsyncActions = Reflux.createActions({
     "donation": {children: ["completed","failed"]}
 });
 
-Actions.load.listen( function() {
+AsyncActions.donation.listen( function(data) {
+  console.log(data);
 
-  $.ajax({
-   type: "GET",
-   url: '/shelters',
-   headers: {'x-access-token': "TOKEN GOES HERE"}
-  }).done( this.completed )
-  .fail( this.failed );
+  // $.ajax({
+  //  type: "POST",
+  //  url: '/donate',
+  //  data:  data
+  // }).done( this.completed )
+  // .fail( this.failed );
 
 });
 

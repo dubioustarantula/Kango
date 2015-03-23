@@ -31705,18 +31705,19 @@ Router.run(routes,function (Handler) {
 var Reflux = require('reflux');
 var $ = require('jquery');
 
-var Actions = Reflux.createActions({
+var AsyncActions = Reflux.createActions({
     "donation": {children: ["completed","failed"]}
 });
 
-Actions.load.listen( function() {
+AsyncActions.donation.listen( function(data) {
+  console.log(data);
 
-  $.ajax({
-   type: "GET",
-   url: '/shelters',
-   headers: {'x-access-token': "TOKEN GOES HERE"}
-  }).done( this.completed )
-  .fail( this.failed );
+  // $.ajax({
+  //  type: "POST",
+  //  url: '/donate',
+  //  data:  data
+  // }).done( this.completed )
+  // .fail( this.failed );
 
 });
 
@@ -31928,23 +31929,39 @@ var _ = require('underscore');
 var $ = require('jquery');
 var ShelterStore = require('../stores/ShelterStore.jsx');
 var NavBarDefault = require('./NavBarDefault.jsx');
+var AsyncActions = require('../actions/asyncActions.jsx');
 
 var Shelter = React.createClass({displayName: "Shelter",
+   getInitialState: function() {
+    return null
+  },
+  updateState: function() {
+    console.log('great success');
+  },
+  submit: function() {
+    var amount = $('#donation').val();
+    AsyncActions.donation.triggerAsync(amount); 
+  },
 	render: function() {
 		var url = window.location.href.split('/');
 		var shelterPath = url[url.length-1];
-    var shelter = _.filter(this.props.shelters, function(element) {
+    var shelter = (_.filter(this.props.shelters, function(element) {
     	if(element.sheltername === shelterPath) {
     		return element;
     	}
-    })[0];
+    })[0]);
 		return (
 			React.createElement("div", null, 
 				React.createElement("div", {className: "container-fluid header-default"}, 
 					React.createElement(NavBarDefault, null)
 				), 
 				React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, shelter.name)
+					React.createElement("h1", null, shelter.name), 
+          React.createElement("form", {action: "/donate", method: "post", onSuccess: this.updateState, onSubmit: this.submit}, 
+            React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
+            React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: shelter.sheltername}), 
+            React.createElement("button", {type: "submit"}, "Submit")
+          )
 				)
 			)
 		);
@@ -31953,7 +31970,7 @@ var Shelter = React.createClass({displayName: "Shelter",
 
 module.exports = Shelter;
 
-},{"../stores/ShelterStore.jsx":229,"./NavBarDefault.jsx":219,"jquery":2,"react":189,"reflux":190,"underscore":231}],223:[function(require,module,exports){
+},{"../actions/asyncActions.jsx":211,"../stores/ShelterStore.jsx":229,"./NavBarDefault.jsx":219,"jquery":2,"react":189,"reflux":190,"underscore":231}],223:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -32109,7 +32126,7 @@ var ShelterActions = require('../actions/shelterActions.jsx');
 
 var shelters = [
 	{
-		'sheltername' : 'berkeleyShelter',
+		'sheltername' : 'berkeleyshelter',
 		'name' : 'Berkeley Animal Shelter',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
 		'address_one' : '1 Telegraph Rd.',
@@ -32124,7 +32141,7 @@ var shelters = [
 		'raised' : 400
 	},
 	{
-		'sheltername' : 'sanFranciscoShelter',
+		'sheltername' : 'sanfranciscoshelter',
 		'name' : 'San Francisco Animal Shelter',
 		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
 		'address_one' : '875 Post St.',
@@ -32139,7 +32156,7 @@ var shelters = [
 		'raised' : 960
 	},
 	{
-		'sheltername' : 'westOaklandShelter',
+		'sheltername' : 'westoaklandshelter',
 		'name' : 'West Oakland Animal Shelter',
 		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
 		'address_one' : '600 Geary St.',
