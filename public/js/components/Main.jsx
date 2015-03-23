@@ -3,17 +3,11 @@ var ShelterStore = require('../stores/ShelterStore.jsx');
 var ShowList = require('./ShowList.jsx');
 var NavBarDefault = require('./NavBarDefault.jsx');
 
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
 var Main = React.createClass({
-	getInitialState: function() {
-		return {
-			nearbyShelters: ShelterStore.getShelters()
-		}
-	},
-	addShelter: function(shelter) {
-		this.setState({
-			shelters: this.state.nearbyShelters.concat([shelter])
-		})
-	},
 	render: function() {
 		return (
 			<div>
@@ -26,9 +20,9 @@ var Main = React.createClass({
 								<a className="btn hero-btn more" href="#">
 									<span>Learn More</span>
 								</a>
-								<a className="btn hero-btn view" href="">
+								<Link to="fund-shelters" className="btn hero-btn view">
 									<span>View Shelters</span>
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -40,7 +34,7 @@ var Main = React.createClass({
 				</section>
 				<section className="three-shelters">
 					<div className="container">
-						<ShowList shelters={this.state.nearbyShelters} />
+						<ShowList {...this.props} />
 					</div>
 				</section>
 			</div>

@@ -9,6 +9,7 @@ var NavBarDefault = require('./components/NavBarDefault.jsx');
 var Login = require('./components/Login.jsx');
 var Signup = require('./components/Signup.jsx');
 var TwitterLogin = require('./components/TwitterLogin.jsx');
+var Shelter = require('./components/Shelter.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -18,11 +19,16 @@ var RouteHandler = Router.RouteHandler;
 var NotFoundRoute = Router.NotFoundRoute;
 
 var App = React.createClass({
+	getInitialState: function() {
+		return {
+			nearbyShelters: ShelterStore.getShelters()
+		}
+	},
 	render: function() {
 		return (
 			<div>
 				<div className="main-wrapper">
-					<RouteHandler />
+					<RouteHandler shelters={this.state.nearbyShelters}/>
 				</div>
 			</div>
 		)	
@@ -32,8 +38,9 @@ var App = React.createClass({
 var routes = (
   <Route name="app" handler={App}>
   	<Route name="main" path="/" handler={Main} />
-    <Route name="fund-shelters" handler={Shelters}/>
-    <Route name="twitter" handler={TwitterLogin}/>
+    <Route name="fund-shelters" handler={Shelters} />
+    <Route name="twitter" handler={TwitterLogin} />
+    <Route name="shelter" path="/shelter/:sheltername" handler={Shelter} />
     <NotFoundRoute handler={NotFound} />
   </Route>
 );
