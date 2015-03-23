@@ -28,7 +28,8 @@ require('./keys/passport')(passport);
 app
   .use(morgan('dev')) // log every request to the console
   .use(cookieParser()) // read cookies (needed for auth)
-  .use(bodyParser()) //get information from html forms
+  .use(bodyParser.json()) //get information from html forms
+  .use(bodyParser.urlencoded({extended:true}))
   .use(function(req, res, next) {
     req.parsed = url.parse(req.url);
     next();

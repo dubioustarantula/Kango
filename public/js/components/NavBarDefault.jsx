@@ -8,8 +8,12 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 var TwitterLogin = require('./TwitterLogin.jsx');
 
+
 var NavBarDefault = React.createClass({
+
+
 	render: function() {
+
 		return (
 			<div>
 				<header>
