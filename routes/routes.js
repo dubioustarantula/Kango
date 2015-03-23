@@ -76,7 +76,7 @@ module.exports = function(app, passport) {
     // handle the callback after twitter has authenticated the user
     app.get('/auth/twitter/callback',
         passport.authenticate('twitter', {
-            successRedirect : '/profile',
+            successRedirect : '/',
             failureRedirect : '/'
         }));
 
