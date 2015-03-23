@@ -5,22 +5,22 @@ var ShelterActions = require('../actions/shelterActions.jsx');
 
 var shelters = [
 	{
-		'sheltername' : 'berkeleyShelter',
-		'name' : 'Berkeley Animal Shelter',
+		'sheltername' : 'rockridgeshelter',
+		'name' : 'Rockridge Animal Shelter',
 		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '1 Telegraph Rd.',
+		'address_one' : '123 Blah Rd.',
 		'address_two' : null,
-		'city' : 'Berkeley',
+		'city' : 'Rockridge',
 		'state' : 'ca',
 		'zip' : 94109,
-		'telephone' : 4509492684,
+		'telephone' : 4509392684,
 		'email' : 'hello@bas.org',
-		'bio' : 'We are the Berkeley animal shelter',
+		'bio' : 'We are the Rockridge animal shelter',
 		'goal' : 1000,
 		'raised' : 400
 	},
 	{
-		'sheltername' : 'sanFranciscoShelter',
+		'sheltername' : 'sanfranciscoshelter',
 		'name' : 'San Francisco Animal Shelter',
 		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
 		'address_one' : '875 Post St.',
@@ -35,7 +35,7 @@ var shelters = [
 		'raised' : 960
 	},
 	{
-		'sheltername' : 'westOaklandShelter',
+		'sheltername' : 'westoaklandshelter',
 		'name' : 'West Oakland Animal Shelter',
 		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
 		'address_one' : '600 Geary St.',
