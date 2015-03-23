@@ -31941,7 +31941,18 @@ var ShowList = React.createClass({displayName: "ShowList",
 					React.createElement("div", {className: "shelter-card"}, 
 						React.createElement("img", {src: shelter.image_url}), 
 						React.createElement("div", {className: "shelter-info"}, 
-							shelter.name
+							React.createElement("div", {className: "shelter-bio"}, 
+								React.createElement("h3", null, shelter.name)
+							), 
+							React.createElement("div", {className: "shelter-progress-bar"}), 
+							React.createElement("div", {className: "shelter-fund-wrapper"}, 
+								React.createElement("span", {className: "shelter-raised"}, 
+									"$350 raised"
+								), 
+								React.createElement("span", {className: "shelter-target"}, 
+									"$400 to go"
+								)
+							)
 						)
 					)
 				)
