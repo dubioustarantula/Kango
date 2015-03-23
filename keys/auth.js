@@ -11,6 +11,7 @@ module.exports = {
     'twitterAuth' : {
         'consumerKey'       : consumerKey,
         'consumerSecret'    : consumerSecret,
-        'callbackURL'       : 'http://www.kango.azurewebsites.net/auth/twitter/callback'
+        'callbackURL'       : 'http://kango.azurewebsites.net/auth/twitter/callback'
     }
 };
+
