@@ -41,8 +41,8 @@ var Shelter = React.createClass({
     for (var i = 0; i < paragraph.length; i++) {
     	fullParagraph.push(paragraph[i]);
     }
-    console.log('fullPs', fullParagraph);
 
+    var progress = Math.floor((shelter.raised / shelter.goal) * 100) + '%';
 
 		return (
 			<div>
@@ -61,8 +61,17 @@ var Shelter = React.createClass({
 							<img className="shelter--photo" src={shelter.image_url} />
 						</div>
 						<div className="col-md-4">
-							<div id="#shelter--progress-circle"></div>
-							{shelter.raised}
+							<div className="shelter--raised-goal">{progress}</div>
+							<div className="shelter-fund-wrap">
+								<div className="shelter--raised">${shelter.raised} raised</div>
+								<div className="shelter--goal">${shelter.goal} to go</div>
+							</div>
+							<form id="donation-form" action="/donate" method="post" onSuccess={this.updateState} onSubmit={this.submit}>
+							  <input id="donation" type="text" name="donation" />
+							  <input type="text" name="sheltername" className="hidden" readOnly="true" value={shelter.sheltername} />
+							  <button id="donation-submit" type="submit">DONATE</button>
+							</form>
+
 						</div>
 					</div>
 					<div className="row">
@@ -72,12 +81,8 @@ var Shelter = React.createClass({
 								{fullParagraph}
 							</div>
 						</div>
-						<div className="col-md-4">		
-						<form action="/donate" method="post" onSuccess={this.updateState} onSubmit={this.submit}>
-						  <input id="donation" type="text" name="donation" />
-						  <input type="text" name="sheltername" className="hidden" readOnly="true" value={shelter.sheltername} />
-						  <button id="donation-submit" type="submit">DONATE</button>
-						</form>
+						<div className="col-md-4">	
+							<div className="shelter--leaderboard"></div>	
 						</div>
 					</div>
 
