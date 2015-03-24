@@ -33248,17 +33248,12 @@ var AsyncActions = Reflux.createActions({
 });
 
 AsyncActions.donation.listen( function(data) {
-  console.log(data);
-
-  // $.ajax({
-  //  type: "POST",
-  //  url: '/donate',
-  //  data:  data
-  // }).done( this.completed )
-  // .fail( this.failed );
-
+  $.ajax({
+   type: "GET",
+   url: '/shelters?' + data.sheltername
+  }).done( this.completed )
+  .fail( this.failed );
 });
-
 
 module.exports = AsyncActions;
 
@@ -33473,34 +33468,39 @@ var ShelterStore = require('../stores/ShelterStore.jsx');
 var NavBarDefault = require('./NavBarDefault.jsx');
 var circleProgress = require('../vendor/circle-progress.js');
 var AsyncActions = require('../actions/asyncActions.jsx');
+var SingleStore = require('../stores/SingleStore.jsx');
 
 
 var Shelter = React.createClass({displayName: "Shelter",
-   getInitialState: function() {
-    return null
-  },
+  mixins: [Reflux.ListenerMixin],
   componentDidMount: function() {
-  	$('#shelter--progress-circle').circleProgress({
-  		value: 0.8,
-  		size: 80
-  	});
+      this.listenTo(SingleStore, this.onStatusChange);
   },
-  updateState: function() {
-    console.log('great success');
+  current: {},
+  onStatusChange: function(status) {
+    this.current = status;
+    this.setState({
+      current: status
+    });
+    this.render();
+  },
+  findMe: function(shelters, sheltername) {
+    var shelter = _.filter(shelters, function(element) {
+      if(element.sheltername === sheltername) {
+        return element;
+      }
+    })[0];
+    this.current = shelter;
+    return shelter;
   },
   submit: function() {
-    var amount = $('#donation').val();
-    AsyncActions.donation.triggerAsync(amount); 
+    AsyncActions.donation.triggerAsync(this.current); 
   },
 	render: function() {
 		/* Gets the shelterName and filters the contents */
 		var url = window.location.href.split('/');
 		var shelterPath = url[url.length-1];
-    var shelter = _.filter(this.props.shelters, function(element) {
-    	if(element.sheltername === shelterPath) {
-    		return element;
-    	}
-    })[0];
+    var shelter = this.findMe(this.props.shelters, shelterPath);
     var paragraph = shelter.bio.split('\n');
     console.log(paragraph);
     var fullParagraph = [];
@@ -33510,6 +33510,7 @@ var Shelter = React.createClass({displayName: "Shelter",
     }
 
     var progress = Math.floor((shelter.raised / shelter.goal) * 100) + '%';
+
 
 		return (
 			React.createElement("div", null, 
@@ -33535,7 +33536,7 @@ var Shelter = React.createClass({displayName: "Shelter",
 							), 
 							React.createElement("form", {id: "donation-form", action: "/donate", method: "post", onSuccess: this.updateState, onSubmit: this.submit}, 
 							  React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
-							  React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: shelter.sheltername}), 
+							  React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: this.current.sheltername}), 
 							  React.createElement("button", {id: "donation-submit", type: "submit"}, "DONATE")
 							)
 
@@ -33561,7 +33562,7 @@ var Shelter = React.createClass({displayName: "Shelter",
 
 module.exports = Shelter;
 
-},{"../actions/asyncActions.jsx":212,"../stores/ShelterStore.jsx":230,"../vendor/circle-progress.js":232,"./NavBarDefault.jsx":220,"jquery":2,"react":189,"reflux":190,"underscore":210}],224:[function(require,module,exports){
+},{"../actions/asyncActions.jsx":212,"../stores/ShelterStore.jsx":230,"../stores/SingleStore.jsx":231,"../vendor/circle-progress.js":232,"./NavBarDefault.jsx":220,"jquery":2,"react":189,"reflux":190,"underscore":210}],224:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33827,7 +33828,6 @@ var ShelterStore = Reflux.createStore({
 	     $.ajax({
 	       type: "GET",
 	       url: '/shelters',
-	       headers: {'x-access-token': "TOKEN GOES HERE"}
 	     }).done(function(data) {
 	         for (var i = 0; i < data.length; i++) {
 	         	shelters.push(data[i]);
@@ -33855,24 +33855,26 @@ var ShelterStore = Reflux.createStore({
 module.exports = ShelterStore;
 
 },{"../actions/shelterActions.jsx":213,"jquery":2,"reflux":190}],231:[function(require,module,exports){
-// var Reflux = require('reflux');
-// var ShelterActions = require('../actions/shelterActions.jsx');
+var Reflux = require('reflux');
+var AsyncActions = require('../actions/asyncActions.jsx');
 
-// var Store = Reflux.createStore({
-// 	init: function() {
-// 		this.listenTo(ShelterActions.loadShelter, this.load);
-// 	},
-// 	load: function() {
-// 		this.setState({
-			
-// 		});
-// 	}
-// });
+var SingleStore = Reflux.createStore({
+	init: function() {
+		this.listenTo(AsyncActions.donation.completed, this.load);
+    this.listenTo(AsyncActions.donation.failed, this.error);
+	},
+	load: function(data) {
+    this.trigger(data);
+  },
+  error: function(err) {
+    console.log('donation post error', err);
+  }
+});
 
-// module.exports = Store;
+module.exports = SingleStore;
 
 
-},{}],232:[function(require,module,exports){
+},{"../actions/asyncActions.jsx":212,"reflux":190}],232:[function(require,module,exports){
 /*
 jquery-circle-progress - jQuery Plugin to draw animated circular progress bars
 

@@ -6,34 +6,39 @@ var ShelterStore = require('../stores/ShelterStore.jsx');
 var NavBarDefault = require('./NavBarDefault.jsx');
 var circleProgress = require('../vendor/circle-progress.js');
 var AsyncActions = require('../actions/asyncActions.jsx');
+var SingleStore = require('../stores/SingleStore.jsx');
 
 
 var Shelter = React.createClass({
-   getInitialState: function() {
-    return null
-  },
+  mixins: [Reflux.ListenerMixin],
   componentDidMount: function() {
-  	$('#shelter--progress-circle').circleProgress({
-  		value: 0.8,
-  		size: 80
-  	});
+      this.listenTo(SingleStore, this.onStatusChange);
   },
-  updateState: function() {
-    console.log('great success');
+  current: {},
+  onStatusChange: function(status) {
+    this.current = status;
+    this.setState({
+      current: status
+    });
+    this.render();
+  },
+  findMe: function(shelters, sheltername) {
+    var shelter = _.filter(shelters, function(element) {
+      if(element.sheltername === sheltername) {
+        return element;
+      }
+    })[0];
+    this.current = shelter;
+    return shelter;
   },
   submit: function() {
-    var amount = $('#donation').val();
-    AsyncActions.donation.triggerAsync(amount); 
+    AsyncActions.donation.triggerAsync(this.current); 
   },
 	render: function() {
 		/* Gets the shelterName and filters the contents */
 		var url = window.location.href.split('/');
 		var shelterPath = url[url.length-1];
-    var shelter = _.filter(this.props.shelters, function(element) {
-    	if(element.sheltername === shelterPath) {
-    		return element;
-    	}
-    })[0];
+    var shelter = this.findMe(this.props.shelters, shelterPath);
     var paragraph = shelter.bio.split('\n');
     console.log(paragraph);
     var fullParagraph = [];
@@ -43,6 +48,7 @@ var Shelter = React.createClass({
     }
 
     var progress = Math.floor((shelter.raised / shelter.goal) * 100) + '%';
+
 
 		return (
 			<div>
@@ -68,7 +74,7 @@ var Shelter = React.createClass({
 							</div>
 							<form id="donation-form" action="/donate" method="post" onSuccess={this.updateState} onSubmit={this.submit}>
 							  <input id="donation" type="text" name="donation" />
-							  <input type="text" name="sheltername" className="hidden" readOnly="true" value={shelter.sheltername} />
+							  <input type="text" name="sheltername" className="hidden" readOnly="true" value={this.current.sheltername} />
 							  <button id="donation-submit" type="submit">DONATE</button>
 							</form>
 
