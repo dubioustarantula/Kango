@@ -31648,599 +31648,9 @@ exports.throwIf = function(val,msg){
 };
 
 },{"eventemitter3":191,"native-promise-only":192}],210:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react');
-var Main = require('./components/Main.jsx');
-var ShelterStore = require('./stores/ShelterStore.jsx');
-var ShowList = require('./components/ShowList.jsx');
-var Shelters = require('./components/Shelters.jsx');
-var NotFound = require('./components/NotFound.jsx');
-var NavBarDefault = require('./components/NavBarDefault.jsx');
-var Login = require('./components/Login.jsx');
-var Signup = require('./components/Signup.jsx');
-var TwitterLogin = require('./components/TwitterLogin.jsx');
-var Shelter = require('./components/Shelter.jsx');
-
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var DefaultRoute = Route.DefaultRoute;
-var RouteHandler = Router.RouteHandler;
-var NotFoundRoute = Router.NotFoundRoute;
-
-var App = React.createClass({displayName: "App",
-	getInitialState: function() {
-		return {
-			nearbyShelters: ShelterStore.getShelters()
-		}
-	},
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "main-wrapper"}, 
-					React.createElement(RouteHandler, {shelters: this.state.nearbyShelters})
-				)
-			)
-		)	
-	}
-});
-
-var routes = (
-  React.createElement(Route, {name: "app", handler: App}, 
-  	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
-    React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
-    React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
-    React.createElement(Route, {name: "shelter", path: "/shelter/:sheltername", handler: Shelter}), 
-    React.createElement(NotFoundRoute, {handler: NotFound})
-  )
-);
-
-Router.run(routes,function (Handler) {
-  React.render(React.createElement(Handler, null), document.getElementById('content'));
-});
-
-
-
-},{"./components/Login.jsx":217,"./components/Main.jsx":218,"./components/NavBarDefault.jsx":219,"./components/NotFound.jsx":220,"./components/Shelter.jsx":222,"./components/Shelters.jsx":224,"./components/ShowList.jsx":226,"./components/Signup.jsx":227,"./components/TwitterLogin.jsx":228,"./stores/ShelterStore.jsx":229,"react":189,"react-router":30}],211:[function(require,module,exports){
-var Reflux = require('reflux');
-var $ = require('jquery');
-
-var AsyncActions = Reflux.createActions({
-    "donation": {children: ["completed","failed"]}
-});
-
-AsyncActions.donation.listen( function(data) {
-  $.ajax({
-   type: "GET",
-   url: '/shelters?' + data.sheltername
-  }).done( this.completed )
-  .fail( this.failed );
-});
-
-module.exports = AsyncActions;
-
-},{"jquery":2,"reflux":190}],212:[function(require,module,exports){
-var Reflux = require('reflux');
-
-var ShelterActions = Reflux.createActions([
-  'createShelter',
-  'loadShelters',
-  'loadShelter'
-]);
-
-
-module.exports = ShelterActions;
-
-},{"reflux":190}],213:[function(require,module,exports){
-var React = require('react');
-
-var AddShelter = React.createClass({displayName: "AddShelter",
-	getInitialState: function() {
-		return {
-			newShelter: ''
-		}
-	},
-	updateNewShelter: function(e) {
-		this.setState({
-			newShelter: e.target.value
-		});
-	},
-	handleAddNew: function(e) {
-		this.props.addNew(this.state.newShelter);
-		this.setState({
-			newShelter: ''
-		});
-	},
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("input", {type: "text", value: "this.state.newShelter", onChange: this.updateNewFriend}), 
-				React.createElement("button", {onClick: this.handleAddNew}, " Add New Shelter ")
-			)
-		);
-	}
-});
-
-module.exports = AddShelter;
-
-
-},{"react":189}],214:[function(require,module,exports){
-var React = require('react');
-
-},{"react":189}],215:[function(require,module,exports){
-
-
-},{}],216:[function(require,module,exports){
-
-
-},{}],217:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var Login = React.createClass({displayName: "Login",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango"), 
-        React.createElement("form", {action: "/login", method: "post"}, 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Email"), 
-            React.createElement("input", {type: "text", class: "form-control", name: "email"})
-          ), 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Password"), 
-            React.createElement("input", {type: "password", class: "form-control", name: "password"})
-          ), 
-
-          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
-        ), 
-
-        React.createElement("p", null, "Need an account? ", React.createElement(Link, {to: "signup"}, "Sign Up"))
-      )
-    )
-  }
-});
-
-module.exports = Login;
-
-},{"react":189,"react-router":30}],218:[function(require,module,exports){
-var React = require('react');
-var ShelterStore = require('../stores/ShelterStore.jsx');
-var ShowList = require('./ShowList.jsx');
-var NavBarDefault = require('./NavBarDefault.jsx');
-
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var Main = React.createClass({displayName: "Main",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid hero"}, 
-					React.createElement(NavBarDefault, null), 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("div", {className: "hero-description"}, 
-							React.createElement("h1", {className: "hero-headline"}, "Connecting donors to animal shelters in need"), 
-							React.createElement("div", {className: "button-group"}, 
-								React.createElement("a", {className: "btn hero-btn more", href: "#"}, 
-									React.createElement("span", null, "Learn More")
-								), 
-								React.createElement(Link, {to: "fund-shelters", className: "btn hero-btn view"}, 
-									React.createElement("span", null, "View Shelters")
-								)
-							)
-						)
-					)
-				), 
-				React.createElement("section", {className: "devoted"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("h2", null, "100% of your donation fund Bay Area animal shelters.")
-					)
-				), 
-				React.createElement("section", {className: "three-shelters"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement(ShowList, React.__spread({},  this.props))
-					)
-				)
-			)
-		)
-	}
-});	
-
-module.exports = Main;
-
-},{"../stores/ShelterStore.jsx":229,"./NavBarDefault.jsx":219,"./ShowList.jsx":226,"react":189,"react-router":30}],219:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var DefaultRoute = Route.DefaultRoute;
-var RouteHandler = Router.RouteHandler;
-var NotFoundRoute = Router.NotFoundRoute;
-
-var TwitterLogin = require('./TwitterLogin.jsx');
-
-var NavBarDefault = React.createClass({displayName: "NavBarDefault",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("header", null, 
-					React.createElement("nav", {className: "navbar navbar-default container"}, 
-						React.createElement("div", {className: "wrapper"}, 
-							React.createElement("div", {className: "navbar-header"}, 
-								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
-								  "kango`"
-								)
-							), 
-							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
-								React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
-								React.createElement("li", null, 
-								React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
-										"Sign In"
-								)
-								)
-							)
-						)
-					)
-				), 
-				React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
-				  React.createElement("div", {className: "modal-dialog"}, 
-				  	React.createElement(TwitterLogin, null)
-				  )
-				)
-			)
-		)
-	}
-});
-
-module.exports = NavBarDefault;
-
-},{"./TwitterLogin.jsx":228,"react":189,"react-router":30}],220:[function(require,module,exports){
-var React = require('react');
-
-var NotFound = React.createClass({displayName: "NotFound",
-	render: function() {
-		return (
-			React.createElement("div", {className: "container"}, 
-				React.createElement("h1", null, "Page not found.")
-			)
-		)
-	}
-});
-
-module.exports = NotFound;
-
-},{"react":189}],221:[function(require,module,exports){
-var React = require('react');
-
-},{"react":189}],222:[function(require,module,exports){
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('underscore');
-var $ = require('jquery');
-var ShelterStore = require('../stores/ShelterStore.jsx');
-var NavBarDefault = require('./NavBarDefault.jsx');
-var AsyncActions = require('../actions/asyncActions.jsx');
-var SingleStore = require('../stores/SingleStore.jsx');
-
-var Shelter = React.createClass({displayName: "Shelter",
-  mixins: [Reflux.ListenerMixin],
-  componentDidMount: function() {
-      this.listenTo(SingleStore, this.onStatusChange);
-  },
-  current: {},
-  onStatusChange: function(status) {
-    this.current = status;
-    this.setState({
-      current: status
-    });
-    this.render();
-  },
-  findMe: function(shelters, sheltername) {
-    var shelter = _.filter(shelters, function(element) {
-      if(element.sheltername === sheltername) {
-        return element;
-      }
-    })[0];
-    this.current = shelter;
-    return shelter;
-  },
-  submit: function() {
-    AsyncActions.donation.triggerAsync(this.current); 
-  },
-	render: function() {
-		var url = window.location.href.split('/');
-		var shelterPath = url[url.length-1];
-    var shelter = this.findMe(this.props.shelters, shelterPath);
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid header-default"}, 
-					React.createElement(NavBarDefault, null)
-				), 
-				React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, shelter.name, this.current.raised), 
-          React.createElement("form", {action: "/donate", method: "post", onSubmit: this.submit}, 
-            React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
-            React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: this.current.sheltername}), 
-            React.createElement("button", {type: "submit"}, "Submit")
-          )
-				)
-			)
-		);
-	}
-});
-
-module.exports = Shelter;
-
-},{"../actions/asyncActions.jsx":211,"../stores/ShelterStore.jsx":229,"../stores/SingleStore.jsx":230,"./NavBarDefault.jsx":219,"jquery":2,"react":189,"reflux":190,"underscore":231}],223:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var $ = require('jquery');
-
-var ShelterCard = React.createClass({displayName: "ShelterCard",
-
-	render: function() {
-		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
-		return (
-			React.createElement("li", {className: "col-md-4"}, 
-				React.createElement("div", {className: "shelter-card"}, 
-						React.createElement(Link, {to: "shelter", params: {sheltername: this.props.data.sheltername}}, 							
-							React.createElement("img", {src: this.props.data.image_url})
-						), 
-					React.createElement("div", {className: "shelter-info"}, 
-						React.createElement("div", {className: "shelter-bio"}, 
-							React.createElement("h3", null, this.props.data.name)
-						), 
-						React.createElement("div", {className: "shelter-progress-bar"}), 
-						React.createElement("div", {className: "shelter-fund-wrapper"}, 
-							React.createElement("span", {className: "shelter-raised"}, 
-								"$", this.props.data.raised, " raised"
-							), 
-							React.createElement("span", {className: "shelter-target"}, 
-								"$", this.props.data.goal - this.props.data.raised, " to go"
-							)
-						)
-					)
-				)
-			)
-		)
-	}
-});
-
-module.exports = ShelterCard;
-
-},{"jquery":2,"react":189,"react-router":30}],224:[function(require,module,exports){
-var React = require('react');
-var NavBarDefault = require('./NavBarDefault.jsx');
-
-var Shelters = React.createClass({displayName: "Shelters",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid header-default"}, 
-					React.createElement(NavBarDefault, null)
-				), 
-				React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, " This is the Shelters view ")
-				)
-			)
-		)
-	}
-});
-
-module.exports = Shelters;
-
-},{"./NavBarDefault.jsx":219,"react":189}],225:[function(require,module,exports){
-var React = require('react');
-
-var ShowAll = React.createClass({displayName: "ShowAll",
-	render: function() {
-		
-	}
-});
-
-module.exports = ShowAll;
-
-},{"react":189}],226:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var ShelterCard = require('./ShelterCard.jsx');
-
-var ShowList = React.createClass({displayName: "ShowList",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("h3", {className: "section-header"}, "Meet the Animal Shelters"), 
-				React.createElement("p", {className: "section-short"}, "San Francisco • Oakland • South Bay"), 
-				React.createElement("ul", {className: "shelter-list-home"}, 
-					React.createElement("div", {className: "row"}, 
-						this.props.shelters.map(function(shelter, i){
-								return React.createElement(ShelterCard, {key: i, data: shelter})
-							}, this)
-						
-					)
-				)
-			)
-		)
-	}
-});
-
-module.exports = ShowList;
-
-
-},{"./ShelterCard.jsx":223,"react":189,"react-router":30}],227:[function(require,module,exports){
-var React = require('react');
-
-var Signup = React.createClass({displayName: "Signup",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Sign Up for Kango"), 
-        React.createElement("form", {action: "/signup", method: "post"}, 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Email"), 
-            React.createElement("input", {type: "text", class: "form-control", name: "email"})
-          ), 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Password"), 
-            React.createElement("input", {type: "password", class: "form-control", name: "password"})
-          ), 
-
-          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
-        ), 
-
-        "// ", React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup"))
-      )
-    )
-  }
-});
-
-module.exports = Signup;
-
-},{"react":189}],228:[function(require,module,exports){
-var React = require('react');
-
-var TwitterLogin = React.createClass({displayName: "TwitterLogin",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
-        React.createElement("form", {action: "/auth/twitter", method: "get"}, 
-          React.createElement("button", {type: "submit"}, "Login")
-        )
-      )
-    )
-  }
-});
-
-module.exports = TwitterLogin;
-
-},{"react":189}],229:[function(require,module,exports){
-var Reflux = require('reflux');
-var $ = require('jquery');
-var ShelterActions = require('../actions/shelterActions.jsx');
-// require action here.
-
-var shelters = [
-	{
-		'sheltername' : 'rockridgeshelter',
-		'name' : 'Rockridge Animal Shelter',
-		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '123 Blah Rd.',
-		'address_two' : null,
-		'city' : 'Rockridge',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4509392684,
-		'email' : 'hello@bas.org',
-		'bio' : 'We are the Rockridge animal shelter',
-		'goal' : 1000,
-		'raised' : 400
-	},
-	{
-		'sheltername' : 'sanfranciscoshelter',
-		'name' : 'San Francisco Animal Shelter',
-		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
-		'address_one' : '875 Post St.',
-		'address_two' : null,
-		'city' : 'San Francisco',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4509206186,
-		'email' : 'hello@sas.org',
-		'bio' : 'We are the San Francisco animal shelter',
-		'goal' : 2100,
-		'raised' : 960
-	},
-	{
-		'sheltername' : 'westoaklandshelter',
-		'name' : 'West Oakland Animal Shelter',
-		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
-		'address_one' : '600 Geary St.',
-		'address_two' : null,
-		'city' : 'Oakland',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4506541234,
-		'email' : 'hello@woas.org',
-		'bio' : 'We are the West Oakland animal shelter',
-		'goal' : 1600,
-		'raised' : 870
-	}
-];
-
-var ShelterStore = Reflux.createStore({
-	shelters: [],
-	init: function(){
-		 this.shelters = shelters;
-	   this.load();
-	   this.listenTo(ShelterActions.loadShelters, this.load)
-	   this.listenTo(ShelterActions.createShelter, this.onCreate);
-	 },
-	 load: function(){
-	   var context = this;
-	     $.ajax({
-	       type: "GET",
-	       url: '/shelters',
-	     }).done(function(data) {
-	         for (var i = 0; i < data.length; i++) {
-	         	shelters.push(data[i]);
-	         }
-					 //push data to store
-	         context.trigger(shelters);
-	     });
-	 },
-	 onCreate: function(shelter) {
-	   shelters.push(shelter);
-
-	   this.trigger(shelters);
-	 },
-	 toggle: function(e, toggled, job){
-	   console.log(e, toggled, job);
-
-	 },
-	 getShelters: function() {
-	   //req to /api/listings
-	   return shelters;
-	 },
-
-});
-
-module.exports = ShelterStore;
-
-},{"../actions/shelterActions.jsx":212,"jquery":2,"reflux":190}],230:[function(require,module,exports){
-var Reflux = require('reflux');
-var AsyncActions = require('../actions/asyncActions.jsx');
-
-var SingleStore = Reflux.createStore({
-	init: function() {
-		this.listenTo(AsyncActions.donation.completed, this.load);
-    this.listenTo(AsyncActions.donation.failed, this.error);
-	},
-	load: function(data) {
-    this.trigger(data);
-  },
-  error: function(err) {
-    console.log('donation post error', err);
-  }
-});
-
-module.exports = SingleStore;
-
-
-},{"../actions/asyncActions.jsx":211,"reflux":190}],231:[function(require,module,exports){
-//     Underscore.js 1.7.0
+//     Underscore.js 1.8.2
 //     http://underscorejs.org
-//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
 
 (function() {
@@ -32261,7 +31671,6 @@ module.exports = SingleStore;
   var
     push             = ArrayProto.push,
     slice            = ArrayProto.slice,
-    concat           = ArrayProto.concat,
     toString         = ObjProto.toString,
     hasOwnProperty   = ObjProto.hasOwnProperty;
 
@@ -32270,7 +31679,11 @@ module.exports = SingleStore;
   var
     nativeIsArray      = Array.isArray,
     nativeKeys         = Object.keys,
-    nativeBind         = FuncProto.bind;
+    nativeBind         = FuncProto.bind,
+    nativeCreate       = Object.create;
+
+  // Naked function reference for surrogate-prototype-swapping.
+  var Ctor = function(){};
 
   // Create a safe reference to the Underscore object for use below.
   var _ = function(obj) {
@@ -32292,12 +31705,12 @@ module.exports = SingleStore;
   }
 
   // Current version.
-  _.VERSION = '1.7.0';
+  _.VERSION = '1.8.2';
 
   // Internal function that returns an efficient (for current engines) version
   // of the passed-in callback, to be repeatedly applied in other Underscore
   // functions.
-  var createCallback = function(func, context, argCount) {
+  var optimizeCb = function(func, context, argCount) {
     if (context === void 0) return func;
     switch (argCount == null ? 3 : argCount) {
       case 1: return function(value) {
@@ -32321,11 +31734,51 @@ module.exports = SingleStore;
   // A mostly-internal function to generate callbacks that can be applied
   // to each element in a collection, returning the desired result — either
   // identity, an arbitrary callback, a property matcher, or a property accessor.
-  _.iteratee = function(value, context, argCount) {
+  var cb = function(value, context, argCount) {
     if (value == null) return _.identity;
-    if (_.isFunction(value)) return createCallback(value, context, argCount);
-    if (_.isObject(value)) return _.matches(value);
+    if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+    if (_.isObject(value)) return _.matcher(value);
     return _.property(value);
+  };
+  _.iteratee = function(value, context) {
+    return cb(value, context, Infinity);
+  };
+
+  // An internal function for creating assigner functions.
+  var createAssigner = function(keysFunc, undefinedOnly) {
+    return function(obj) {
+      var length = arguments.length;
+      if (length < 2 || obj == null) return obj;
+      for (var index = 1; index < length; index++) {
+        var source = arguments[index],
+            keys = keysFunc(source),
+            l = keys.length;
+        for (var i = 0; i < l; i++) {
+          var key = keys[i];
+          if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+        }
+      }
+      return obj;
+    };
+  };
+
+  // An internal function for creating a new object that inherits from another.
+  var baseCreate = function(prototype) {
+    if (!_.isObject(prototype)) return {};
+    if (nativeCreate) return nativeCreate(prototype);
+    Ctor.prototype = prototype;
+    var result = new Ctor;
+    Ctor.prototype = null;
+    return result;
+  };
+
+  // Helper for collection methods to determine whether a collection
+  // should be iterated as an array or as an object
+  // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
+  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+  var isArrayLike = function(collection) {
+    var length = collection && collection.length;
+    return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
   };
 
   // Collection Functions
@@ -32335,11 +31788,10 @@ module.exports = SingleStore;
   // Handles raw objects in addition to array-likes. Treats all
   // sparse array-likes as if they were dense.
   _.each = _.forEach = function(obj, iteratee, context) {
-    if (obj == null) return obj;
-    iteratee = createCallback(iteratee, context);
-    var i, length = obj.length;
-    if (length === +length) {
-      for (i = 0; i < length; i++) {
+    iteratee = optimizeCb(iteratee, context);
+    var i, length;
+    if (isArrayLike(obj)) {
+      for (i = 0, length = obj.length; i < length; i++) {
         iteratee(obj[i], i, obj);
       }
     } else {
@@ -32353,77 +31805,66 @@ module.exports = SingleStore;
 
   // Return the results of applying the iteratee to each element.
   _.map = _.collect = function(obj, iteratee, context) {
-    if (obj == null) return [];
-    iteratee = _.iteratee(iteratee, context);
-    var keys = obj.length !== +obj.length && _.keys(obj),
+    iteratee = cb(iteratee, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
         length = (keys || obj).length,
-        results = Array(length),
-        currentKey;
+        results = Array(length);
     for (var index = 0; index < length; index++) {
-      currentKey = keys ? keys[index] : index;
+      var currentKey = keys ? keys[index] : index;
       results[index] = iteratee(obj[currentKey], currentKey, obj);
     }
     return results;
   };
 
-  var reduceError = 'Reduce of empty array with no initial value';
+  // Create a reducing function iterating left or right.
+  function createReduce(dir) {
+    // Optimized iterator function as using arguments.length
+    // in the main function will deoptimize the, see #1991.
+    function iterator(obj, iteratee, memo, keys, index, length) {
+      for (; index >= 0 && index < length; index += dir) {
+        var currentKey = keys ? keys[index] : index;
+        memo = iteratee(memo, obj[currentKey], currentKey, obj);
+      }
+      return memo;
+    }
+
+    return function(obj, iteratee, memo, context) {
+      iteratee = optimizeCb(iteratee, context, 4);
+      var keys = !isArrayLike(obj) && _.keys(obj),
+          length = (keys || obj).length,
+          index = dir > 0 ? 0 : length - 1;
+      // Determine the initial value if none is provided.
+      if (arguments.length < 3) {
+        memo = obj[keys ? keys[index] : index];
+        index += dir;
+      }
+      return iterator(obj, iteratee, memo, keys, index, length);
+    };
+  }
 
   // **Reduce** builds up a single result from a list of values, aka `inject`,
   // or `foldl`.
-  _.reduce = _.foldl = _.inject = function(obj, iteratee, memo, context) {
-    if (obj == null) obj = [];
-    iteratee = createCallback(iteratee, context, 4);
-    var keys = obj.length !== +obj.length && _.keys(obj),
-        length = (keys || obj).length,
-        index = 0, currentKey;
-    if (arguments.length < 3) {
-      if (!length) throw new TypeError(reduceError);
-      memo = obj[keys ? keys[index++] : index++];
-    }
-    for (; index < length; index++) {
-      currentKey = keys ? keys[index] : index;
-      memo = iteratee(memo, obj[currentKey], currentKey, obj);
-    }
-    return memo;
-  };
+  _.reduce = _.foldl = _.inject = createReduce(1);
 
   // The right-associative version of reduce, also known as `foldr`.
-  _.reduceRight = _.foldr = function(obj, iteratee, memo, context) {
-    if (obj == null) obj = [];
-    iteratee = createCallback(iteratee, context, 4);
-    var keys = obj.length !== + obj.length && _.keys(obj),
-        index = (keys || obj).length,
-        currentKey;
-    if (arguments.length < 3) {
-      if (!index) throw new TypeError(reduceError);
-      memo = obj[keys ? keys[--index] : --index];
-    }
-    while (index--) {
-      currentKey = keys ? keys[index] : index;
-      memo = iteratee(memo, obj[currentKey], currentKey, obj);
-    }
-    return memo;
-  };
+  _.reduceRight = _.foldr = createReduce(-1);
 
   // Return the first value which passes a truth test. Aliased as `detect`.
   _.find = _.detect = function(obj, predicate, context) {
-    var result;
-    predicate = _.iteratee(predicate, context);
-    _.some(obj, function(value, index, list) {
-      if (predicate(value, index, list)) {
-        result = value;
-        return true;
-      }
-    });
-    return result;
+    var key;
+    if (isArrayLike(obj)) {
+      key = _.findIndex(obj, predicate, context);
+    } else {
+      key = _.findKey(obj, predicate, context);
+    }
+    if (key !== void 0 && key !== -1) return obj[key];
   };
 
   // Return all the elements that pass a truth test.
   // Aliased as `select`.
   _.filter = _.select = function(obj, predicate, context) {
     var results = [];
-    if (obj == null) return results;
-    predicate = _.iteratee(predicate, context);
+    predicate = cb(predicate, context);
     _.each(obj, function(value, index, list) {
       if (predicate(value, index, list)) results.push(value);
     });
@@ -32432,19 +31873,17 @@ module.exports = SingleStore;
 
   // Return all the elements for which a truth test fails.
   _.reject = function(obj, predicate, context) {
-    return _.filter(obj, _.negate(_.iteratee(predicate)), context);
+    return _.filter(obj, _.negate(cb(predicate)), context);
   };
 
   // Determine whether all of the elements match a truth test.
   // Aliased as `all`.
   _.every = _.all = function(obj, predicate, context) {
-    if (obj == null) return true;
-    predicate = _.iteratee(predicate, context);
-    var keys = obj.length !== +obj.length && _.keys(obj),
-        length = (keys || obj).length,
-        index, currentKey;
-    for (index = 0; index < length; index++) {
-      currentKey = keys ? keys[index] : index;
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
       if (!predicate(obj[currentKey], currentKey, obj)) return false;
     }
     return true;
@@ -32453,24 +31892,21 @@ module.exports = SingleStore;
   // Determine if at least one element in the object matches a truth test.
   // Aliased as `any`.
   _.some = _.any = function(obj, predicate, context) {
-    if (obj == null) return false;
-    predicate = _.iteratee(predicate, context);
-    var keys = obj.length !== +obj.length && _.keys(obj),
-        length = (keys || obj).length,
-        index, currentKey;
-    for (index = 0; index < length; index++) {
-      currentKey = keys ? keys[index] : index;
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
       if (predicate(obj[currentKey], currentKey, obj)) return true;
     }
     return false;
   };
 
   // Determine if the array or object contains a given value (using `===`).
-  // Aliased as `include`.
-  _.contains = _.include = function(obj, target) {
-    if (obj == null) return false;
-    if (obj.length !== +obj.length) obj = _.values(obj);
-    return _.indexOf(obj, target) >= 0;
+  // Aliased as `includes` and `include`.
+  _.contains = _.includes = _.include = function(obj, target, fromIndex) {
+    if (!isArrayLike(obj)) obj = _.values(obj);
+    return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
   };
 
   // Invoke a method (with arguments) on every item in a collection.
@@ -32478,7 +31914,8 @@ module.exports = SingleStore;
     var args = slice.call(arguments, 2);
     var isFunc = _.isFunction(method);
     return _.map(obj, function(value) {
-      return (isFunc ? method : value[method]).apply(value, args);
+      var func = isFunc ? method : value[method];
+      return func == null ? func : func.apply(value, args);
     });
   };
 
@@ -32490,13 +31927,13 @@ module.exports = SingleStore;
   // Convenience version of a common use case of `filter`: selecting only objects
   // containing specific `key:value` pairs.
   _.where = function(obj, attrs) {
-    return _.filter(obj, _.matches(attrs));
+    return _.filter(obj, _.matcher(attrs));
   };
 
   // Convenience version of a common use case of `find`: getting the first object
   // containing specific `key:value` pairs.
   _.findWhere = function(obj, attrs) {
-    return _.find(obj, _.matches(attrs));
+    return _.find(obj, _.matcher(attrs));
   };
 
   // Return the maximum element (or element-based computation).
@@ -32504,7 +31941,7 @@ module.exports = SingleStore;
     var result = -Infinity, lastComputed = -Infinity,
         value, computed;
     if (iteratee == null && obj != null) {
-      obj = obj.length === +obj.length ? obj : _.values(obj);
+      obj = isArrayLike(obj) ? obj : _.values(obj);
       for (var i = 0, length = obj.length; i < length; i++) {
         value = obj[i];
         if (value > result) {
@@ -32512,7 +31949,7 @@ module.exports = SingleStore;
         }
       }
     } else {
-      iteratee = _.iteratee(iteratee, context);
+      iteratee = cb(iteratee, context);
       _.each(obj, function(value, index, list) {
         computed = iteratee(value, index, list);
         if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
@@ -32529,7 +31966,7 @@ module.exports = SingleStore;
     var result = Infinity, lastComputed = Infinity,
         value, computed;
     if (iteratee == null && obj != null) {
-      obj = obj.length === +obj.length ? obj : _.values(obj);
+      obj = isArrayLike(obj) ? obj : _.values(obj);
       for (var i = 0, length = obj.length; i < length; i++) {
         value = obj[i];
         if (value < result) {
@@ -32537,7 +31974,7 @@ module.exports = SingleStore;
         }
       }
     } else {
-      iteratee = _.iteratee(iteratee, context);
+      iteratee = cb(iteratee, context);
       _.each(obj, function(value, index, list) {
         computed = iteratee(value, index, list);
         if (computed < lastComputed || computed === Infinity && result === Infinity) {
@@ -32552,7 +31989,7 @@ module.exports = SingleStore;
   // Shuffle a collection, using the modern version of the
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
-    var set = obj && obj.length === +obj.length ? obj : _.values(obj);
+    var set = isArrayLike(obj) ? obj : _.values(obj);
     var length = set.length;
     var shuffled = Array(length);
     for (var index = 0, rand; index < length; index++) {
@@ -32568,7 +32005,7 @@ module.exports = SingleStore;
   // The internal `guard` argument allows it to work with `map`.
   _.sample = function(obj, n, guard) {
     if (n == null || guard) {
-      if (obj.length !== +obj.length) obj = _.values(obj);
+      if (!isArrayLike(obj)) obj = _.values(obj);
       return obj[_.random(obj.length - 1)];
     }
     return _.shuffle(obj).slice(0, Math.max(0, n));
@@ -32576,7 +32013,7 @@ module.exports = SingleStore;
 
   // Sort the object's values by a criterion produced by an iteratee.
   _.sortBy = function(obj, iteratee, context) {
-    iteratee = _.iteratee(iteratee, context);
+    iteratee = cb(iteratee, context);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
@@ -32598,7 +32035,7 @@ module.exports = SingleStore;
   var group = function(behavior) {
     return function(obj, iteratee, context) {
       var result = {};
-      iteratee = _.iteratee(iteratee, context);
+      iteratee = cb(iteratee, context);
       _.each(obj, function(value, index) {
         var key = iteratee(value, index, obj);
         behavior(result, value, key);
@@ -32626,37 +32063,24 @@ module.exports = SingleStore;
     if (_.has(result, key)) result[key]++; else result[key] = 1;
   });
 
-  // Use a comparator function to figure out the smallest index at which
-  // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iteratee, context) {
-    iteratee = _.iteratee(iteratee, context, 1);
-    var value = iteratee(obj);
-    var low = 0, high = array.length;
-    while (low < high) {
-      var mid = low + high >>> 1;
-      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
-    }
-    return low;
-  };
-
   // Safely create a real, live array from anything iterable.
   _.toArray = function(obj) {
     if (!obj) return [];
     if (_.isArray(obj)) return slice.call(obj);
-    if (obj.length === +obj.length) return _.map(obj, _.identity);
+    if (isArrayLike(obj)) return _.map(obj, _.identity);
     return _.values(obj);
   };
 
   // Return the number of elements in an object.
   _.size = function(obj) {
     if (obj == null) return 0;
-    return obj.length === +obj.length ? obj.length : _.keys(obj).length;
+    return isArrayLike(obj) ? obj.length : _.keys(obj).length;
   };
 
   // Split a collection into two arrays: one whose elements all satisfy the given
   // predicate, and one whose elements all do not satisfy the predicate.
   _.partition = function(obj, predicate, context) {
-    predicate = _.iteratee(predicate, context);
+    predicate = cb(predicate, context);
     var pass = [], fail = [];
     _.each(obj, function(value, key, obj) {
       (predicate(value, key, obj) ? pass : fail).push(value);
@@ -32673,30 +32097,27 @@ module.exports = SingleStore;
   _.first = _.head = _.take = function(array, n, guard) {
     if (array == null) return void 0;
     if (n == null || guard) return array[0];
-    if (n < 0) return [];
-    return slice.call(array, 0, n);
+    return _.initial(array, array.length - n);
   };
 
   // Returns everything but the last entry of the array. Especially useful on
   // the arguments object. Passing **n** will return all the values in
-  // the array, excluding the last N. The **guard** check allows it to work with
-  // `_.map`.
+  // the array, excluding the last N.
   _.initial = function(array, n, guard) {
     return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
   };
 
   // Get the last element of an array. Passing **n** will return the last N
-  // values in the array. The **guard** check allows it to work with `_.map`.
+  // values in the array.
   _.last = function(array, n, guard) {
     if (array == null) return void 0;
     if (n == null || guard) return array[array.length - 1];
-    return slice.call(array, Math.max(array.length - n, 0));
+    return _.rest(array, Math.max(0, array.length - n));
   };
 
   // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
   // Especially useful on the arguments object. Passing an **n** will return
-  // the rest N values in the array. The **guard**
-  // check allows it to work with `_.map`.
+  // the rest N values in the array.
   _.rest = _.tail = _.drop = function(array, n, guard) {
     return slice.call(array, n == null || guard ? 1 : n);
   };
@@ -32707,18 +32128,20 @@ module.exports = SingleStore;
   };
 
   // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, strict, output) {
-    if (shallow && _.every(input, _.isArray)) {
-      return concat.apply(output, input);
-    }
-    for (var i = 0, length = input.length; i < length; i++) {
+  var flatten = function(input, shallow, strict, startIndex) {
+    var output = [], idx = 0;
+    for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
       var value = input[i];
-      if (!_.isArray(value) && !_.isArguments(value)) {
-        if (!strict) output.push(value);
-      } else if (shallow) {
-        push.apply(output, value);
-      } else {
-        flatten(value, shallow, strict, output);
+      if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+        //flatten current level of array or arguments object
+        if (!shallow) value = flatten(value, shallow, strict);
+        var j = 0, len = value.length;
+        output.length += len;
+        while (j < len) {
+          output[idx++] = value[j++];
+        }
+      } else if (!strict) {
+        output[idx++] = value;
       }
     }
     return output;
@@ -32726,7 +32149,7 @@ module.exports = SingleStore;
 
   // Flatten out an array, either recursively (by default), or just one level.
   _.flatten = function(array, shallow) {
-    return flatten(array, shallow, false, []);
+    return flatten(array, shallow, false);
   };
 
   // Return a version of the array that does not contain the specified value(s).
@@ -32744,21 +32167,21 @@ module.exports = SingleStore;
       iteratee = isSorted;
       isSorted = false;
     }
-    if (iteratee != null) iteratee = _.iteratee(iteratee, context);
+    if (iteratee != null) iteratee = cb(iteratee, context);
     var result = [];
     var seen = [];
     for (var i = 0, length = array.length; i < length; i++) {
-      var value = array[i];
+      var value = array[i],
+          computed = iteratee ? iteratee(value, i, array) : value;
       if (isSorted) {
-        if (!i || seen !== value) result.push(value);
-        seen = value;
+        if (!i || seen !== computed) result.push(value);
+        seen = computed;
       } else if (iteratee) {
-        var computed = iteratee(value, i, array);
-        if (_.indexOf(seen, computed) < 0) {
+        if (!_.contains(seen, computed)) {
           seen.push(computed);
           result.push(value);
         }
-      } else if (_.indexOf(result, value) < 0) {
+      } else if (!_.contains(result, value)) {
         result.push(value);
       }
     }
@@ -32768,7 +32191,7 @@ module.exports = SingleStore;
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(flatten(arguments, true, true, []));
+    return _.uniq(flatten(arguments, true, true));
   };
 
   // Produce an array that contains every item shared between all the
@@ -32791,7 +32214,7 @@ module.exports = SingleStore;
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
-    var rest = flatten(slice.call(arguments, 1), true, true, []);
+    var rest = flatten(arguments, true, true, 1);
     return _.filter(array, function(value){
       return !_.contains(rest, value);
     });
@@ -32799,23 +32222,28 @@ module.exports = SingleStore;
 
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
-  _.zip = function(array) {
-    if (array == null) return [];
-    var length = _.max(arguments, 'length').length;
-    var results = Array(length);
-    for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, i);
+  _.zip = function() {
+    return _.unzip(arguments);
+  };
+
+  // Complement of _.zip. Unzip accepts an array of arrays and groups
+  // each array's elements on shared indices
+  _.unzip = function(array) {
+    var length = array && _.max(array, 'length').length || 0;
+    var result = Array(length);
+
+    for (var index = 0; index < length; index++) {
+      result[index] = _.pluck(array, index);
     }
-    return results;
+    return result;
   };
 
   // Converts lists into objects. Pass either a single array of `[key, value]`
   // pairs, or two parallel arrays of the same length -- one of keys, and one of
   // the corresponding values.
   _.object = function(list, values) {
-    if (list == null) return {};
     var result = {};
-    for (var i = 0, length = list.length; i < length; i++) {
+    for (var i = 0, length = list && list.length; i < length; i++) {
       if (values) {
         result[list[i]] = values[i];
       } else {
@@ -32830,28 +32258,61 @@ module.exports = SingleStore;
   // If the array is large and already in sort order, pass `true`
   // for **isSorted** to use binary search.
   _.indexOf = function(array, item, isSorted) {
-    if (array == null) return -1;
-    var i = 0, length = array.length;
-    if (isSorted) {
-      if (typeof isSorted == 'number') {
-        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-      } else {
-        i = _.sortedIndex(array, item);
-        return array[i] === item ? i : -1;
-      }
+    var i = 0, length = array && array.length;
+    if (typeof isSorted == 'number') {
+      i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+    } else if (isSorted && length) {
+      i = _.sortedIndex(array, item);
+      return array[i] === item ? i : -1;
+    }
+    if (item !== item) {
+      return _.findIndex(slice.call(array, i), _.isNaN);
     }
     for (; i < length; i++) if (array[i] === item) return i;
     return -1;
   };
 
   _.lastIndexOf = function(array, item, from) {
-    if (array == null) return -1;
-    var idx = array.length;
+    var idx = array ? array.length : 0;
     if (typeof from == 'number') {
       idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
     }
+    if (item !== item) {
+      return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
+    }
     while (--idx >= 0) if (array[idx] === item) return idx;
     return -1;
+  };
+
+  // Generator function to create the findIndex and findLastIndex functions
+  function createIndexFinder(dir) {
+    return function(array, predicate, context) {
+      predicate = cb(predicate, context);
+      var length = array != null && array.length;
+      var index = dir > 0 ? 0 : length - 1;
+      for (; index >= 0 && index < length; index += dir) {
+        if (predicate(array[index], index, array)) return index;
+      }
+      return -1;
+    };
+  }
+
+  // Returns the first index on an array-like that passes a predicate test
+  _.findIndex = createIndexFinder(1);
+
+  _.findLastIndex = createIndexFinder(-1);
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = cb(iteratee, context, 1);
+    var value = iteratee(obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = Math.floor((low + high) / 2);
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+    }
+    return low;
   };
 
   // Generate an integer Array containing an arithmetic progression. A port of
@@ -32877,25 +32338,25 @@ module.exports = SingleStore;
   // Function (ahem) Functions
   // ------------------
 
-  // Reusable constructor function for prototype setting.
-  var Ctor = function(){};
+  // Determines whether to execute a function as a constructor
+  // or a normal function with the provided arguments
+  var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
+    if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
+    var self = baseCreate(sourceFunc.prototype);
+    var result = sourceFunc.apply(self, args);
+    if (_.isObject(result)) return result;
+    return self;
+  };
 
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
   // available.
   _.bind = function(func, context) {
-    var args, bound;
     if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
     if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
-    args = slice.call(arguments, 2);
-    bound = function() {
-      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      Ctor.prototype = func.prototype;
-      var self = new Ctor;
-      Ctor.prototype = null;
-      var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (_.isObject(result)) return result;
-      return self;
+    var args = slice.call(arguments, 2);
+    var bound = function() {
+      return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
     };
     return bound;
   };
@@ -32905,15 +32366,16 @@ module.exports = SingleStore;
   // as a placeholder, allowing any combination of arguments to be pre-filled.
   _.partial = function(func) {
     var boundArgs = slice.call(arguments, 1);
-    return function() {
-      var position = 0;
-      var args = boundArgs.slice();
-      for (var i = 0, length = args.length; i < length; i++) {
-        if (args[i] === _) args[i] = arguments[position++];
+    var bound = function() {
+      var position = 0, length = boundArgs.length;
+      var args = Array(length);
+      for (var i = 0; i < length; i++) {
+        args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
       }
       while (position < arguments.length) args.push(arguments[position++]);
-      return func.apply(this, args);
+      return executeBound(func, bound, this, this, args);
     };
+    return bound;
   };
 
   // Bind a number of an object's methods to that object. Remaining arguments
@@ -32933,7 +32395,7 @@ module.exports = SingleStore;
   _.memoize = function(func, hasher) {
     var memoize = function(key) {
       var cache = memoize.cache;
-      var address = hasher ? hasher.apply(this, arguments) : key;
+      var address = '' + (hasher ? hasher.apply(this, arguments) : key);
       if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
       return cache[address];
     };
@@ -32952,9 +32414,7 @@ module.exports = SingleStore;
 
   // Defers a function, scheduling it to run after the current call stack has
   // cleared.
-  _.defer = function(func) {
-    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
-  };
+  _.defer = _.partial(_.delay, _, 1);
 
   // Returns a function, that, when invoked, will only be triggered at most once
   // during a given window of time. Normally, the throttled function will run
@@ -32979,8 +32439,10 @@ module.exports = SingleStore;
       context = this;
       args = arguments;
       if (remaining <= 0 || remaining > wait) {
-        clearTimeout(timeout);
-        timeout = null;
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
         previous = now;
         result = func.apply(context, args);
         if (!timeout) context = args = null;
@@ -33001,7 +32463,7 @@ module.exports = SingleStore;
     var later = function() {
       var last = _.now() - timestamp;
 
-      if (last < wait && last > 0) {
+      if (last < wait && last >= 0) {
         timeout = setTimeout(later, wait - last);
       } else {
         timeout = null;
@@ -33054,7 +32516,7 @@ module.exports = SingleStore;
     };
   };
 
-  // Returns a function that will only be executed after being called N times.
+  // Returns a function that will only be executed on and after the Nth call.
   _.after = function(times, func) {
     return function() {
       if (--times < 1) {
@@ -33063,15 +32525,14 @@ module.exports = SingleStore;
     };
   };
 
-  // Returns a function that will only be executed before being called N times.
+  // Returns a function that will only be executed up to (but not including) the Nth call.
   _.before = function(times, func) {
     var memo;
     return function() {
       if (--times > 0) {
         memo = func.apply(this, arguments);
-      } else {
-        func = null;
       }
+      if (times <= 1) func = null;
       return memo;
     };
   };
@@ -33083,13 +32544,47 @@ module.exports = SingleStore;
   // Object Functions
   // ----------------
 
-  // Retrieve the names of an object's properties.
+  // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
+  var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
+  var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
+                      'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+
+  function collectNonEnumProps(obj, keys) {
+    var nonEnumIdx = nonEnumerableProps.length;
+    var constructor = obj.constructor;
+    var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
+
+    // Constructor is a special case.
+    var prop = 'constructor';
+    if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
+
+    while (nonEnumIdx--) {
+      prop = nonEnumerableProps[nonEnumIdx];
+      if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
+        keys.push(prop);
+      }
+    }
+  }
+
+  // Retrieve the names of an object's own properties.
   // Delegates to **ECMAScript 5**'s native `Object.keys`
   _.keys = function(obj) {
     if (!_.isObject(obj)) return [];
     if (nativeKeys) return nativeKeys(obj);
     var keys = [];
     for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
+    return keys;
+  };
+
+  // Retrieve all the property names of an object.
+  _.allKeys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    var keys = [];
+    for (var key in obj) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
     return keys;
   };
 
@@ -33102,6 +32597,21 @@ module.exports = SingleStore;
       values[i] = obj[keys[i]];
     }
     return values;
+  };
+
+  // Returns the results of applying the iteratee to each element of the object
+  // In contrast to _.map it returns an object
+  _.mapObject = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    var keys =  _.keys(obj),
+          length = keys.length,
+          results = {},
+          currentKey;
+      for (var index = 0; index < length; index++) {
+        currentKey = keys[index];
+        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
+      }
+      return results;
   };
 
   // Convert an object into a list of `[key, value]` pairs.
@@ -33136,37 +32646,38 @@ module.exports = SingleStore;
   };
 
   // Extend a given object with all the properties in passed-in object(s).
-  _.extend = function(obj) {
-    if (!_.isObject(obj)) return obj;
-    var source, prop;
-    for (var i = 1, length = arguments.length; i < length; i++) {
-      source = arguments[i];
-      for (prop in source) {
-        if (hasOwnProperty.call(source, prop)) {
-            obj[prop] = source[prop];
-        }
-      }
+  _.extend = createAssigner(_.allKeys);
+
+  // Assigns a given object with all the own properties in the passed-in object(s)
+  // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  _.extendOwn = _.assign = createAssigner(_.keys);
+
+  // Returns the first key on an object that passes a predicate test
+  _.findKey = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = _.keys(obj), key;
+    for (var i = 0, length = keys.length; i < length; i++) {
+      key = keys[i];
+      if (predicate(obj[key], key, obj)) return key;
     }
-    return obj;
   };
 
   // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(obj, iteratee, context) {
-    var result = {}, key;
+  _.pick = function(object, oiteratee, context) {
+    var result = {}, obj = object, iteratee, keys;
     if (obj == null) return result;
-    if (_.isFunction(iteratee)) {
-      iteratee = createCallback(iteratee, context);
-      for (key in obj) {
-        var value = obj[key];
-        if (iteratee(value, key, obj)) result[key] = value;
-      }
+    if (_.isFunction(oiteratee)) {
+      keys = _.allKeys(obj);
+      iteratee = optimizeCb(oiteratee, context);
     } else {
-      var keys = concat.apply([], slice.call(arguments, 1));
-      obj = new Object(obj);
-      for (var i = 0, length = keys.length; i < length; i++) {
-        key = keys[i];
-        if (key in obj) result[key] = obj[key];
-      }
+      keys = flatten(arguments, false, false, 1);
+      iteratee = function(value, key, obj) { return key in obj; };
+      obj = Object(obj);
+    }
+    for (var i = 0, length = keys.length; i < length; i++) {
+      var key = keys[i];
+      var value = obj[key];
+      if (iteratee(value, key, obj)) result[key] = value;
     }
     return result;
   };
@@ -33176,7 +32687,7 @@ module.exports = SingleStore;
     if (_.isFunction(iteratee)) {
       iteratee = _.negate(iteratee);
     } else {
-      var keys = _.map(concat.apply([], slice.call(arguments, 1)), String);
+      var keys = _.map(flatten(arguments, false, false, 1), String);
       iteratee = function(value, key) {
         return !_.contains(keys, key);
       };
@@ -33185,16 +32696,7 @@ module.exports = SingleStore;
   };
 
   // Fill in a given object with default properties.
-  _.defaults = function(obj) {
-    if (!_.isObject(obj)) return obj;
-    for (var i = 1, length = arguments.length; i < length; i++) {
-      var source = arguments[i];
-      for (var prop in source) {
-        if (obj[prop] === void 0) obj[prop] = source[prop];
-      }
-    }
-    return obj;
-  };
+  _.defaults = createAssigner(_.allKeys, true);
 
   // Create a (shallow-cloned) duplicate of an object.
   _.clone = function(obj) {
@@ -33209,6 +32711,19 @@ module.exports = SingleStore;
     interceptor(obj);
     return obj;
   };
+
+  // Returns whether an object has a given set of `key:value` pairs.
+  _.isMatch = function(object, attrs) {
+    var keys = _.keys(attrs), length = keys.length;
+    if (object == null) return !length;
+    var obj = Object(object);
+    for (var i = 0; i < length; i++) {
+      var key = keys[i];
+      if (attrs[key] !== obj[key] || !(key in obj)) return false;
+    }
+    return true;
+  };
+
 
   // Internal recursive comparison function for `isEqual`.
   var eq = function(a, b, aStack, bStack) {
@@ -33244,74 +32759,76 @@ module.exports = SingleStore;
         // of `NaN` are not equivalent.
         return +a === +b;
     }
-    if (typeof a != 'object' || typeof b != 'object') return false;
+
+    var areArrays = className === '[object Array]';
+    if (!areArrays) {
+      if (typeof a != 'object' || typeof b != 'object') return false;
+
+      // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+                               _.isFunction(bCtor) && bCtor instanceof bCtor)
+                          && ('constructor' in a && 'constructor' in b)) {
+        return false;
+      }
+    }
     // Assume equality for cyclic structures. The algorithm for detecting cyclic
     // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    
+    // Initializing stack of traversed objects.
+    // It's done here since we only need them for objects and arrays comparison.
+    aStack = aStack || [];
+    bStack = bStack || [];
     var length = aStack.length;
     while (length--) {
       // Linear search. Performance is inversely proportional to the number of
       // unique nested structures.
       if (aStack[length] === a) return bStack[length] === b;
     }
-    // Objects with different constructors are not equivalent, but `Object`s
-    // from different frames are.
-    var aCtor = a.constructor, bCtor = b.constructor;
-    if (
-      aCtor !== bCtor &&
-      // Handle Object.create(x) cases
-      'constructor' in a && 'constructor' in b &&
-      !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
-        _.isFunction(bCtor) && bCtor instanceof bCtor)
-    ) {
-      return false;
-    }
+
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
-    var size, result;
+
     // Recursively compare objects and arrays.
-    if (className === '[object Array]') {
+    if (areArrays) {
       // Compare array lengths to determine if a deep comparison is necessary.
-      size = a.length;
-      result = size === b.length;
-      if (result) {
-        // Deep compare the contents, ignoring non-numeric properties.
-        while (size--) {
-          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
-        }
+      length = a.length;
+      if (length !== b.length) return false;
+      // Deep compare the contents, ignoring non-numeric properties.
+      while (length--) {
+        if (!eq(a[length], b[length], aStack, bStack)) return false;
       }
     } else {
       // Deep compare objects.
       var keys = _.keys(a), key;
-      size = keys.length;
+      length = keys.length;
       // Ensure that both objects contain the same number of properties before comparing deep equality.
-      result = _.keys(b).length === size;
-      if (result) {
-        while (size--) {
-          // Deep compare each member
-          key = keys[size];
-          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
-        }
+      if (_.keys(b).length !== length) return false;
+      while (length--) {
+        // Deep compare each member
+        key = keys[length];
+        if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
       }
     }
     // Remove the first object from the stack of traversed objects.
     aStack.pop();
     bStack.pop();
-    return result;
+    return true;
   };
 
   // Perform a deep comparison to check if two objects are equal.
   _.isEqual = function(a, b) {
-    return eq(a, b, [], []);
+    return eq(a, b);
   };
 
   // Is a given array, string, or object empty?
   // An "empty" object has no enumerable own-properties.
   _.isEmpty = function(obj) {
     if (obj == null) return true;
-    if (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)) return obj.length === 0;
-    for (var key in obj) if (_.has(obj, key)) return false;
-    return true;
+    if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
+    return _.keys(obj).length === 0;
   };
 
   // Is a given value a DOM element?
@@ -33331,14 +32848,14 @@ module.exports = SingleStore;
     return type === 'function' || type === 'object' && !!obj;
   };
 
-  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
     _['is' + name] = function(obj) {
       return toString.call(obj) === '[object ' + name + ']';
     };
   });
 
-  // Define a fallback version of the method in browsers (ahem, IE), where
+  // Define a fallback version of the method in browsers (ahem, IE < 9), where
   // there isn't any inspectable "Arguments" type.
   if (!_.isArguments(arguments)) {
     _.isArguments = function(obj) {
@@ -33346,8 +32863,9 @@ module.exports = SingleStore;
     };
   }
 
-  // Optimize `isFunction` if appropriate. Work around an IE 11 bug.
-  if (typeof /./ !== 'function') {
+  // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
+  // IE 11 (#1621), and in Safari 8 (#1929).
+  if (typeof /./ != 'function' && typeof Int8Array != 'object') {
     _.isFunction = function(obj) {
       return typeof obj == 'function' || false;
     };
@@ -33399,6 +32917,7 @@ module.exports = SingleStore;
     return value;
   };
 
+  // Predicate-generating functions. Often useful outside of Underscore.
   _.constant = function(value) {
     return function() {
       return value;
@@ -33409,28 +32928,30 @@ module.exports = SingleStore;
 
   _.property = function(key) {
     return function(obj) {
+      return obj == null ? void 0 : obj[key];
+    };
+  };
+
+  // Generates a function for a given object that returns a given property.
+  _.propertyOf = function(obj) {
+    return obj == null ? function(){} : function(key) {
       return obj[key];
     };
   };
 
-  // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
-  _.matches = function(attrs) {
-    var pairs = _.pairs(attrs), length = pairs.length;
+  // Returns a predicate for checking whether an object has a given set of 
+  // `key:value` pairs.
+  _.matcher = _.matches = function(attrs) {
+    attrs = _.extendOwn({}, attrs);
     return function(obj) {
-      if (obj == null) return !length;
-      obj = new Object(obj);
-      for (var i = 0; i < length; i++) {
-        var pair = pairs[i], key = pair[0];
-        if (pair[1] !== obj[key] || !(key in obj)) return false;
-      }
-      return true;
+      return _.isMatch(obj, attrs);
     };
   };
 
   // Run a function **n** times.
   _.times = function(n, iteratee, context) {
     var accum = Array(Math.max(0, n));
-    iteratee = createCallback(iteratee, context, 1);
+    iteratee = optimizeCb(iteratee, context, 1);
     for (var i = 0; i < n; i++) accum[i] = iteratee(i);
     return accum;
   };
@@ -33479,10 +33000,12 @@ module.exports = SingleStore;
 
   // If the value of the named `property` is a function then invoke it with the
   // `object` as context; otherwise, return it.
-  _.result = function(object, property) {
-    if (object == null) return void 0;
-    var value = object[property];
-    return _.isFunction(value) ? object[property]() : value;
+  _.result = function(object, property, fallback) {
+    var value = object == null ? void 0 : object[property];
+    if (value === void 0) {
+      value = fallback;
+    }
+    return _.isFunction(value) ? value.call(object) : value;
   };
 
   // Generate a unique integer id (unique within the entire client session).
@@ -33597,8 +33120,8 @@ module.exports = SingleStore;
   // underscore functions. Wrapped objects may be chained.
 
   // Helper function to continue chaining intermediate results.
-  var result = function(obj) {
-    return this._chain ? _(obj).chain() : obj;
+  var result = function(instance, obj) {
+    return instance._chain ? _(obj).chain() : obj;
   };
 
   // Add your own custom functions to the Underscore object.
@@ -33608,7 +33131,7 @@ module.exports = SingleStore;
       _.prototype[name] = function() {
         var args = [this._wrapped];
         push.apply(args, arguments);
-        return result.call(this, func.apply(_, args));
+        return result(this, func.apply(_, args));
       };
     });
   };
@@ -33623,7 +33146,7 @@ module.exports = SingleStore;
       var obj = this._wrapped;
       method.apply(obj, arguments);
       if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
-      return result.call(this, obj);
+      return result(this, obj);
     };
   });
 
@@ -33631,13 +33154,21 @@ module.exports = SingleStore;
   _.each(['concat', 'join', 'slice'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
-      return result.call(this, method.apply(this._wrapped, arguments));
+      return result(this, method.apply(this._wrapped, arguments));
     };
   });
 
   // Extracts the result from a wrapped and chained object.
   _.prototype.value = function() {
     return this._wrapped;
+  };
+
+  // Provide unwrapping proxy for some methods used in engine operations
+  // such as arithmetic and JSON stringification.
+  _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
+  
+  _.prototype.toString = function() {
+    return '' + this._wrapped;
   };
 
   // AMD registration happens at the end for compatibility with AMD loaders
@@ -33654,4 +33185,1098 @@ module.exports = SingleStore;
   }
 }.call(this));
 
-},{}]},{},[210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230]);
+},{}],211:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react');
+var Main = require('./components/Main.jsx');
+var ShelterStore = require('./stores/ShelterStore.jsx');
+var ShowList = require('./components/ShowList.jsx');
+var Shelters = require('./components/Shelters.jsx');
+var NotFound = require('./components/NotFound.jsx');
+var NavBarDefault = require('./components/NavBarDefault.jsx');
+var Login = require('./components/Login.jsx');
+var Signup = require('./components/Signup.jsx');
+var TwitterLogin = require('./components/TwitterLogin.jsx');
+var Shelter = require('./components/Shelter.jsx');
+
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
+
+var App = React.createClass({displayName: "App",
+	getInitialState: function() {
+		return {
+			nearbyShelters: ShelterStore.getShelters()
+		}
+	},
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "main-wrapper"}, 
+					React.createElement(RouteHandler, {shelters: this.state.nearbyShelters})
+				)
+			)
+		)	
+	}
+});
+
+var routes = (
+  React.createElement(Route, {name: "app", handler: App}, 
+  	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
+    React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
+    React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
+    React.createElement(Route, {name: "shelter", path: "/shelter/:sheltername", handler: Shelter}), 
+    React.createElement(NotFoundRoute, {handler: NotFound})
+  )
+);
+
+Router.run(routes,function (Handler) {
+  React.render(React.createElement(Handler, null), document.getElementById('content'));
+});
+
+
+
+},{"./components/Login.jsx":218,"./components/Main.jsx":219,"./components/NavBarDefault.jsx":220,"./components/NotFound.jsx":221,"./components/Shelter.jsx":223,"./components/Shelters.jsx":225,"./components/ShowList.jsx":227,"./components/Signup.jsx":228,"./components/TwitterLogin.jsx":229,"./stores/ShelterStore.jsx":230,"react":189,"react-router":30}],212:[function(require,module,exports){
+var Reflux = require('reflux');
+var $ = require('jquery');
+
+var AsyncActions = Reflux.createActions({
+    "donation": {children: ["completed","failed"]}
+});
+
+AsyncActions.donation.listen( function(data) {
+  $.ajax({
+   type: "GET",
+   url: '/shelters?' + data.sheltername
+  }).done( this.completed )
+  .fail( this.failed );
+});
+
+module.exports = AsyncActions;
+
+},{"jquery":2,"reflux":190}],213:[function(require,module,exports){
+var Reflux = require('reflux');
+
+var ShelterActions = Reflux.createActions([
+  'createShelter',
+  'loadShelters',
+  'loadShelter'
+]);
+
+
+module.exports = ShelterActions;
+
+},{"reflux":190}],214:[function(require,module,exports){
+var React = require('react');
+
+var AddShelter = React.createClass({displayName: "AddShelter",
+	getInitialState: function() {
+		return {
+			newShelter: ''
+		}
+	},
+	updateNewShelter: function(e) {
+		this.setState({
+			newShelter: e.target.value
+		});
+	},
+	handleAddNew: function(e) {
+		this.props.addNew(this.state.newShelter);
+		this.setState({
+			newShelter: ''
+		});
+	},
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("input", {type: "text", value: "this.state.newShelter", onChange: this.updateNewFriend}), 
+				React.createElement("button", {onClick: this.handleAddNew}, " Add New Shelter ")
+			)
+		);
+	}
+});
+
+module.exports = AddShelter;
+
+
+},{"react":189}],215:[function(require,module,exports){
+var React = require('react');
+
+},{"react":189}],216:[function(require,module,exports){
+
+
+},{}],217:[function(require,module,exports){
+
+
+},{}],218:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var Login = React.createClass({displayName: "Login",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango"), 
+        React.createElement("form", {action: "/login", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
+          ), 
+
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+        ), 
+
+        React.createElement("p", null, "Need an account? ", React.createElement(Link, {to: "signup"}, "Sign Up"))
+      )
+    )
+  }
+});
+
+module.exports = Login;
+
+},{"react":189,"react-router":30}],219:[function(require,module,exports){
+var React = require('react');
+var ShelterStore = require('../stores/ShelterStore.jsx');
+var ShowList = require('./ShowList.jsx');
+var NavBarDefault = require('./NavBarDefault.jsx');
+
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var Main = React.createClass({displayName: "Main",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid hero"}, 
+					React.createElement(NavBarDefault, null), 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("div", {className: "hero-description"}, 
+							React.createElement("h1", {className: "hero-headline"}, "Connecting donors to animal shelters in need"), 
+							React.createElement("div", {className: "button-group"}, 
+								React.createElement("a", {className: "btn hero-btn more", href: "#"}, 
+									React.createElement("span", null, "Learn More")
+								), 
+								React.createElement(Link, {to: "fund-shelters", className: "btn hero-btn view"}, 
+									React.createElement("span", null, "View Shelters")
+								)
+							)
+						)
+					)
+				), 
+				React.createElement("section", {className: "devoted"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("h2", null, "100% of your donation fund Bay Area animal shelters.")
+					)
+				), 
+				React.createElement("section", {className: "three-shelters"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement(ShowList, React.__spread({},  this.props))
+					)
+				)
+			)
+		)
+	}
+});	
+
+module.exports = Main;
+
+},{"../stores/ShelterStore.jsx":230,"./NavBarDefault.jsx":220,"./ShowList.jsx":227,"react":189,"react-router":30}],220:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
+
+var TwitterLogin = require('./TwitterLogin.jsx');
+
+
+var NavBarDefault = React.createClass({displayName: "NavBarDefault",
+
+
+	render: function() {
+
+		return (
+			React.createElement("div", null, 
+				React.createElement("header", null, 
+					React.createElement("nav", {className: "navbar navbar-default container"}, 
+						React.createElement("div", {className: "wrapper"}, 
+							React.createElement("div", {className: "navbar-header"}, 
+								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
+								  "kango`"
+								)
+							), 
+							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
+								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
+								React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
+								React.createElement("li", null, 
+								React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
+										"Sign In"
+								)
+								)
+							)
+						)
+					)
+				), 
+				React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
+				  React.createElement("div", {className: "modal-dialog"}, 
+				  	React.createElement(TwitterLogin, null)
+				  )
+				)
+			)
+		)
+	}
+});
+
+module.exports = NavBarDefault;
+
+},{"./TwitterLogin.jsx":229,"react":189,"react-router":30}],221:[function(require,module,exports){
+var React = require('react');
+
+var NotFound = React.createClass({displayName: "NotFound",
+	render: function() {
+		return (
+			React.createElement("div", {className: "container"}, 
+				React.createElement("h1", null, "Page not found.")
+			)
+		)
+	}
+});
+
+module.exports = NotFound;
+
+},{"react":189}],222:[function(require,module,exports){
+var React = require('react');
+
+},{"react":189}],223:[function(require,module,exports){
+var React = require('react');
+var Reflux = require('reflux');
+var _ = require('underscore');
+var $ = require('jquery');
+var ShelterStore = require('../stores/ShelterStore.jsx');
+var NavBarDefault = require('./NavBarDefault.jsx');
+var circleProgress = require('../vendor/circle-progress.js');
+var AsyncActions = require('../actions/asyncActions.jsx');
+var SingleStore = require('../stores/SingleStore.jsx');
+
+
+var Shelter = React.createClass({displayName: "Shelter",
+  mixins: [Reflux.ListenerMixin],
+  componentDidMount: function() {
+      this.listenTo(SingleStore, this.onStatusChange);
+  },
+  current: {},
+  onStatusChange: function(status) {
+    this.current = status;
+    this.setState({
+      current: status
+    });
+    this.render();
+  },
+  findMe: function(shelters, sheltername) {
+    var shelter = _.filter(shelters, function(element) {
+      if(element.sheltername === sheltername) {
+        return element;
+      }
+    })[0];
+    this.current = shelter;
+    return shelter;
+  },
+  submit: function() {
+    AsyncActions.donation.triggerAsync(this.current); 
+  },
+	render: function() {
+		/* Gets the shelterName and filters the contents */
+		var url = window.location.href.split('/');
+		var shelterPath = url[url.length-1];
+    var shelter = this.findMe(this.props.shelters, shelterPath);
+    var paragraph = shelter.bio.split('\n');
+    console.log(paragraph);
+    var fullParagraph = [];
+    
+    for (var i = 0; i < paragraph.length; i++) {
+    	fullParagraph.push(paragraph[i]);
+    }
+
+    var progress = Math.floor((shelter.raised / shelter.goal) * 100) + '%';
+
+
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid header-default"}, 
+					React.createElement(NavBarDefault, null)
+				), 
+				React.createElement("div", {className: "container"}, 
+
+					React.createElement("div", {className: "row"}, 
+						React.createElement("div", {className: "col-md-12"}, 
+							React.createElement("h1", {className: "shelter--name"}, shelter.name, " – ", shelter.city, ", ", React.createElement("span", {className: "caps"}, shelter.state))
+						)	
+					), 
+					React.createElement("div", {className: "row"}, 
+						React.createElement("div", {className: "col-md-8"}, 
+							React.createElement("img", {className: "shelter--photo", src: shelter.image_url})
+						), 
+						React.createElement("div", {className: "col-md-4"}, 
+							React.createElement("div", {className: "shelter--raised-goal"}, progress), 
+							React.createElement("div", {className: "shelter-fund-wrap"}, 
+								React.createElement("div", {className: "shelter--raised"}, "$", shelter.raised, " raised"), 
+								React.createElement("div", {className: "shelter--goal"}, "$", shelter.goal, " to go")
+							), 
+							React.createElement("form", {id: "donation-form", action: "/donate", method: "post", onSuccess: this.updateState, onSubmit: this.submit}, 
+							  React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
+							  React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: this.current.sheltername}), 
+							  React.createElement("button", {id: "donation-submit", type: "submit"}, "DONATE")
+							)
+
+						)
+					), 
+					React.createElement("div", {className: "row"}, 
+						React.createElement("div", {className: "col-md-8"}, 
+							React.createElement("h3", {className: "shelter--story-title caps"}, shelter.name + "'s", " Story"), 
+							React.createElement("div", {className: "shelter--story"}, 
+								fullParagraph
+							)
+						), 
+						React.createElement("div", {className: "col-md-4"}, 	
+							React.createElement("div", {className: "shelter--leaderboard"})	
+						)
+					)
+
+				)
+			)
+		);
+	}
+});
+
+module.exports = Shelter;
+
+},{"../actions/asyncActions.jsx":212,"../stores/ShelterStore.jsx":230,"../stores/SingleStore.jsx":231,"../vendor/circle-progress.js":232,"./NavBarDefault.jsx":220,"jquery":2,"react":189,"reflux":190,"underscore":210}],224:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var $ = require('jquery');
+
+var ShelterCard = React.createClass({displayName: "ShelterCard",
+	componentDidMount: function() {
+		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
+		$('shelter-progress-bar').css("width", progress);
+	},
+
+	render: function() {
+		
+		return (
+			React.createElement("li", {className: "col-md-4"}, 
+				React.createElement("div", {className: "shelter-card"}, 
+						React.createElement(Link, {to: "shelter", params: {sheltername: this.props.data.sheltername}}, 							
+							React.createElement("img", {src: this.props.data.image_url})
+						), 
+					React.createElement("div", {className: "shelter-info"}, 
+						React.createElement("div", {className: "shelter-bio"}, 
+							React.createElement("h3", null, this.props.data.name)
+						), 
+						React.createElement("div", {className: this.props.data.sheltername + " shelter-progress-bar"}
+						), 
+						React.createElement("div", {className: "shelter-fund-wrapper"}, 
+							React.createElement("span", {className: "shelter-raised"}, 
+								"$", this.props.data.raised, " raised"
+							), 
+							React.createElement("span", {className: "shelter-target"}, 
+								"$", this.props.data.goal - this.props.data.raised, " to go"
+							)
+						)
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = ShelterCard;
+
+},{"jquery":2,"react":189,"react-router":30}],225:[function(require,module,exports){
+var React = require('react');
+var NavBarDefault = require('./NavBarDefault.jsx');
+
+var Shelters = React.createClass({displayName: "Shelters",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid header-default"}, 
+					React.createElement(NavBarDefault, null)
+				), 
+				React.createElement("div", {className: "container"}, 
+					React.createElement("h1", null, " This is the Shelters view ")
+				)
+			)
+		)
+	}
+});
+
+module.exports = Shelters;
+
+},{"./NavBarDefault.jsx":220,"react":189}],226:[function(require,module,exports){
+var React = require('react');
+
+var ShowAll = React.createClass({displayName: "ShowAll",
+	render: function() {
+		
+	}
+});
+
+module.exports = ShowAll;
+
+},{"react":189}],227:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var ShelterCard = require('./ShelterCard.jsx');
+
+var ShowList = React.createClass({displayName: "ShowList",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("h3", {className: "section-header"}, "Meet the Animal Shelters"), 
+				React.createElement("p", {className: "section-short"}, "San Francisco • Oakland • South Bay"), 
+				React.createElement("ul", {className: "shelter-list-home"}, 
+					React.createElement("div", {className: "row"}, 
+						this.props.shelters.map(function(shelter, i){
+								return React.createElement(ShelterCard, {key: i, data: shelter})
+							}, this)
+						
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = ShowList;
+
+
+},{"./ShelterCard.jsx":224,"react":189,"react-router":30}],228:[function(require,module,exports){
+var React = require('react');
+
+var Signup = React.createClass({displayName: "Signup",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign Up for Kango"), 
+        React.createElement("form", {action: "/signup", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
+          ), 
+
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
+        ), 
+
+        "// ", React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup"))
+      )
+    )
+  }
+});
+
+module.exports = Signup;
+
+},{"react":189}],229:[function(require,module,exports){
+var React = require('react');
+
+var TwitterLogin = React.createClass({displayName: "TwitterLogin",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
+        React.createElement("form", {action: "/auth/twitter", method: "get"}, 
+          React.createElement("button", {type: "submit"}, "Login")
+        )
+      )
+    )
+  }
+});
+
+module.exports = TwitterLogin;
+
+},{"react":189}],230:[function(require,module,exports){
+var Reflux = require('reflux');
+var $ = require('jquery');
+var ShelterActions = require('../actions/shelterActions.jsx');
+// require action here.
+
+var shelters = [
+	{
+
+		'sheltername' : 'wonderdogrescue',
+		'name' : 'Wonder Dog Rescue',
+		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
+		'address_one' : '650 Fillmore St',
+		'address_two' : null,
+		'city' : 'San Francisco',
+		'state' : 'CA',
+		'zip' : 94140,
+		'telephone' : 4156213647,
+		'email' : 'adoption@wonderdogrescue.org',
+		'bio' : 'Wonder Dog Rescue has a long history of rescuing dogs in need! Our founder was introduced to rescue in 1992, assisting a long-time Boston and Pug rescuer. Over time she formed Bay Area Boston Terrier Rescue. As time went on the group grew and began helping dogs of all sizes, shapes and breeds. Wonder Dog Rescue is the synthesis of this progression. We are passionate about rescue, rehoming, education and spay/neuter! We serve the San Francisco Bay Area and beyond, rescuing dogs from all over Northern and Central California. Wonder Dog Rescue has saved blind and deaf dogs, puppies as young as one week and seniors as old as 15 years! We offer hospice to special needs and elderly dogs, caring for them until the end of their lives. Each animal has so much to offer… and we learn so much by opening our hearts to these deserving companions. When a dog comes into rescue he or she is evaluated carefully. All dogs receive vaccinations and are spayed or neutered, and most dogs receive additional medical care and/or behavior modification. We work with each dog, giving them the love and structure they need to move onward. Dogs stay in foster homes until they are matched with their ideal family. We want these adoptions to be life-long and take this very seriously!Wonder Dog Rescue depends on public donations so we can continue to save dogs that find themselves in animal shelters across California. We rely upon the kindness of strangers.  Many people enjoy buying items to donate to the dogs. Please know that while we are always grateful to receive wishlist items, we do get considerable discounts at a few local pet stores and so we can often buy more items with the same amount than you may be able to.We are always in need of the following items: exercise pens (our GREATEST need for foster homes), crates, leashes and collars for small dogs,dog food, bully sticks, biscuits and treats, bedding and towels, flea and tick control, toys, and pet carriers.  Thank you for your kind donation!',
+		'goal' : 1000,
+		'raised' : 400
+	},
+	{
+		'sheltername' : 'familydogrescue',
+		'name' : 'Family Dog Rescue',
+		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
+		'address_one' : '255 Alabama St',
+		'address_two' : null,
+		'city' : 'San Francisco',
+		'state' : 'CA',
+		'zip' : 94140,
+		'telephone' : 4154248912,
+		'email' : 'adopt@norcalfamilydogrescue.org',
+		'bio' : 'We save family-friendly dogs of all shapes and sizes. We give priority to deserving-but-overlooked dogs in California’s overcrowded municipal shelters. Our mission can also take us across the country and around the world.  All dogs are carefully screened for good behavior and receive proper veterinary care, including spay/neuter surgery and vaccinations. We seek out kid-friendly and dog-friendly dogs who can get along with everyone in your family.  While we do not accept dogs with a history of aggression, we are happy to save the underdogs, including blind/deaf, disabled, and shy dogs whom we believe have the potential to be ideal family dogs.We can always use dog treats, dog toys, leashes, collars, harnesses, dog beds, crates, dog shampoo, clean towels and blankets, Advantage or Frontline, flea/tick treatment, laptop computers, file folders, and printer paper. Thank you for helping us save over 800 dogs every year!',
+		'goal' : 2100,
+		'raised' : 960
+	},
+	{
+		'sheltername' : 'sanfranciscospca',
+		'name' : 'San Francisco SPCA',
+		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
+		'address_one' : '201 Alabama St',
+		'address_two' : null,
+		'city' : 'San Francisco',
+		'state' : 'CA',
+		'zip' : 94103,
+		'telephone' : 4155543000,
+		'email' : 'development@sfspca.org',
+		'bio' : 'As the fourth oldest humane society in the U.S. and the founders of the No-Kill movement, the SF SPCA has always been at the forefront of animal welfare. As a result of our efforts and those of our community partners, San Francisco has the lowest euthanasia rate of any major city in the United States. No adoptable dog or cat in San Francisco goes without a home, even if they have medical or other issues. In 2014 we merged with Pets Unlimited, a likeminded animal welfare nonprofit in Pacific Heights. Their organization included a nonprofit veterinary hospital that provided significant financial assistance to pet guardians in need, as well as a small adoption center. The original SF SPCA campus in the Mission, and the additional campus in Pacific Heights, are now working toward the same shared mission and goals. We imagine a community where every animal has a loving home. Where animals don’t need the support of San Francisco’s rescues and shelters. And we know how to get there. In 2012, the SF SPCA created Vision 2020—a road map to end animal abandonment in San Francisco by 2020. The plan identifies three main reasons animals end up in shelters—overpopulation, barriers to veterinary care and pet behavior issues. By addressing these issues aggressively, we will make San Francisco the first city in the nation to end animal homelessness. All our programs and services support at least one of three Vision 2020 principles: prevention, rescue and education. We are always in need of baby food (for weaning kittens), towels, blankets, pet beds, cat and dog food, natural chewies, kennels, crates, leashes, and pet toys.Thank you for helping us with your generous donation!',
+		'goal' : 1600,
+		'raised' : 870
+	},
+	{
+		'sheltername' : 'berkeleyhumane',
+		'name' : 'Berkeley Humane',
+		'image_url' : 'http://static1.squarespace.com/static/50c8c55be4b0a1d4330d16f8/t/54ef9e64e4b093c84efb1a5f/1424989797766/',
+		'address_one' : '2700 Ninth St',
+		'address_two' : null,
+		'city' : 'Berkeley',
+		'state' : 'CA',
+		'zip' : 94710,
+		'telephone' : 5108453633,
+		'email' : 'development@berkeleyhumane.org',
+		'bio' : 'Berkeley Humane provides complete care for homeless animals, from rescue to rehabilitation to placement. We match animals with loving and committed adopters, strengthen the human-animal bond, and promote the humane treatment of animals. Our vision is to be an innovative leader in animal welfare and to provide critical resources to our community, leading the way with best practices in animal care to reduce the number of homeless animals in our community and beyond. We are always in need of donations for food, crates, leashes, toys, blankets, and other supplies for dogs and cats in need. Thank you for considering a donation to support the life-saving efforts at Berkeley Humane!',
+		'goal' : 1900,
+		'raised' : 843
+	},
+		{
+		'sheltername' : 'gratefuldogsrescue',
+		'name' : 'Grateful Dogs Rescue',
+		'image_url' : 'http://www.noozhawk.com/images/uploads/062411-shelter-630.jpg',
+		'address_one' : 'P.O. Box 411013',
+		'address_two' : null,
+		'city' : 'San Francisco',
+		'state' : 'CA',
+		'zip' : 94141,
+		'telephone' : 4155871121,
+		'email' : 'info@gratefuldogsrescue.org',
+		'bio' : 'Grateful Dogs Rescue – a volunteer-run 501(c)(3) non-profit organization – was founded in 1990 by Michelle Parris, a former SF Animal Care & Control (SF ACC) volunteer.  She made it her mission to rescue SF ACC shelter dogs not made available for adoption and we continue that mission today. Rather than letting these dogs be euthanized, Grateful Dogs Rescue saves as many as possible by fostering them until loving homes are found. Our dedicated GDR volunteers also volunteer to work with the animals at SFACC. GDR is the oldest all breed rescue group in the San Francisco bay area. The Grateful Dogs Rescue adoption procedure is designed to find a good match between the dog and adopter. Our goal is a happy human and happy dog in a "forever home." We are an all-volunteer organization with no paid staff, so donations to Grateful Dogs Rescue go towards the care of our dogs. Thank you for your donation!',
+		'goal' : 1200,
+		'raised' : 640
+	},
+		{
+		'sheltername' : 'oaklandanimalservices',
+		'name' : 'Oakland Animal Services',
+		'image_url' : 'https://www.mobilecause.com/wp-content/uploads/2014/06/shelter_volunteer.jpg',
+		'address_one' : '1101 29th Ave',
+		'address_two' : null,
+		'city' : 'Oakland',
+		'state' : 'CA',
+		'zip' : 94601,
+		'telephone' : 5105355602,
+		'email' : 'oasvolunteerquestions@gmail.com',
+		'bio' : 'Oakland Animal Services is a division of the Oakland Police Department within the City of Oakland.  Oakland Animal Services is dedicated to improving the relationship between the citizens of Oakland and its animals. Ensuring both public safety and animal welfare, OAS is responsible for responding to animal-related calls for service including helping abused, neglected, injured and abandoned animals, investigating animal bites and regulating animal-related activities within the City.Oakland Animal Services rescues hundreds of animals each year from abuse, neglect and abandonment. Many of these animals have been starved or are very injured, sick and/or under-socialized when we find them. It is truly amazing to watch as our staff and volunteers help to bring these animals back to life and find them wonderful adoption homes. Our services are made possible by the generous donations of people like you.  Please consider making a donation so that we may continue our efforts.',
+		'goal' : 1600,
+		'raised' : 320
+	}
+];
+
+var ShelterStore = Reflux.createStore({
+	shelters: [],
+	init: function(){
+		 this.shelters = shelters;
+	   this.load();
+	   this.listenTo(ShelterActions.loadShelters, this.load)
+	   this.listenTo(ShelterActions.createShelter, this.onCreate);
+	 },
+	 load: function(){
+	   var context = this;
+	     $.ajax({
+	       type: "GET",
+	       url: '/shelters',
+	     }).done(function(data) {
+	         for (var i = 0; i < data.length; i++) {
+	         	shelters.push(data[i]);
+	         }
+					 //push data to store
+	         context.trigger(shelters);
+	     });
+	 },
+	 onCreate: function(shelter) {
+	   shelters.push(shelter);
+
+	   this.trigger(shelters);
+	 },
+	 toggle: function(e, toggled, job){
+	   console.log(e, toggled, job);
+
+	 },
+	 getShelters: function() {
+	   //req to /api/listings
+	   return shelters;
+	 },
+
+});
+
+module.exports = ShelterStore;
+
+},{"../actions/shelterActions.jsx":213,"jquery":2,"reflux":190}],231:[function(require,module,exports){
+var Reflux = require('reflux');
+var AsyncActions = require('../actions/asyncActions.jsx');
+
+var SingleStore = Reflux.createStore({
+	init: function() {
+		this.listenTo(AsyncActions.donation.completed, this.load);
+    this.listenTo(AsyncActions.donation.failed, this.error);
+	},
+	load: function(data) {
+    this.trigger(data);
+  },
+  error: function(err) {
+    console.log('donation post error', err);
+  }
+});
+
+module.exports = SingleStore;
+
+
+},{"../actions/asyncActions.jsx":212,"reflux":190}],232:[function(require,module,exports){
+/*
+jquery-circle-progress - jQuery Plugin to draw animated circular progress bars
+
+URL: http://kottenator.github.io/jquery-circle-progress/
+Author: Rostyslav Bryzgunov <kottenator@gmail.com>
+Version: 1.1.2
+License: MIT
+*/
+(function($) {
+    function CircleProgress(config) {
+        this.init(config);
+    }
+
+    CircleProgress.prototype = {
+        //----------------------------------------------- public options -----------------------------------------------
+        /**
+         * This is the only required option. It should be from 0.0 to 1.0
+         * @type {number}
+         */
+        value: 0.0,
+
+        /**
+         * Size of the circle / canvas in pixels
+         * @type {number}
+         */
+        size: 100.0,
+
+        /**
+         * Initial angle for 0.0 value in radians
+         * @type {number}
+         */
+        startAngle: -Math.PI,
+
+        /**
+         * Width of the arc. By default it's auto-calculated as 1/14 of size, but you may set it explicitly in pixels
+         * @type {number|string}
+         */
+        thickness: 'auto',
+
+        /**
+         * Fill of the arc. You may set it to:
+         *   - solid color:
+         *     - { color: '#3aeabb' }
+         *     - { color: 'rgba(255, 255, 255, .3)' }
+         *   - linear gradient (left to right):
+         *     - { gradient: ['#3aeabb', '#fdd250'], gradientAngle: Math.PI / 4 }
+         *     - { gradient: ['red', 'green', 'blue'], gradientDirection: [x0, y0, x1, y1] }
+         *   - image:
+         *     - { image: 'http://i.imgur.com/pT0i89v.png' }
+         *     - { image: imageObject }
+         *     - { color: 'lime', image: 'http://i.imgur.com/pT0i89v.png' } - color displayed until the image is loaded
+         */
+        fill: {
+            gradient: ['#3aeabb', '#fdd250']
+        },
+
+        /**
+         * Color of the "empty" arc. Only a color fill supported by now
+         * @type {string}
+         */
+        emptyFill: 'rgba(0, 0, 0, .1)',
+
+        /**
+         * Animation config (see jQuery animations: http://api.jquery.com/animate/)
+         */
+        animation: {
+            duration: 1200,
+            easing: 'circleProgressEasing'
+        },
+
+        /**
+         * Default animation starts at 0.0 and ends at specified `value`. Let's call this direct animation.
+         * If you want to make reversed animation then you should set `animationStartValue` to 1.0.
+         * Also you may specify any other value from 0.0 to 1.0
+         * @type {number}
+         */
+        animationStartValue: 0.0,
+
+        /**
+         * Reverse animation and arc draw
+         * @type {boolean}
+         */
+        reverse: false,
+
+        /**
+         * Arc line cap ('butt' (default), 'round' and 'square')
+         * Read more: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.lineCap
+         * @type {string}
+         */
+        lineCap: 'butt',
+
+        //-------------------------------------- protected properties and methods --------------------------------------
+        /**
+         * @protected
+         */
+        constructor: CircleProgress,
+
+        /**
+         * Container element. Should be passed into constructor config
+         * @protected
+         * @type {jQuery}
+         */
+        el: null,
+
+        /**
+         * Canvas element. Automatically generated and prepended to the {@link CircleProgress.el container}
+         * @protected
+         * @type {HTMLCanvasElement}
+         */
+        canvas: null,
+
+        /**
+         * 2D-context of the {@link CircleProgress.canvas canvas}
+         * @protected
+         * @type {CanvasRenderingContext2D}
+         */
+        ctx: null,
+
+        /**
+         * Radius of the outer circle. Automatically calculated as {@link CircleProgress.size} / 2
+         * @protected
+         * @type {number}
+         */
+        radius: 0.0,
+
+        /**
+         * Fill of the main arc. Automatically calculated, depending on {@link CircleProgress.fill} option
+         * @protected
+         * @type {string|CanvasGradient|CanvasPattern}
+         */
+        arcFill: null,
+
+        /**
+         * Last rendered frame value
+         * @protected
+         * @type {number}
+         */
+        lastFrameValue: 0.0,
+
+        /**
+         * Init/re-init the widget
+         * @param {object} config Config
+         */
+        init: function(config) {
+            $.extend(this, config);
+            this.radius = this.size / 2;
+            this.initWidget();
+            this.initFill();
+            this.draw();
+        },
+
+        /**
+         * @protected
+         */
+        initWidget: function() {
+            var canvas = this.canvas = this.canvas || $('<canvas>').prependTo(this.el)[0];
+            canvas.width = this.size;
+            canvas.height = this.size;
+            this.ctx = canvas.getContext('2d');
+        },
+
+        /**
+         * This method sets {@link CircleProgress.arcFill}
+         * It could do this async (on image load)
+         * @protected
+         */
+        initFill: function() {
+            var self = this,
+                fill = this.fill,
+                ctx = this.ctx,
+                size = this.size;
+
+            if (!fill)
+                throw Error("The fill is not specified!");
+
+            if (fill.color)
+                this.arcFill = fill.color;
+
+            if (fill.gradient) {
+                var gr = fill.gradient;
+
+                if (gr.length == 1) {
+                    this.arcFill = gr[0];
+                } else if (gr.length > 1) {
+                    var ga = fill.gradientAngle || 0, // gradient direction angle; 0 by default
+                        gd = fill.gradientDirection || [
+                            size / 2 * (1 - Math.cos(ga)), // x0
+                            size / 2 * (1 + Math.sin(ga)), // y0
+                            size / 2 * (1 + Math.cos(ga)), // x1
+                            size / 2 * (1 - Math.sin(ga))  // y1
+                        ];
+
+                    var lg = ctx.createLinearGradient.apply(ctx, gd);
+
+                    for (var i = 0; i < gr.length; i++) {
+                        var color = gr[i],
+                            pos = i / (gr.length - 1);
+
+                        if ($.isArray(color)) {
+                            pos = color[1];
+                            color = color[0];
+                        }
+
+                        lg.addColorStop(pos, color);
+                    }
+
+                    this.arcFill = lg;
+                }
+            }
+
+            if (fill.image) {
+                var img;
+
+                if (fill.image instanceof Image) {
+                    img = fill.image;
+                } else {
+                    img = new Image();
+                    img.src = fill.image;
+                }
+
+                if (img.complete)
+                    setImageFill();
+                else
+                    img.onload = setImageFill;
+            }
+
+            function setImageFill() {
+                var bg = $('<canvas>')[0];
+                bg.width = self.size;
+                bg.height = self.size;
+                bg.getContext('2d').drawImage(img, 0, 0, size, size);
+                self.arcFill = self.ctx.createPattern(bg, 'no-repeat');
+                self.drawFrame(self.lastFrameValue);
+            }
+        },
+
+        draw: function() {
+            if (this.animation)
+                this.drawAnimated(this.value);
+            else
+                this.drawFrame(this.value);
+        },
+
+        /**
+         * @protected
+         * @param {number} v Frame value
+         */
+        drawFrame: function(v) {
+            this.lastFrameValue = v;
+            this.ctx.clearRect(0, 0, this.size, this.size);
+            this.drawEmptyArc(v);
+            this.drawArc(v);
+        },
+
+        /**
+         * @protected
+         * @param {number} v Frame value
+         */
+        drawArc: function(v) {
+            var ctx = this.ctx,
+                r = this.radius,
+                t = this.getThickness(),
+                a = this.startAngle;
+
+            ctx.save();
+            ctx.beginPath();
+
+            if (!this.reverse) {
+                ctx.arc(r, r, r - t / 2, a, a + Math.PI * 2 * v);
+            } else {
+                ctx.arc(r, r, r - t / 2, a - Math.PI * 2 * v, a);
+            }
+
+            ctx.lineWidth = t;
+            ctx.lineCap = this.lineCap;
+            ctx.strokeStyle = this.arcFill;
+            ctx.stroke();
+            ctx.restore();
+        },
+
+        /**
+         * @protected
+         * @param {number} v Frame value
+         */
+        drawEmptyArc: function(v) {
+            var ctx = this.ctx,
+                r = this.radius,
+                t = this.getThickness(),
+                a = this.startAngle;
+
+            if (v < 1) {
+                ctx.save();
+                ctx.beginPath();
+
+                if (v <= 0) {
+                    ctx.arc(r, r, r - t / 2, 0, Math.PI * 2);
+                } else {
+                    if (!this.reverse) {
+                        ctx.arc(r, r, r - t / 2, a + Math.PI * 2 * v, a);
+                    } else {
+                        ctx.arc(r, r, r - t / 2, a, a - Math.PI * 2 * v);
+                    }
+                }
+
+                ctx.lineWidth = t;
+                ctx.strokeStyle = this.emptyFill;
+                ctx.stroke();
+                ctx.restore();
+            }
+        },
+
+        /**
+         * @protected
+         * @param {number} v Value
+         */
+        drawAnimated: function(v) {
+            var self = this,
+                el = this.el;
+
+            el.trigger('circle-animation-start');
+
+            $(this.canvas)
+                .stop(true, true)
+                .css({ animationProgress: 0 })
+                .animate({ animationProgress: 1 }, $.extend({}, this.animation, {
+                    step: function(animationProgress) {
+                        var stepValue = self.animationStartValue * (1 - animationProgress) + v * animationProgress;
+                        self.drawFrame(stepValue);
+                        el.trigger('circle-animation-progress', [animationProgress, stepValue]);
+                    },
+                    complete: function() {
+                        el.trigger('circle-animation-end');
+                    }
+                }));
+        },
+
+        /**
+         * @protected
+         * @returns {number}
+         */
+        getThickness: function() {
+            return $.isNumeric(this.thickness) ? this.thickness : this.size / 14;
+        }
+    };
+
+    //-------------------------------------------- Initiating jQuery plugin --------------------------------------------
+    $.circleProgress = {
+        // Default options (you may override them)
+        defaults: CircleProgress.prototype
+    };
+
+    // ease-in-out-cubic
+    $.easing.circleProgressEasing = function(x, t, b, c, d) {
+        if ((t /= d / 2) < 1)
+            return c / 2 * t * t * t + b;
+        return c / 2 * ((t -= 2) * t * t + 2) + b;
+    };
+
+    /**
+     * Draw animated circular progress bar.
+     *
+     * Appends <canvas> to the element or updates already appended one.
+     *
+     * If animated, throws 3 events:
+     *
+     *   - circle-animation-start(jqEvent)
+     *   - circle-animation-progress(jqEvent, animationProgress, stepValue) - multiple event;
+     *                                                                        animationProgress: from 0.0 to 1.0;
+     *                                                                        stepValue: from 0.0 to value
+     *   - circle-animation-end(jqEvent)
+     *
+     * @param config Example: { value: 0.75, size: 50, animation: false };
+     *                you may set any of public options;
+     *                `animation` may be set to false;
+     *                you may also use .circleProgress('widget') to get the canvas
+     */
+    $.fn.circleProgress = function(config) {
+        var dataName = 'circle-progress';
+
+        if (config == 'widget') {
+            var data = this.data(dataName);
+            return data && data.canvas;
+        }
+
+        return this.each(function() {
+            var el = $(this),
+                instance = el.data(dataName),
+                cfg = $.isPlainObject(config) ? config : {};
+
+            if (instance) {
+                instance.init(cfg);
+            } else {
+                cfg.el = el;
+                instance = new CircleProgress(cfg);
+                el.data(dataName, instance);
+            }
+        });
+    };
+})(jQuery);
+
+
+},{}],233:[function(require,module,exports){
+function countUp(a,b,c,d,e,f){for(var g=0,h=["webkit","moz","ms","o"],i=0;i<h.length&&!window.requestAnimationFrame;++i)window.requestAnimationFrame=window[h[i]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[h[i]+"CancelAnimationFrame"]||window[h[i]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(a){var c=(new Date).getTime(),d=Math.max(0,16-(c-g)),e=window.setTimeout(function(){a(c+d)},d);return g=c+d,e}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(a){clearTimeout(a)}),this.options=f||{useEasing:!0,useGrouping:!0,separator:",",decimal:"."},""==this.options.separator&&(this.options.useGrouping=!1),null==this.options.prefix&&(this.options.prefix=""),null==this.options.suffix&&(this.options.suffix="");var j=this;this.d="string"==typeof a?document.getElementById(a):a,this.startVal=Number(b),this.endVal=Number(c),this.countDown=this.startVal>this.endVal?!0:!1,this.startTime=null,this.timestamp=null,this.remaining=null,this.frameVal=this.startVal,this.rAF=null,this.decimals=Math.max(0,d||0),this.dec=Math.pow(10,this.decimals),this.duration=1e3*e||2e3,this.version=function(){return"1.3.2"},this.printValue=function(a){var b=isNaN(a)?"--":j.formatNumber(a);"INPUT"==j.d.tagName?this.d.value=b:"text"==j.d.tagName?this.d.textContent=b:this.d.innerHTML=b},this.easeOutExpo=function(a,b,c,d){return 1024*c*(-Math.pow(2,-10*a/d)+1)/1023+b},this.count=function(a){null===j.startTime&&(j.startTime=a),j.timestamp=a;var b=a-j.startTime;if(j.remaining=j.duration-b,j.options.useEasing)if(j.countDown){var c=j.easeOutExpo(b,0,j.startVal-j.endVal,j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.easeOutExpo(b,j.startVal,j.endVal-j.startVal,j.duration);else if(j.countDown){var c=(j.startVal-j.endVal)*(b/j.duration);j.frameVal=j.startVal-c}else j.frameVal=j.startVal+(j.endVal-j.startVal)*(b/j.duration);j.frameVal=j.countDown?j.frameVal<j.endVal?j.endVal:j.frameVal:j.frameVal>j.endVal?j.endVal:j.frameVal,j.frameVal=Math.round(j.frameVal*j.dec)/j.dec,j.printValue(j.frameVal),b<j.duration?j.rAF=requestAnimationFrame(j.count):null!=j.callback&&j.callback()},this.start=function(a){return j.callback=a,isNaN(j.endVal)||isNaN(j.startVal)?(console.log("countUp error: startVal or endVal is not a number"),j.printValue()):j.rAF=requestAnimationFrame(j.count),!1},this.stop=function(){cancelAnimationFrame(j.rAF)},this.reset=function(){j.startTime=null,j.startVal=b,cancelAnimationFrame(j.rAF),j.printValue(j.startVal)},this.resume=function(){j.stop(),j.startTime=null,j.duration=j.remaining,j.startVal=j.frameVal,requestAnimationFrame(j.count)},this.formatNumber=function(a){a=a.toFixed(j.decimals),a+="";var b,c,d,e;if(b=a.split("."),c=b[0],d=b.length>1?j.options.decimal+b[1]:"",e=/(\d+)(\d{3})/,j.options.useGrouping)for(;e.test(c);)c=c.replace(e,"$1"+j.options.separator+"$2");return j.options.prefix+c+d+j.options.suffix},j.printValue(j.startVal)}
+
+},{}]},{},[211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233]);
