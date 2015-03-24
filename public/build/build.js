@@ -31648,9 +31648,599 @@ exports.throwIf = function(val,msg){
 };
 
 },{"eventemitter3":191,"native-promise-only":192}],210:[function(require,module,exports){
-//     Underscore.js 1.8.2
+/** @jsx React.DOM */
+var React = require('react');
+var Main = require('./components/Main.jsx');
+var ShelterStore = require('./stores/ShelterStore.jsx');
+var ShowList = require('./components/ShowList.jsx');
+var Shelters = require('./components/Shelters.jsx');
+var NotFound = require('./components/NotFound.jsx');
+var NavBarDefault = require('./components/NavBarDefault.jsx');
+var Login = require('./components/Login.jsx');
+var Signup = require('./components/Signup.jsx');
+var TwitterLogin = require('./components/TwitterLogin.jsx');
+var Shelter = require('./components/Shelter.jsx');
+
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
+
+var App = React.createClass({displayName: "App",
+	getInitialState: function() {
+		return {
+			nearbyShelters: ShelterStore.getShelters()
+		}
+	},
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "main-wrapper"}, 
+					React.createElement(RouteHandler, {shelters: this.state.nearbyShelters})
+				)
+			)
+		)	
+	}
+});
+
+var routes = (
+  React.createElement(Route, {name: "app", handler: App}, 
+  	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
+    React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
+    React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
+    React.createElement(Route, {name: "shelter", path: "/shelter/:sheltername", handler: Shelter}), 
+    React.createElement(NotFoundRoute, {handler: NotFound})
+  )
+);
+
+Router.run(routes,function (Handler) {
+  React.render(React.createElement(Handler, null), document.getElementById('content'));
+});
+
+
+
+},{"./components/Login.jsx":217,"./components/Main.jsx":218,"./components/NavBarDefault.jsx":219,"./components/NotFound.jsx":220,"./components/Shelter.jsx":222,"./components/Shelters.jsx":224,"./components/ShowList.jsx":226,"./components/Signup.jsx":227,"./components/TwitterLogin.jsx":228,"./stores/ShelterStore.jsx":229,"react":189,"react-router":30}],211:[function(require,module,exports){
+var Reflux = require('reflux');
+var $ = require('jquery');
+
+var AsyncActions = Reflux.createActions({
+    "donation": {children: ["completed","failed"]}
+});
+
+AsyncActions.donation.listen( function(data) {
+  $.ajax({
+   type: "GET",
+   url: '/shelters?' + data.sheltername
+  }).done( this.completed )
+  .fail( this.failed );
+});
+
+module.exports = AsyncActions;
+
+},{"jquery":2,"reflux":190}],212:[function(require,module,exports){
+var Reflux = require('reflux');
+
+var ShelterActions = Reflux.createActions([
+  'createShelter',
+  'loadShelters',
+  'loadShelter'
+]);
+
+
+module.exports = ShelterActions;
+
+},{"reflux":190}],213:[function(require,module,exports){
+var React = require('react');
+
+var AddShelter = React.createClass({displayName: "AddShelter",
+	getInitialState: function() {
+		return {
+			newShelter: ''
+		}
+	},
+	updateNewShelter: function(e) {
+		this.setState({
+			newShelter: e.target.value
+		});
+	},
+	handleAddNew: function(e) {
+		this.props.addNew(this.state.newShelter);
+		this.setState({
+			newShelter: ''
+		});
+	},
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("input", {type: "text", value: "this.state.newShelter", onChange: this.updateNewFriend}), 
+				React.createElement("button", {onClick: this.handleAddNew}, " Add New Shelter ")
+			)
+		);
+	}
+});
+
+module.exports = AddShelter;
+
+
+},{"react":189}],214:[function(require,module,exports){
+var React = require('react');
+
+},{"react":189}],215:[function(require,module,exports){
+
+
+},{}],216:[function(require,module,exports){
+
+
+},{}],217:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var Login = React.createClass({displayName: "Login",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango"), 
+        React.createElement("form", {action: "/login", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
+          ), 
+
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
+        ), 
+
+        React.createElement("p", null, "Need an account? ", React.createElement(Link, {to: "signup"}, "Sign Up"))
+      )
+    )
+  }
+});
+
+module.exports = Login;
+
+},{"react":189,"react-router":30}],218:[function(require,module,exports){
+var React = require('react');
+var ShelterStore = require('../stores/ShelterStore.jsx');
+var ShowList = require('./ShowList.jsx');
+var NavBarDefault = require('./NavBarDefault.jsx');
+
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var Main = React.createClass({displayName: "Main",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid hero"}, 
+					React.createElement(NavBarDefault, null), 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("div", {className: "hero-description"}, 
+							React.createElement("h1", {className: "hero-headline"}, "Connecting donors to animal shelters in need"), 
+							React.createElement("div", {className: "button-group"}, 
+								React.createElement("a", {className: "btn hero-btn more", href: "#"}, 
+									React.createElement("span", null, "Learn More")
+								), 
+								React.createElement(Link, {to: "fund-shelters", className: "btn hero-btn view"}, 
+									React.createElement("span", null, "View Shelters")
+								)
+							)
+						)
+					)
+				), 
+				React.createElement("section", {className: "devoted"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("h2", null, "100% of your donation fund Bay Area animal shelters.")
+					)
+				), 
+				React.createElement("section", {className: "three-shelters"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement(ShowList, React.__spread({},  this.props))
+					)
+				)
+			)
+		)
+	}
+});	
+
+module.exports = Main;
+
+},{"../stores/ShelterStore.jsx":229,"./NavBarDefault.jsx":219,"./ShowList.jsx":226,"react":189,"react-router":30}],219:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var DefaultRoute = Route.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
+var NotFoundRoute = Router.NotFoundRoute;
+
+var TwitterLogin = require('./TwitterLogin.jsx');
+
+var NavBarDefault = React.createClass({displayName: "NavBarDefault",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("header", null, 
+					React.createElement("nav", {className: "navbar navbar-default container"}, 
+						React.createElement("div", {className: "wrapper"}, 
+							React.createElement("div", {className: "navbar-header"}, 
+								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
+								  "kango`"
+								)
+							), 
+							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
+								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
+								React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
+								React.createElement("li", null, 
+								React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
+										"Sign In"
+								)
+								)
+							)
+						)
+					)
+				), 
+				React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
+				  React.createElement("div", {className: "modal-dialog"}, 
+				  	React.createElement(TwitterLogin, null)
+				  )
+				)
+			)
+		)
+	}
+});
+
+module.exports = NavBarDefault;
+
+},{"./TwitterLogin.jsx":228,"react":189,"react-router":30}],220:[function(require,module,exports){
+var React = require('react');
+
+var NotFound = React.createClass({displayName: "NotFound",
+	render: function() {
+		return (
+			React.createElement("div", {className: "container"}, 
+				React.createElement("h1", null, "Page not found.")
+			)
+		)
+	}
+});
+
+module.exports = NotFound;
+
+},{"react":189}],221:[function(require,module,exports){
+var React = require('react');
+
+},{"react":189}],222:[function(require,module,exports){
+var React = require('react');
+var Reflux = require('reflux');
+var _ = require('underscore');
+var $ = require('jquery');
+var ShelterStore = require('../stores/ShelterStore.jsx');
+var NavBarDefault = require('./NavBarDefault.jsx');
+var AsyncActions = require('../actions/asyncActions.jsx');
+var SingleStore = require('../stores/SingleStore.jsx');
+
+var Shelter = React.createClass({displayName: "Shelter",
+  mixins: [Reflux.ListenerMixin],
+  componentDidMount: function() {
+      this.listenTo(SingleStore, this.onStatusChange);
+  },
+  current: {},
+  onStatusChange: function(status) {
+    this.current = status;
+    this.setState({
+      current: status
+    });
+    this.render();
+  },
+  findMe: function(shelters, sheltername) {
+    var shelter = _.filter(shelters, function(element) {
+      if(element.sheltername === sheltername) {
+        return element;
+      }
+    })[0];
+    this.current = shelter;
+    return shelter;
+  },
+  submit: function() {
+    AsyncActions.donation.triggerAsync(this.current); 
+  },
+	render: function() {
+		var url = window.location.href.split('/');
+		var shelterPath = url[url.length-1];
+    var shelter = this.findMe(this.props.shelters, shelterPath);
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid header-default"}, 
+					React.createElement(NavBarDefault, null)
+				), 
+				React.createElement("div", {className: "container"}, 
+					React.createElement("h1", null, shelter.name, this.current.raised), 
+          React.createElement("form", {action: "/donate", method: "post", onSubmit: this.submit}, 
+            React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
+            React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: this.current.sheltername}), 
+            React.createElement("button", {type: "submit"}, "Submit")
+          )
+				)
+			)
+		);
+	}
+});
+
+module.exports = Shelter;
+
+},{"../actions/asyncActions.jsx":211,"../stores/ShelterStore.jsx":229,"../stores/SingleStore.jsx":230,"./NavBarDefault.jsx":219,"jquery":2,"react":189,"reflux":190,"underscore":231}],223:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+var $ = require('jquery');
+
+var ShelterCard = React.createClass({displayName: "ShelterCard",
+
+	render: function() {
+		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
+		return (
+			React.createElement("li", {className: "col-md-4"}, 
+				React.createElement("div", {className: "shelter-card"}, 
+						React.createElement(Link, {to: "shelter", params: {sheltername: this.props.data.sheltername}}, 							
+							React.createElement("img", {src: this.props.data.image_url})
+						), 
+					React.createElement("div", {className: "shelter-info"}, 
+						React.createElement("div", {className: "shelter-bio"}, 
+							React.createElement("h3", null, this.props.data.name)
+						), 
+						React.createElement("div", {className: "shelter-progress-bar"}), 
+						React.createElement("div", {className: "shelter-fund-wrapper"}, 
+							React.createElement("span", {className: "shelter-raised"}, 
+								"$", this.props.data.raised, " raised"
+							), 
+							React.createElement("span", {className: "shelter-target"}, 
+								"$", this.props.data.goal - this.props.data.raised, " to go"
+							)
+						)
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = ShelterCard;
+
+},{"jquery":2,"react":189,"react-router":30}],224:[function(require,module,exports){
+var React = require('react');
+var NavBarDefault = require('./NavBarDefault.jsx');
+
+var Shelters = React.createClass({displayName: "Shelters",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("div", {className: "container-fluid header-default"}, 
+					React.createElement(NavBarDefault, null)
+				), 
+				React.createElement("div", {className: "container"}, 
+					React.createElement("h1", null, " This is the Shelters view ")
+				)
+			)
+		)
+	}
+});
+
+module.exports = Shelters;
+
+},{"./NavBarDefault.jsx":219,"react":189}],225:[function(require,module,exports){
+var React = require('react');
+
+var ShowAll = React.createClass({displayName: "ShowAll",
+	render: function() {
+		
+	}
+});
+
+module.exports = ShowAll;
+
+},{"react":189}],226:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Route = Router.Route;
+var Link = Router.Link;
+
+var ShelterCard = require('./ShelterCard.jsx');
+
+var ShowList = React.createClass({displayName: "ShowList",
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("h3", {className: "section-header"}, "Meet the Animal Shelters"), 
+				React.createElement("p", {className: "section-short"}, "San Francisco • Oakland • South Bay"), 
+				React.createElement("ul", {className: "shelter-list-home"}, 
+					React.createElement("div", {className: "row"}, 
+						this.props.shelters.map(function(shelter, i){
+								return React.createElement(ShelterCard, {key: i, data: shelter})
+							}, this)
+						
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = ShowList;
+
+
+},{"./ShelterCard.jsx":223,"react":189,"react-router":30}],227:[function(require,module,exports){
+var React = require('react');
+
+var Signup = React.createClass({displayName: "Signup",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Sign Up for Kango"), 
+        React.createElement("form", {action: "/signup", method: "post"}, 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Email"), 
+            React.createElement("input", {type: "text", class: "form-control", name: "email"})
+          ), 
+          React.createElement("div", {class: "form-group"}, 
+            React.createElement("label", null, "Password"), 
+            React.createElement("input", {type: "password", class: "form-control", name: "password"})
+          ), 
+
+          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
+        ), 
+
+        "// ", React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup"))
+      )
+    )
+  }
+});
+
+module.exports = Signup;
+
+},{"react":189}],228:[function(require,module,exports){
+var React = require('react');
+
+var TwitterLogin = React.createClass({displayName: "TwitterLogin",
+  render: function() {
+    return (
+      React.createElement("div", {className: "modal-popup modal-content"}, 
+        React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
+        React.createElement("form", {action: "/auth/twitter", method: "get"}, 
+          React.createElement("button", {type: "submit"}, "Login")
+        )
+      )
+    )
+  }
+});
+
+module.exports = TwitterLogin;
+
+},{"react":189}],229:[function(require,module,exports){
+var Reflux = require('reflux');
+var $ = require('jquery');
+var ShelterActions = require('../actions/shelterActions.jsx');
+// require action here.
+
+var shelters = [
+	{
+		'sheltername' : 'rockridgeshelter',
+		'name' : 'Rockridge Animal Shelter',
+		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
+		'address_one' : '123 Blah Rd.',
+		'address_two' : null,
+		'city' : 'Rockridge',
+		'state' : 'ca',
+		'zip' : 94109,
+		'telephone' : 4509392684,
+		'email' : 'hello@bas.org',
+		'bio' : 'We are the Rockridge animal shelter',
+		'goal' : 1000,
+		'raised' : 400
+	},
+	{
+		'sheltername' : 'sanfranciscoshelter',
+		'name' : 'San Francisco Animal Shelter',
+		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
+		'address_one' : '875 Post St.',
+		'address_two' : null,
+		'city' : 'San Francisco',
+		'state' : 'ca',
+		'zip' : 94109,
+		'telephone' : 4509206186,
+		'email' : 'hello@sas.org',
+		'bio' : 'We are the San Francisco animal shelter',
+		'goal' : 2100,
+		'raised' : 960
+	},
+	{
+		'sheltername' : 'westoaklandshelter',
+		'name' : 'West Oakland Animal Shelter',
+		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
+		'address_one' : '600 Geary St.',
+		'address_two' : null,
+		'city' : 'Oakland',
+		'state' : 'ca',
+		'zip' : 94109,
+		'telephone' : 4506541234,
+		'email' : 'hello@woas.org',
+		'bio' : 'We are the West Oakland animal shelter',
+		'goal' : 1600,
+		'raised' : 870
+	}
+];
+
+var ShelterStore = Reflux.createStore({
+	shelters: [],
+	init: function(){
+		 this.shelters = shelters;
+	   this.load();
+	   this.listenTo(ShelterActions.loadShelters, this.load)
+	   this.listenTo(ShelterActions.createShelter, this.onCreate);
+	 },
+	 load: function(){
+	   var context = this;
+	     $.ajax({
+	       type: "GET",
+	       url: '/shelters',
+	     }).done(function(data) {
+	         for (var i = 0; i < data.length; i++) {
+	         	shelters.push(data[i]);
+	         }
+					 //push data to store
+	         context.trigger(shelters);
+	     });
+	 },
+	 onCreate: function(shelter) {
+	   shelters.push(shelter);
+
+	   this.trigger(shelters);
+	 },
+	 toggle: function(e, toggled, job){
+	   console.log(e, toggled, job);
+
+	 },
+	 getShelters: function() {
+	   //req to /api/listings
+	   return shelters;
+	 },
+
+});
+
+module.exports = ShelterStore;
+
+},{"../actions/shelterActions.jsx":212,"jquery":2,"reflux":190}],230:[function(require,module,exports){
+var Reflux = require('reflux');
+var AsyncActions = require('../actions/asyncActions.jsx');
+
+var SingleStore = Reflux.createStore({
+	init: function() {
+		this.listenTo(AsyncActions.donation.completed, this.load);
+    this.listenTo(AsyncActions.donation.failed, this.error);
+	},
+	load: function(data) {
+    this.trigger(data);
+  },
+  error: function(err) {
+    console.log('donation post error', err);
+  }
+});
+
+module.exports = SingleStore;
+
+
+},{"../actions/asyncActions.jsx":211,"reflux":190}],231:[function(require,module,exports){
+//     Underscore.js 1.7.0
 //     http://underscorejs.org
-//     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
 
 (function() {
@@ -31671,6 +32261,7 @@ exports.throwIf = function(val,msg){
   var
     push             = ArrayProto.push,
     slice            = ArrayProto.slice,
+    concat           = ArrayProto.concat,
     toString         = ObjProto.toString,
     hasOwnProperty   = ObjProto.hasOwnProperty;
 
@@ -31679,11 +32270,7 @@ exports.throwIf = function(val,msg){
   var
     nativeIsArray      = Array.isArray,
     nativeKeys         = Object.keys,
-    nativeBind         = FuncProto.bind,
-    nativeCreate       = Object.create;
-
-  // Naked function reference for surrogate-prototype-swapping.
-  var Ctor = function(){};
+    nativeBind         = FuncProto.bind;
 
   // Create a safe reference to the Underscore object for use below.
   var _ = function(obj) {
@@ -31705,12 +32292,12 @@ exports.throwIf = function(val,msg){
   }
 
   // Current version.
-  _.VERSION = '1.8.2';
+  _.VERSION = '1.7.0';
 
   // Internal function that returns an efficient (for current engines) version
   // of the passed-in callback, to be repeatedly applied in other Underscore
   // functions.
-  var optimizeCb = function(func, context, argCount) {
+  var createCallback = function(func, context, argCount) {
     if (context === void 0) return func;
     switch (argCount == null ? 3 : argCount) {
       case 1: return function(value) {
@@ -31734,51 +32321,11 @@ exports.throwIf = function(val,msg){
   // A mostly-internal function to generate callbacks that can be applied
   // to each element in a collection, returning the desired result — either
   // identity, an arbitrary callback, a property matcher, or a property accessor.
-  var cb = function(value, context, argCount) {
+  _.iteratee = function(value, context, argCount) {
     if (value == null) return _.identity;
-    if (_.isFunction(value)) return optimizeCb(value, context, argCount);
-    if (_.isObject(value)) return _.matcher(value);
+    if (_.isFunction(value)) return createCallback(value, context, argCount);
+    if (_.isObject(value)) return _.matches(value);
     return _.property(value);
-  };
-  _.iteratee = function(value, context) {
-    return cb(value, context, Infinity);
-  };
-
-  // An internal function for creating assigner functions.
-  var createAssigner = function(keysFunc, undefinedOnly) {
-    return function(obj) {
-      var length = arguments.length;
-      if (length < 2 || obj == null) return obj;
-      for (var index = 1; index < length; index++) {
-        var source = arguments[index],
-            keys = keysFunc(source),
-            l = keys.length;
-        for (var i = 0; i < l; i++) {
-          var key = keys[i];
-          if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
-        }
-      }
-      return obj;
-    };
-  };
-
-  // An internal function for creating a new object that inherits from another.
-  var baseCreate = function(prototype) {
-    if (!_.isObject(prototype)) return {};
-    if (nativeCreate) return nativeCreate(prototype);
-    Ctor.prototype = prototype;
-    var result = new Ctor;
-    Ctor.prototype = null;
-    return result;
-  };
-
-  // Helper for collection methods to determine whether a collection
-  // should be iterated as an array or as an object
-  // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
-  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-  var isArrayLike = function(collection) {
-    var length = collection && collection.length;
-    return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
   };
 
   // Collection Functions
@@ -31788,10 +32335,11 @@ exports.throwIf = function(val,msg){
   // Handles raw objects in addition to array-likes. Treats all
   // sparse array-likes as if they were dense.
   _.each = _.forEach = function(obj, iteratee, context) {
-    iteratee = optimizeCb(iteratee, context);
-    var i, length;
-    if (isArrayLike(obj)) {
-      for (i = 0, length = obj.length; i < length; i++) {
+    if (obj == null) return obj;
+    iteratee = createCallback(iteratee, context);
+    var i, length = obj.length;
+    if (length === +length) {
+      for (i = 0; i < length; i++) {
         iteratee(obj[i], i, obj);
       }
     } else {
@@ -31805,66 +32353,77 @@ exports.throwIf = function(val,msg){
 
   // Return the results of applying the iteratee to each element.
   _.map = _.collect = function(obj, iteratee, context) {
-    iteratee = cb(iteratee, context);
-    var keys = !isArrayLike(obj) && _.keys(obj),
+    if (obj == null) return [];
+    iteratee = _.iteratee(iteratee, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
         length = (keys || obj).length,
-        results = Array(length);
+        results = Array(length),
+        currentKey;
     for (var index = 0; index < length; index++) {
-      var currentKey = keys ? keys[index] : index;
+      currentKey = keys ? keys[index] : index;
       results[index] = iteratee(obj[currentKey], currentKey, obj);
     }
     return results;
   };
 
-  // Create a reducing function iterating left or right.
-  function createReduce(dir) {
-    // Optimized iterator function as using arguments.length
-    // in the main function will deoptimize the, see #1991.
-    function iterator(obj, iteratee, memo, keys, index, length) {
-      for (; index >= 0 && index < length; index += dir) {
-        var currentKey = keys ? keys[index] : index;
-        memo = iteratee(memo, obj[currentKey], currentKey, obj);
-      }
-      return memo;
-    }
-
-    return function(obj, iteratee, memo, context) {
-      iteratee = optimizeCb(iteratee, context, 4);
-      var keys = !isArrayLike(obj) && _.keys(obj),
-          length = (keys || obj).length,
-          index = dir > 0 ? 0 : length - 1;
-      // Determine the initial value if none is provided.
-      if (arguments.length < 3) {
-        memo = obj[keys ? keys[index] : index];
-        index += dir;
-      }
-      return iterator(obj, iteratee, memo, keys, index, length);
-    };
-  }
+  var reduceError = 'Reduce of empty array with no initial value';
 
   // **Reduce** builds up a single result from a list of values, aka `inject`,
   // or `foldl`.
-  _.reduce = _.foldl = _.inject = createReduce(1);
+  _.reduce = _.foldl = _.inject = function(obj, iteratee, memo, context) {
+    if (obj == null) obj = [];
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index = 0, currentKey;
+    if (arguments.length < 3) {
+      if (!length) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[index++] : index++];
+    }
+    for (; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
+    return memo;
+  };
 
   // The right-associative version of reduce, also known as `foldr`.
-  _.reduceRight = _.foldr = createReduce(-1);
+  _.reduceRight = _.foldr = function(obj, iteratee, memo, context) {
+    if (obj == null) obj = [];
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== + obj.length && _.keys(obj),
+        index = (keys || obj).length,
+        currentKey;
+    if (arguments.length < 3) {
+      if (!index) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[--index] : --index];
+    }
+    while (index--) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
+    return memo;
+  };
 
   // Return the first value which passes a truth test. Aliased as `detect`.
   _.find = _.detect = function(obj, predicate, context) {
-    var key;
-    if (isArrayLike(obj)) {
-      key = _.findIndex(obj, predicate, context);
-    } else {
-      key = _.findKey(obj, predicate, context);
-    }
-    if (key !== void 0 && key !== -1) return obj[key];
+    var result;
+    predicate = _.iteratee(predicate, context);
+    _.some(obj, function(value, index, list) {
+      if (predicate(value, index, list)) {
+        result = value;
+        return true;
+      }
+    });
+    return result;
   };
 
   // Return all the elements that pass a truth test.
   // Aliased as `select`.
   _.filter = _.select = function(obj, predicate, context) {
     var results = [];
-    predicate = cb(predicate, context);
+    if (obj == null) return results;
+    predicate = _.iteratee(predicate, context);
     _.each(obj, function(value, index, list) {
       if (predicate(value, index, list)) results.push(value);
     });
@@ -31873,17 +32432,19 @@ exports.throwIf = function(val,msg){
 
   // Return all the elements for which a truth test fails.
   _.reject = function(obj, predicate, context) {
-    return _.filter(obj, _.negate(cb(predicate)), context);
+    return _.filter(obj, _.negate(_.iteratee(predicate)), context);
   };
 
   // Determine whether all of the elements match a truth test.
   // Aliased as `all`.
   _.every = _.all = function(obj, predicate, context) {
-    predicate = cb(predicate, context);
-    var keys = !isArrayLike(obj) && _.keys(obj),
-        length = (keys || obj).length;
-    for (var index = 0; index < length; index++) {
-      var currentKey = keys ? keys[index] : index;
+    if (obj == null) return true;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
       if (!predicate(obj[currentKey], currentKey, obj)) return false;
     }
     return true;
@@ -31892,21 +32453,24 @@ exports.throwIf = function(val,msg){
   // Determine if at least one element in the object matches a truth test.
   // Aliased as `any`.
   _.some = _.any = function(obj, predicate, context) {
-    predicate = cb(predicate, context);
-    var keys = !isArrayLike(obj) && _.keys(obj),
-        length = (keys || obj).length;
-    for (var index = 0; index < length; index++) {
-      var currentKey = keys ? keys[index] : index;
+    if (obj == null) return false;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
       if (predicate(obj[currentKey], currentKey, obj)) return true;
     }
     return false;
   };
 
   // Determine if the array or object contains a given value (using `===`).
-  // Aliased as `includes` and `include`.
-  _.contains = _.includes = _.include = function(obj, target, fromIndex) {
-    if (!isArrayLike(obj)) obj = _.values(obj);
-    return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
+  // Aliased as `include`.
+  _.contains = _.include = function(obj, target) {
+    if (obj == null) return false;
+    if (obj.length !== +obj.length) obj = _.values(obj);
+    return _.indexOf(obj, target) >= 0;
   };
 
   // Invoke a method (with arguments) on every item in a collection.
@@ -31914,8 +32478,7 @@ exports.throwIf = function(val,msg){
     var args = slice.call(arguments, 2);
     var isFunc = _.isFunction(method);
     return _.map(obj, function(value) {
-      var func = isFunc ? method : value[method];
-      return func == null ? func : func.apply(value, args);
+      return (isFunc ? method : value[method]).apply(value, args);
     });
   };
 
@@ -31927,13 +32490,13 @@ exports.throwIf = function(val,msg){
   // Convenience version of a common use case of `filter`: selecting only objects
   // containing specific `key:value` pairs.
   _.where = function(obj, attrs) {
-    return _.filter(obj, _.matcher(attrs));
+    return _.filter(obj, _.matches(attrs));
   };
 
   // Convenience version of a common use case of `find`: getting the first object
   // containing specific `key:value` pairs.
   _.findWhere = function(obj, attrs) {
-    return _.find(obj, _.matcher(attrs));
+    return _.find(obj, _.matches(attrs));
   };
 
   // Return the maximum element (or element-based computation).
@@ -31941,7 +32504,7 @@ exports.throwIf = function(val,msg){
     var result = -Infinity, lastComputed = -Infinity,
         value, computed;
     if (iteratee == null && obj != null) {
-      obj = isArrayLike(obj) ? obj : _.values(obj);
+      obj = obj.length === +obj.length ? obj : _.values(obj);
       for (var i = 0, length = obj.length; i < length; i++) {
         value = obj[i];
         if (value > result) {
@@ -31949,7 +32512,7 @@ exports.throwIf = function(val,msg){
         }
       }
     } else {
-      iteratee = cb(iteratee, context);
+      iteratee = _.iteratee(iteratee, context);
       _.each(obj, function(value, index, list) {
         computed = iteratee(value, index, list);
         if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
@@ -31966,7 +32529,7 @@ exports.throwIf = function(val,msg){
     var result = Infinity, lastComputed = Infinity,
         value, computed;
     if (iteratee == null && obj != null) {
-      obj = isArrayLike(obj) ? obj : _.values(obj);
+      obj = obj.length === +obj.length ? obj : _.values(obj);
       for (var i = 0, length = obj.length; i < length; i++) {
         value = obj[i];
         if (value < result) {
@@ -31974,7 +32537,7 @@ exports.throwIf = function(val,msg){
         }
       }
     } else {
-      iteratee = cb(iteratee, context);
+      iteratee = _.iteratee(iteratee, context);
       _.each(obj, function(value, index, list) {
         computed = iteratee(value, index, list);
         if (computed < lastComputed || computed === Infinity && result === Infinity) {
@@ -31989,7 +32552,7 @@ exports.throwIf = function(val,msg){
   // Shuffle a collection, using the modern version of the
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
-    var set = isArrayLike(obj) ? obj : _.values(obj);
+    var set = obj && obj.length === +obj.length ? obj : _.values(obj);
     var length = set.length;
     var shuffled = Array(length);
     for (var index = 0, rand; index < length; index++) {
@@ -32005,7 +32568,7 @@ exports.throwIf = function(val,msg){
   // The internal `guard` argument allows it to work with `map`.
   _.sample = function(obj, n, guard) {
     if (n == null || guard) {
-      if (!isArrayLike(obj)) obj = _.values(obj);
+      if (obj.length !== +obj.length) obj = _.values(obj);
       return obj[_.random(obj.length - 1)];
     }
     return _.shuffle(obj).slice(0, Math.max(0, n));
@@ -32013,7 +32576,7 @@ exports.throwIf = function(val,msg){
 
   // Sort the object's values by a criterion produced by an iteratee.
   _.sortBy = function(obj, iteratee, context) {
-    iteratee = cb(iteratee, context);
+    iteratee = _.iteratee(iteratee, context);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
@@ -32035,7 +32598,7 @@ exports.throwIf = function(val,msg){
   var group = function(behavior) {
     return function(obj, iteratee, context) {
       var result = {};
-      iteratee = cb(iteratee, context);
+      iteratee = _.iteratee(iteratee, context);
       _.each(obj, function(value, index) {
         var key = iteratee(value, index, obj);
         behavior(result, value, key);
@@ -32063,24 +32626,37 @@ exports.throwIf = function(val,msg){
     if (_.has(result, key)) result[key]++; else result[key] = 1;
   });
 
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context, 1);
+    var value = iteratee(obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = low + high >>> 1;
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+    }
+    return low;
+  };
+
   // Safely create a real, live array from anything iterable.
   _.toArray = function(obj) {
     if (!obj) return [];
     if (_.isArray(obj)) return slice.call(obj);
-    if (isArrayLike(obj)) return _.map(obj, _.identity);
+    if (obj.length === +obj.length) return _.map(obj, _.identity);
     return _.values(obj);
   };
 
   // Return the number of elements in an object.
   _.size = function(obj) {
     if (obj == null) return 0;
-    return isArrayLike(obj) ? obj.length : _.keys(obj).length;
+    return obj.length === +obj.length ? obj.length : _.keys(obj).length;
   };
 
   // Split a collection into two arrays: one whose elements all satisfy the given
   // predicate, and one whose elements all do not satisfy the predicate.
   _.partition = function(obj, predicate, context) {
-    predicate = cb(predicate, context);
+    predicate = _.iteratee(predicate, context);
     var pass = [], fail = [];
     _.each(obj, function(value, key, obj) {
       (predicate(value, key, obj) ? pass : fail).push(value);
@@ -32097,27 +32673,30 @@ exports.throwIf = function(val,msg){
   _.first = _.head = _.take = function(array, n, guard) {
     if (array == null) return void 0;
     if (n == null || guard) return array[0];
-    return _.initial(array, array.length - n);
+    if (n < 0) return [];
+    return slice.call(array, 0, n);
   };
 
   // Returns everything but the last entry of the array. Especially useful on
   // the arguments object. Passing **n** will return all the values in
-  // the array, excluding the last N.
+  // the array, excluding the last N. The **guard** check allows it to work with
+  // `_.map`.
   _.initial = function(array, n, guard) {
     return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
   };
 
   // Get the last element of an array. Passing **n** will return the last N
-  // values in the array.
+  // values in the array. The **guard** check allows it to work with `_.map`.
   _.last = function(array, n, guard) {
     if (array == null) return void 0;
     if (n == null || guard) return array[array.length - 1];
-    return _.rest(array, Math.max(0, array.length - n));
+    return slice.call(array, Math.max(array.length - n, 0));
   };
 
   // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
   // Especially useful on the arguments object. Passing an **n** will return
-  // the rest N values in the array.
+  // the rest N values in the array. The **guard**
+  // check allows it to work with `_.map`.
   _.rest = _.tail = _.drop = function(array, n, guard) {
     return slice.call(array, n == null || guard ? 1 : n);
   };
@@ -32128,20 +32707,18 @@ exports.throwIf = function(val,msg){
   };
 
   // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, strict, startIndex) {
-    var output = [], idx = 0;
-    for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
+  var flatten = function(input, shallow, strict, output) {
+    if (shallow && _.every(input, _.isArray)) {
+      return concat.apply(output, input);
+    }
+    for (var i = 0, length = input.length; i < length; i++) {
       var value = input[i];
-      if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
-        //flatten current level of array or arguments object
-        if (!shallow) value = flatten(value, shallow, strict);
-        var j = 0, len = value.length;
-        output.length += len;
-        while (j < len) {
-          output[idx++] = value[j++];
-        }
-      } else if (!strict) {
-        output[idx++] = value;
+      if (!_.isArray(value) && !_.isArguments(value)) {
+        if (!strict) output.push(value);
+      } else if (shallow) {
+        push.apply(output, value);
+      } else {
+        flatten(value, shallow, strict, output);
       }
     }
     return output;
@@ -32149,7 +32726,7 @@ exports.throwIf = function(val,msg){
 
   // Flatten out an array, either recursively (by default), or just one level.
   _.flatten = function(array, shallow) {
-    return flatten(array, shallow, false);
+    return flatten(array, shallow, false, []);
   };
 
   // Return a version of the array that does not contain the specified value(s).
@@ -32167,21 +32744,21 @@ exports.throwIf = function(val,msg){
       iteratee = isSorted;
       isSorted = false;
     }
-    if (iteratee != null) iteratee = cb(iteratee, context);
+    if (iteratee != null) iteratee = _.iteratee(iteratee, context);
     var result = [];
     var seen = [];
     for (var i = 0, length = array.length; i < length; i++) {
-      var value = array[i],
-          computed = iteratee ? iteratee(value, i, array) : value;
+      var value = array[i];
       if (isSorted) {
-        if (!i || seen !== computed) result.push(value);
-        seen = computed;
+        if (!i || seen !== value) result.push(value);
+        seen = value;
       } else if (iteratee) {
-        if (!_.contains(seen, computed)) {
+        var computed = iteratee(value, i, array);
+        if (_.indexOf(seen, computed) < 0) {
           seen.push(computed);
           result.push(value);
         }
-      } else if (!_.contains(result, value)) {
+      } else if (_.indexOf(result, value) < 0) {
         result.push(value);
       }
     }
@@ -32191,7 +32768,7 @@ exports.throwIf = function(val,msg){
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(flatten(arguments, true, true));
+    return _.uniq(flatten(arguments, true, true, []));
   };
 
   // Produce an array that contains every item shared between all the
@@ -32214,7 +32791,7 @@ exports.throwIf = function(val,msg){
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
-    var rest = flatten(arguments, true, true, 1);
+    var rest = flatten(slice.call(arguments, 1), true, true, []);
     return _.filter(array, function(value){
       return !_.contains(rest, value);
     });
@@ -32222,28 +32799,23 @@ exports.throwIf = function(val,msg){
 
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
-  _.zip = function() {
-    return _.unzip(arguments);
-  };
-
-  // Complement of _.zip. Unzip accepts an array of arrays and groups
-  // each array's elements on shared indices
-  _.unzip = function(array) {
-    var length = array && _.max(array, 'length').length || 0;
-    var result = Array(length);
-
-    for (var index = 0; index < length; index++) {
-      result[index] = _.pluck(array, index);
+  _.zip = function(array) {
+    if (array == null) return [];
+    var length = _.max(arguments, 'length').length;
+    var results = Array(length);
+    for (var i = 0; i < length; i++) {
+      results[i] = _.pluck(arguments, i);
     }
-    return result;
+    return results;
   };
 
   // Converts lists into objects. Pass either a single array of `[key, value]`
   // pairs, or two parallel arrays of the same length -- one of keys, and one of
   // the corresponding values.
   _.object = function(list, values) {
+    if (list == null) return {};
     var result = {};
-    for (var i = 0, length = list && list.length; i < length; i++) {
+    for (var i = 0, length = list.length; i < length; i++) {
       if (values) {
         result[list[i]] = values[i];
       } else {
@@ -32258,61 +32830,28 @@ exports.throwIf = function(val,msg){
   // If the array is large and already in sort order, pass `true`
   // for **isSorted** to use binary search.
   _.indexOf = function(array, item, isSorted) {
-    var i = 0, length = array && array.length;
-    if (typeof isSorted == 'number') {
-      i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-    } else if (isSorted && length) {
-      i = _.sortedIndex(array, item);
-      return array[i] === item ? i : -1;
-    }
-    if (item !== item) {
-      return _.findIndex(slice.call(array, i), _.isNaN);
+    if (array == null) return -1;
+    var i = 0, length = array.length;
+    if (isSorted) {
+      if (typeof isSorted == 'number') {
+        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+      } else {
+        i = _.sortedIndex(array, item);
+        return array[i] === item ? i : -1;
+      }
     }
     for (; i < length; i++) if (array[i] === item) return i;
     return -1;
   };
 
   _.lastIndexOf = function(array, item, from) {
-    var idx = array ? array.length : 0;
+    if (array == null) return -1;
+    var idx = array.length;
     if (typeof from == 'number') {
       idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
     }
-    if (item !== item) {
-      return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
-    }
     while (--idx >= 0) if (array[idx] === item) return idx;
     return -1;
-  };
-
-  // Generator function to create the findIndex and findLastIndex functions
-  function createIndexFinder(dir) {
-    return function(array, predicate, context) {
-      predicate = cb(predicate, context);
-      var length = array != null && array.length;
-      var index = dir > 0 ? 0 : length - 1;
-      for (; index >= 0 && index < length; index += dir) {
-        if (predicate(array[index], index, array)) return index;
-      }
-      return -1;
-    };
-  }
-
-  // Returns the first index on an array-like that passes a predicate test
-  _.findIndex = createIndexFinder(1);
-
-  _.findLastIndex = createIndexFinder(-1);
-
-  // Use a comparator function to figure out the smallest index at which
-  // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iteratee, context) {
-    iteratee = cb(iteratee, context, 1);
-    var value = iteratee(obj);
-    var low = 0, high = array.length;
-    while (low < high) {
-      var mid = Math.floor((low + high) / 2);
-      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
-    }
-    return low;
   };
 
   // Generate an integer Array containing an arithmetic progression. A port of
@@ -32338,25 +32877,25 @@ exports.throwIf = function(val,msg){
   // Function (ahem) Functions
   // ------------------
 
-  // Determines whether to execute a function as a constructor
-  // or a normal function with the provided arguments
-  var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
-    if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
-    var self = baseCreate(sourceFunc.prototype);
-    var result = sourceFunc.apply(self, args);
-    if (_.isObject(result)) return result;
-    return self;
-  };
+  // Reusable constructor function for prototype setting.
+  var Ctor = function(){};
 
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
   // available.
   _.bind = function(func, context) {
+    var args, bound;
     if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
     if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
-    var args = slice.call(arguments, 2);
-    var bound = function() {
-      return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
+    args = slice.call(arguments, 2);
+    bound = function() {
+      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+      Ctor.prototype = func.prototype;
+      var self = new Ctor;
+      Ctor.prototype = null;
+      var result = func.apply(self, args.concat(slice.call(arguments)));
+      if (_.isObject(result)) return result;
+      return self;
     };
     return bound;
   };
@@ -32366,16 +32905,15 @@ exports.throwIf = function(val,msg){
   // as a placeholder, allowing any combination of arguments to be pre-filled.
   _.partial = function(func) {
     var boundArgs = slice.call(arguments, 1);
-    var bound = function() {
-      var position = 0, length = boundArgs.length;
-      var args = Array(length);
-      for (var i = 0; i < length; i++) {
-        args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
+    return function() {
+      var position = 0;
+      var args = boundArgs.slice();
+      for (var i = 0, length = args.length; i < length; i++) {
+        if (args[i] === _) args[i] = arguments[position++];
       }
       while (position < arguments.length) args.push(arguments[position++]);
-      return executeBound(func, bound, this, this, args);
+      return func.apply(this, args);
     };
-    return bound;
   };
 
   // Bind a number of an object's methods to that object. Remaining arguments
@@ -32395,7 +32933,7 @@ exports.throwIf = function(val,msg){
   _.memoize = function(func, hasher) {
     var memoize = function(key) {
       var cache = memoize.cache;
-      var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+      var address = hasher ? hasher.apply(this, arguments) : key;
       if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
       return cache[address];
     };
@@ -32414,7 +32952,9 @@ exports.throwIf = function(val,msg){
 
   // Defers a function, scheduling it to run after the current call stack has
   // cleared.
-  _.defer = _.partial(_.delay, _, 1);
+  _.defer = function(func) {
+    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
+  };
 
   // Returns a function, that, when invoked, will only be triggered at most once
   // during a given window of time. Normally, the throttled function will run
@@ -32439,10 +32979,8 @@ exports.throwIf = function(val,msg){
       context = this;
       args = arguments;
       if (remaining <= 0 || remaining > wait) {
-        if (timeout) {
-          clearTimeout(timeout);
-          timeout = null;
-        }
+        clearTimeout(timeout);
+        timeout = null;
         previous = now;
         result = func.apply(context, args);
         if (!timeout) context = args = null;
@@ -32463,7 +33001,7 @@ exports.throwIf = function(val,msg){
     var later = function() {
       var last = _.now() - timestamp;
 
-      if (last < wait && last >= 0) {
+      if (last < wait && last > 0) {
         timeout = setTimeout(later, wait - last);
       } else {
         timeout = null;
@@ -32516,7 +33054,7 @@ exports.throwIf = function(val,msg){
     };
   };
 
-  // Returns a function that will only be executed on and after the Nth call.
+  // Returns a function that will only be executed after being called N times.
   _.after = function(times, func) {
     return function() {
       if (--times < 1) {
@@ -32525,14 +33063,15 @@ exports.throwIf = function(val,msg){
     };
   };
 
-  // Returns a function that will only be executed up to (but not including) the Nth call.
+  // Returns a function that will only be executed before being called N times.
   _.before = function(times, func) {
     var memo;
     return function() {
       if (--times > 0) {
         memo = func.apply(this, arguments);
+      } else {
+        func = null;
       }
-      if (times <= 1) func = null;
       return memo;
     };
   };
@@ -32544,47 +33083,13 @@ exports.throwIf = function(val,msg){
   // Object Functions
   // ----------------
 
-  // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
-  var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
-  var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
-                      'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
-
-  function collectNonEnumProps(obj, keys) {
-    var nonEnumIdx = nonEnumerableProps.length;
-    var constructor = obj.constructor;
-    var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
-
-    // Constructor is a special case.
-    var prop = 'constructor';
-    if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
-
-    while (nonEnumIdx--) {
-      prop = nonEnumerableProps[nonEnumIdx];
-      if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
-        keys.push(prop);
-      }
-    }
-  }
-
-  // Retrieve the names of an object's own properties.
+  // Retrieve the names of an object's properties.
   // Delegates to **ECMAScript 5**'s native `Object.keys`
   _.keys = function(obj) {
     if (!_.isObject(obj)) return [];
     if (nativeKeys) return nativeKeys(obj);
     var keys = [];
     for (var key in obj) if (_.has(obj, key)) keys.push(key);
-    // Ahem, IE < 9.
-    if (hasEnumBug) collectNonEnumProps(obj, keys);
-    return keys;
-  };
-
-  // Retrieve all the property names of an object.
-  _.allKeys = function(obj) {
-    if (!_.isObject(obj)) return [];
-    var keys = [];
-    for (var key in obj) keys.push(key);
-    // Ahem, IE < 9.
-    if (hasEnumBug) collectNonEnumProps(obj, keys);
     return keys;
   };
 
@@ -32597,21 +33102,6 @@ exports.throwIf = function(val,msg){
       values[i] = obj[keys[i]];
     }
     return values;
-  };
-
-  // Returns the results of applying the iteratee to each element of the object
-  // In contrast to _.map it returns an object
-  _.mapObject = function(obj, iteratee, context) {
-    iteratee = cb(iteratee, context);
-    var keys =  _.keys(obj),
-          length = keys.length,
-          results = {},
-          currentKey;
-      for (var index = 0; index < length; index++) {
-        currentKey = keys[index];
-        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
-      }
-      return results;
   };
 
   // Convert an object into a list of `[key, value]` pairs.
@@ -32646,38 +33136,37 @@ exports.throwIf = function(val,msg){
   };
 
   // Extend a given object with all the properties in passed-in object(s).
-  _.extend = createAssigner(_.allKeys);
-
-  // Assigns a given object with all the own properties in the passed-in object(s)
-  // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
-  _.extendOwn = _.assign = createAssigner(_.keys);
-
-  // Returns the first key on an object that passes a predicate test
-  _.findKey = function(obj, predicate, context) {
-    predicate = cb(predicate, context);
-    var keys = _.keys(obj), key;
-    for (var i = 0, length = keys.length; i < length; i++) {
-      key = keys[i];
-      if (predicate(obj[key], key, obj)) return key;
+  _.extend = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      source = arguments[i];
+      for (prop in source) {
+        if (hasOwnProperty.call(source, prop)) {
+            obj[prop] = source[prop];
+        }
+      }
     }
+    return obj;
   };
 
   // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(object, oiteratee, context) {
-    var result = {}, obj = object, iteratee, keys;
+  _.pick = function(obj, iteratee, context) {
+    var result = {}, key;
     if (obj == null) return result;
-    if (_.isFunction(oiteratee)) {
-      keys = _.allKeys(obj);
-      iteratee = optimizeCb(oiteratee, context);
+    if (_.isFunction(iteratee)) {
+      iteratee = createCallback(iteratee, context);
+      for (key in obj) {
+        var value = obj[key];
+        if (iteratee(value, key, obj)) result[key] = value;
+      }
     } else {
-      keys = flatten(arguments, false, false, 1);
-      iteratee = function(value, key, obj) { return key in obj; };
-      obj = Object(obj);
-    }
-    for (var i = 0, length = keys.length; i < length; i++) {
-      var key = keys[i];
-      var value = obj[key];
-      if (iteratee(value, key, obj)) result[key] = value;
+      var keys = concat.apply([], slice.call(arguments, 1));
+      obj = new Object(obj);
+      for (var i = 0, length = keys.length; i < length; i++) {
+        key = keys[i];
+        if (key in obj) result[key] = obj[key];
+      }
     }
     return result;
   };
@@ -32687,7 +33176,7 @@ exports.throwIf = function(val,msg){
     if (_.isFunction(iteratee)) {
       iteratee = _.negate(iteratee);
     } else {
-      var keys = _.map(flatten(arguments, false, false, 1), String);
+      var keys = _.map(concat.apply([], slice.call(arguments, 1)), String);
       iteratee = function(value, key) {
         return !_.contains(keys, key);
       };
@@ -32696,7 +33185,16 @@ exports.throwIf = function(val,msg){
   };
 
   // Fill in a given object with default properties.
-  _.defaults = createAssigner(_.allKeys, true);
+  _.defaults = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      var source = arguments[i];
+      for (var prop in source) {
+        if (obj[prop] === void 0) obj[prop] = source[prop];
+      }
+    }
+    return obj;
+  };
 
   // Create a (shallow-cloned) duplicate of an object.
   _.clone = function(obj) {
@@ -32711,19 +33209,6 @@ exports.throwIf = function(val,msg){
     interceptor(obj);
     return obj;
   };
-
-  // Returns whether an object has a given set of `key:value` pairs.
-  _.isMatch = function(object, attrs) {
-    var keys = _.keys(attrs), length = keys.length;
-    if (object == null) return !length;
-    var obj = Object(object);
-    for (var i = 0; i < length; i++) {
-      var key = keys[i];
-      if (attrs[key] !== obj[key] || !(key in obj)) return false;
-    }
-    return true;
-  };
-
 
   // Internal recursive comparison function for `isEqual`.
   var eq = function(a, b, aStack, bStack) {
@@ -32759,76 +33244,74 @@ exports.throwIf = function(val,msg){
         // of `NaN` are not equivalent.
         return +a === +b;
     }
-
-    var areArrays = className === '[object Array]';
-    if (!areArrays) {
-      if (typeof a != 'object' || typeof b != 'object') return false;
-
-      // Objects with different constructors are not equivalent, but `Object`s or `Array`s
-      // from different frames are.
-      var aCtor = a.constructor, bCtor = b.constructor;
-      if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
-                               _.isFunction(bCtor) && bCtor instanceof bCtor)
-                          && ('constructor' in a && 'constructor' in b)) {
-        return false;
-      }
-    }
+    if (typeof a != 'object' || typeof b != 'object') return false;
     // Assume equality for cyclic structures. The algorithm for detecting cyclic
     // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-    
-    // Initializing stack of traversed objects.
-    // It's done here since we only need them for objects and arrays comparison.
-    aStack = aStack || [];
-    bStack = bStack || [];
     var length = aStack.length;
     while (length--) {
       // Linear search. Performance is inversely proportional to the number of
       // unique nested structures.
       if (aStack[length] === a) return bStack[length] === b;
     }
-
+    // Objects with different constructors are not equivalent, but `Object`s
+    // from different frames are.
+    var aCtor = a.constructor, bCtor = b.constructor;
+    if (
+      aCtor !== bCtor &&
+      // Handle Object.create(x) cases
+      'constructor' in a && 'constructor' in b &&
+      !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+        _.isFunction(bCtor) && bCtor instanceof bCtor)
+    ) {
+      return false;
+    }
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
-
+    var size, result;
     // Recursively compare objects and arrays.
-    if (areArrays) {
+    if (className === '[object Array]') {
       // Compare array lengths to determine if a deep comparison is necessary.
-      length = a.length;
-      if (length !== b.length) return false;
-      // Deep compare the contents, ignoring non-numeric properties.
-      while (length--) {
-        if (!eq(a[length], b[length], aStack, bStack)) return false;
+      size = a.length;
+      result = size === b.length;
+      if (result) {
+        // Deep compare the contents, ignoring non-numeric properties.
+        while (size--) {
+          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+        }
       }
     } else {
       // Deep compare objects.
       var keys = _.keys(a), key;
-      length = keys.length;
+      size = keys.length;
       // Ensure that both objects contain the same number of properties before comparing deep equality.
-      if (_.keys(b).length !== length) return false;
-      while (length--) {
-        // Deep compare each member
-        key = keys[length];
-        if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+      result = _.keys(b).length === size;
+      if (result) {
+        while (size--) {
+          // Deep compare each member
+          key = keys[size];
+          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+        }
       }
     }
     // Remove the first object from the stack of traversed objects.
     aStack.pop();
     bStack.pop();
-    return true;
+    return result;
   };
 
   // Perform a deep comparison to check if two objects are equal.
   _.isEqual = function(a, b) {
-    return eq(a, b);
+    return eq(a, b, [], []);
   };
 
   // Is a given array, string, or object empty?
   // An "empty" object has no enumerable own-properties.
   _.isEmpty = function(obj) {
     if (obj == null) return true;
-    if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
-    return _.keys(obj).length === 0;
+    if (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)) return obj.length === 0;
+    for (var key in obj) if (_.has(obj, key)) return false;
+    return true;
   };
 
   // Is a given value a DOM element?
@@ -32848,14 +33331,14 @@ exports.throwIf = function(val,msg){
     return type === 'function' || type === 'object' && !!obj;
   };
 
-  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
-  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
     _['is' + name] = function(obj) {
       return toString.call(obj) === '[object ' + name + ']';
     };
   });
 
-  // Define a fallback version of the method in browsers (ahem, IE < 9), where
+  // Define a fallback version of the method in browsers (ahem, IE), where
   // there isn't any inspectable "Arguments" type.
   if (!_.isArguments(arguments)) {
     _.isArguments = function(obj) {
@@ -32863,9 +33346,8 @@ exports.throwIf = function(val,msg){
     };
   }
 
-  // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
-  // IE 11 (#1621), and in Safari 8 (#1929).
-  if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+  // Optimize `isFunction` if appropriate. Work around an IE 11 bug.
+  if (typeof /./ !== 'function') {
     _.isFunction = function(obj) {
       return typeof obj == 'function' || false;
     };
@@ -32917,7 +33399,6 @@ exports.throwIf = function(val,msg){
     return value;
   };
 
-  // Predicate-generating functions. Often useful outside of Underscore.
   _.constant = function(value) {
     return function() {
       return value;
@@ -32928,30 +33409,28 @@ exports.throwIf = function(val,msg){
 
   _.property = function(key) {
     return function(obj) {
-      return obj == null ? void 0 : obj[key];
-    };
-  };
-
-  // Generates a function for a given object that returns a given property.
-  _.propertyOf = function(obj) {
-    return obj == null ? function(){} : function(key) {
       return obj[key];
     };
   };
 
-  // Returns a predicate for checking whether an object has a given set of 
-  // `key:value` pairs.
-  _.matcher = _.matches = function(attrs) {
-    attrs = _.extendOwn({}, attrs);
+  // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
+  _.matches = function(attrs) {
+    var pairs = _.pairs(attrs), length = pairs.length;
     return function(obj) {
-      return _.isMatch(obj, attrs);
+      if (obj == null) return !length;
+      obj = new Object(obj);
+      for (var i = 0; i < length; i++) {
+        var pair = pairs[i], key = pair[0];
+        if (pair[1] !== obj[key] || !(key in obj)) return false;
+      }
+      return true;
     };
   };
 
   // Run a function **n** times.
   _.times = function(n, iteratee, context) {
     var accum = Array(Math.max(0, n));
-    iteratee = optimizeCb(iteratee, context, 1);
+    iteratee = createCallback(iteratee, context, 1);
     for (var i = 0; i < n; i++) accum[i] = iteratee(i);
     return accum;
   };
@@ -33000,12 +33479,10 @@ exports.throwIf = function(val,msg){
 
   // If the value of the named `property` is a function then invoke it with the
   // `object` as context; otherwise, return it.
-  _.result = function(object, property, fallback) {
-    var value = object == null ? void 0 : object[property];
-    if (value === void 0) {
-      value = fallback;
-    }
-    return _.isFunction(value) ? value.call(object) : value;
+  _.result = function(object, property) {
+    if (object == null) return void 0;
+    var value = object[property];
+    return _.isFunction(value) ? object[property]() : value;
   };
 
   // Generate a unique integer id (unique within the entire client session).
@@ -33120,8 +33597,8 @@ exports.throwIf = function(val,msg){
   // underscore functions. Wrapped objects may be chained.
 
   // Helper function to continue chaining intermediate results.
-  var result = function(instance, obj) {
-    return instance._chain ? _(obj).chain() : obj;
+  var result = function(obj) {
+    return this._chain ? _(obj).chain() : obj;
   };
 
   // Add your own custom functions to the Underscore object.
@@ -33131,7 +33608,7 @@ exports.throwIf = function(val,msg){
       _.prototype[name] = function() {
         var args = [this._wrapped];
         push.apply(args, arguments);
-        return result(this, func.apply(_, args));
+        return result.call(this, func.apply(_, args));
       };
     });
   };
@@ -33146,7 +33623,7 @@ exports.throwIf = function(val,msg){
       var obj = this._wrapped;
       method.apply(obj, arguments);
       if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
-      return result(this, obj);
+      return result.call(this, obj);
     };
   });
 
@@ -33154,21 +33631,13 @@ exports.throwIf = function(val,msg){
   _.each(['concat', 'join', 'slice'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
-      return result(this, method.apply(this._wrapped, arguments));
+      return result.call(this, method.apply(this._wrapped, arguments));
     };
   });
 
   // Extracts the result from a wrapped and chained object.
   _.prototype.value = function() {
     return this._wrapped;
-  };
-
-  // Provide unwrapping proxy for some methods used in engine operations
-  // such as arithmetic and JSON stringification.
-  _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
-  
-  _.prototype.toString = function() {
-    return '' + this._wrapped;
   };
 
   // AMD registration happens at the end for compatibility with AMD loaders
@@ -33185,591 +33654,4 @@ exports.throwIf = function(val,msg){
   }
 }.call(this));
 
-},{}],211:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react');
-var Main = require('./components/Main.jsx');
-var ShelterStore = require('./stores/ShelterStore.jsx');
-var ShowList = require('./components/ShowList.jsx');
-var Shelters = require('./components/Shelters.jsx');
-var NotFound = require('./components/NotFound.jsx');
-var NavBarDefault = require('./components/NavBarDefault.jsx');
-var Login = require('./components/Login.jsx');
-var Signup = require('./components/Signup.jsx');
-var TwitterLogin = require('./components/TwitterLogin.jsx');
-var Shelter = require('./components/Shelter.jsx');
-
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var DefaultRoute = Route.DefaultRoute;
-var RouteHandler = Router.RouteHandler;
-var NotFoundRoute = Router.NotFoundRoute;
-
-var App = React.createClass({displayName: "App",
-	getInitialState: function() {
-		return {
-			nearbyShelters: ShelterStore.getShelters()
-		}
-	},
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "main-wrapper"}, 
-					React.createElement(RouteHandler, {shelters: this.state.nearbyShelters})
-				)
-			)
-		)	
-	}
-});
-
-var routes = (
-  React.createElement(Route, {name: "app", handler: App}, 
-  	React.createElement(Route, {name: "main", path: "/", handler: Main}), 
-    React.createElement(Route, {name: "fund-shelters", handler: Shelters}), 
-    React.createElement(Route, {name: "twitter", handler: TwitterLogin}), 
-    React.createElement(Route, {name: "shelter", path: "/shelter/:sheltername", handler: Shelter}), 
-    React.createElement(NotFoundRoute, {handler: NotFound})
-  )
-);
-
-Router.run(routes,function (Handler) {
-  React.render(React.createElement(Handler, null), document.getElementById('content'));
-});
-
-
-
-},{"./components/Login.jsx":218,"./components/Main.jsx":219,"./components/NavBarDefault.jsx":220,"./components/NotFound.jsx":221,"./components/Shelter.jsx":223,"./components/Shelters.jsx":225,"./components/ShowList.jsx":227,"./components/Signup.jsx":228,"./components/TwitterLogin.jsx":229,"./stores/ShelterStore.jsx":230,"react":189,"react-router":30}],212:[function(require,module,exports){
-var Reflux = require('reflux');
-var $ = require('jquery');
-
-var AsyncActions = Reflux.createActions({
-    "donation": {children: ["completed","failed"]}
-});
-
-AsyncActions.donation.listen( function(data) {
-  console.log(data);
-
-  // $.ajax({
-  //  type: "POST",
-  //  url: '/donate',
-  //  data:  data
-  // }).done( this.completed )
-  // .fail( this.failed );
-
-});
-
-
-module.exports = AsyncActions;
-
-},{"jquery":2,"reflux":190}],213:[function(require,module,exports){
-var Reflux = require('reflux');
-
-var ShelterActions = Reflux.createActions([
-  'createShelter',
-  'loadShelters',
-  'loadShelter'
-]);
-
-
-module.exports = ShelterActions;
-
-},{"reflux":190}],214:[function(require,module,exports){
-var React = require('react');
-
-var AddShelter = React.createClass({displayName: "AddShelter",
-	getInitialState: function() {
-		return {
-			newShelter: ''
-		}
-	},
-	updateNewShelter: function(e) {
-		this.setState({
-			newShelter: e.target.value
-		});
-	},
-	handleAddNew: function(e) {
-		this.props.addNew(this.state.newShelter);
-		this.setState({
-			newShelter: ''
-		});
-	},
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("input", {type: "text", value: "this.state.newShelter", onChange: this.updateNewFriend}), 
-				React.createElement("button", {onClick: this.handleAddNew}, " Add New Shelter ")
-			)
-		);
-	}
-});
-
-module.exports = AddShelter;
-
-
-},{"react":189}],215:[function(require,module,exports){
-var React = require('react');
-
-},{"react":189}],216:[function(require,module,exports){
-
-
-},{}],217:[function(require,module,exports){
-
-
-},{}],218:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var Login = React.createClass({displayName: "Login",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Sign In to Kango"), 
-        React.createElement("form", {action: "/login", method: "post"}, 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Email"), 
-            React.createElement("input", {type: "text", class: "form-control", name: "email"})
-          ), 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Password"), 
-            React.createElement("input", {type: "password", class: "form-control", name: "password"})
-          ), 
-
-          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Login")
-        ), 
-
-        React.createElement("p", null, "Need an account? ", React.createElement(Link, {to: "signup"}, "Sign Up"))
-      )
-    )
-  }
-});
-
-module.exports = Login;
-
-},{"react":189,"react-router":30}],219:[function(require,module,exports){
-var React = require('react');
-var ShelterStore = require('../stores/ShelterStore.jsx');
-var ShowList = require('./ShowList.jsx');
-var NavBarDefault = require('./NavBarDefault.jsx');
-
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var Main = React.createClass({displayName: "Main",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid hero"}, 
-					React.createElement(NavBarDefault, null), 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("div", {className: "hero-description"}, 
-							React.createElement("h1", {className: "hero-headline"}, "Connecting donors to animal shelters in need"), 
-							React.createElement("div", {className: "button-group"}, 
-								React.createElement("a", {className: "btn hero-btn more", href: "#"}, 
-									React.createElement("span", null, "Learn More")
-								), 
-								React.createElement(Link, {to: "fund-shelters", className: "btn hero-btn view"}, 
-									React.createElement("span", null, "View Shelters")
-								)
-							)
-						)
-					)
-				), 
-				React.createElement("section", {className: "devoted"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("h2", null, "100% of your donation fund Bay Area animal shelters.")
-					)
-				), 
-				React.createElement("section", {className: "three-shelters"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement(ShowList, React.__spread({},  this.props))
-					)
-				)
-			)
-		)
-	}
-});	
-
-module.exports = Main;
-
-},{"../stores/ShelterStore.jsx":230,"./NavBarDefault.jsx":220,"./ShowList.jsx":227,"react":189,"react-router":30}],220:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var DefaultRoute = Route.DefaultRoute;
-var RouteHandler = Router.RouteHandler;
-var NotFoundRoute = Router.NotFoundRoute;
-
-var TwitterLogin = require('./TwitterLogin.jsx');
-
-
-var NavBarDefault = React.createClass({displayName: "NavBarDefault",
-
-
-	render: function() {
-
-		return (
-			React.createElement("div", null, 
-				React.createElement("header", null, 
-					React.createElement("nav", {className: "navbar navbar-default container"}, 
-						React.createElement("div", {className: "wrapper"}, 
-							React.createElement("div", {className: "navbar-header"}, 
-								React.createElement(Link, {to: "main", className: "navbar-brand"}, 
-								  "kango`"
-								)
-							), 
-							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-								React.createElement("li", null, React.createElement(Link, {to: "fund-shelters"}, "View Shelters")), 
-								React.createElement("li", null, React.createElement(Link, {to: "main"}, "About")), 
-								React.createElement("li", null, 
-								React.createElement(Link, {to: "main", "data-toggle": "modal", "data-target": "#signIn"}, 
-										"Sign In"
-								)
-								)
-							)
-						)
-					)
-				), 
-				React.createElement("div", {className: "modal fade", id: "signIn", tabindex: "-1", 	role: "dialog"}, 
-				  React.createElement("div", {className: "modal-dialog"}, 
-				  	React.createElement(TwitterLogin, null)
-				  )
-				)
-			)
-		)
-	}
-});
-
-module.exports = NavBarDefault;
-
-},{"./TwitterLogin.jsx":229,"react":189,"react-router":30}],221:[function(require,module,exports){
-var React = require('react');
-
-var NotFound = React.createClass({displayName: "NotFound",
-	render: function() {
-		return (
-			React.createElement("div", {className: "container"}, 
-				React.createElement("h1", null, "Page not found.")
-			)
-		)
-	}
-});
-
-module.exports = NotFound;
-
-},{"react":189}],222:[function(require,module,exports){
-var React = require('react');
-
-},{"react":189}],223:[function(require,module,exports){
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('underscore');
-var $ = require('jquery');
-var ShelterStore = require('../stores/ShelterStore.jsx');
-var NavBarDefault = require('./NavBarDefault.jsx');
-var AsyncActions = require('../actions/asyncActions.jsx');
-
-var Shelter = React.createClass({displayName: "Shelter",
-   getInitialState: function() {
-    return null
-  },
-  updateState: function() {
-    console.log('great success');
-  },
-  submit: function() {
-    var amount = $('#donation').val();
-    AsyncActions.donation.triggerAsync(amount); 
-  },
-	render: function() {
-		var url = window.location.href.split('/');
-		var shelterPath = url[url.length-1];
-    var shelter = (_.filter(this.props.shelters, function(element) {
-    	if(element.sheltername === shelterPath) {
-    		return element;
-    	}
-    })[0]);
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid header-default"}, 
-					React.createElement(NavBarDefault, null)
-				), 
-				React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, shelter.name), 
-          React.createElement("form", {action: "/donate", method: "post", onSuccess: this.updateState, onSubmit: this.submit}, 
-            React.createElement("input", {id: "donation", type: "text", name: "donation"}), 
-            React.createElement("input", {type: "text", name: "sheltername", className: "hidden", readOnly: "true", value: shelter.sheltername}), 
-            React.createElement("button", {type: "submit"}, "Submit")
-          )
-				)
-			)
-		);
-	}
-});
-
-module.exports = Shelter;
-
-},{"../actions/asyncActions.jsx":212,"../stores/ShelterStore.jsx":230,"./NavBarDefault.jsx":220,"jquery":2,"react":189,"reflux":190,"underscore":210}],224:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-var $ = require('jquery');
-
-var ShelterCard = React.createClass({displayName: "ShelterCard",
-
-	render: function() {
-		var progress = Math.floor((this.props.data.raised / this.props.data.goal) * 100) + '%';
-		return (
-			React.createElement("li", {className: "col-md-4"}, 
-				React.createElement("div", {className: "shelter-card"}, 
-						React.createElement(Link, {to: "shelter", params: {sheltername: this.props.data.sheltername}}, 							
-							React.createElement("img", {src: this.props.data.image_url})
-						), 
-					React.createElement("div", {className: "shelter-info"}, 
-						React.createElement("div", {className: "shelter-bio"}, 
-							React.createElement("h3", null, this.props.data.name)
-						), 
-						React.createElement("div", {className: "shelter-progress-bar"}), 
-						React.createElement("div", {className: "shelter-fund-wrapper"}, 
-							React.createElement("span", {className: "shelter-raised"}, 
-								"$", this.props.data.raised, " raised"
-							), 
-							React.createElement("span", {className: "shelter-target"}, 
-								"$", this.props.data.goal - this.props.data.raised, " to go"
-							)
-						)
-					)
-				)
-			)
-		)
-	}
-});
-
-module.exports = ShelterCard;
-
-},{"jquery":2,"react":189,"react-router":30}],225:[function(require,module,exports){
-var React = require('react');
-var NavBarDefault = require('./NavBarDefault.jsx');
-
-var Shelters = React.createClass({displayName: "Shelters",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("div", {className: "container-fluid header-default"}, 
-					React.createElement(NavBarDefault, null)
-				), 
-				React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, " This is the Shelters view ")
-				)
-			)
-		)
-	}
-});
-
-module.exports = Shelters;
-
-},{"./NavBarDefault.jsx":220,"react":189}],226:[function(require,module,exports){
-var React = require('react');
-
-var ShowAll = React.createClass({displayName: "ShowAll",
-	render: function() {
-		
-	}
-});
-
-module.exports = ShowAll;
-
-},{"react":189}],227:[function(require,module,exports){
-var React = require('react');
-var Router = require('react-router');
-var Route = Router.Route;
-var Link = Router.Link;
-
-var ShelterCard = require('./ShelterCard.jsx');
-
-var ShowList = React.createClass({displayName: "ShowList",
-	render: function() {
-		return (
-			React.createElement("div", null, 
-				React.createElement("h3", {className: "section-header"}, "Meet the Animal Shelters"), 
-				React.createElement("p", {className: "section-short"}, "San Francisco • Oakland • South Bay"), 
-				React.createElement("ul", {className: "shelter-list-home"}, 
-					React.createElement("div", {className: "row"}, 
-						this.props.shelters.map(function(shelter, i){
-								return React.createElement(ShelterCard, {key: i, data: shelter})
-							}, this)
-						
-					)
-				)
-			)
-		)
-	}
-});
-
-module.exports = ShowList;
-
-
-},{"./ShelterCard.jsx":224,"react":189,"react-router":30}],228:[function(require,module,exports){
-var React = require('react');
-
-var Signup = React.createClass({displayName: "Signup",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Sign Up for Kango"), 
-        React.createElement("form", {action: "/signup", method: "post"}, 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Email"), 
-            React.createElement("input", {type: "text", class: "form-control", name: "email"})
-          ), 
-          React.createElement("div", {class: "form-group"}, 
-            React.createElement("label", null, "Password"), 
-            React.createElement("input", {type: "password", class: "form-control", name: "password"})
-          ), 
-
-          React.createElement("button", {type: "submit", class: "btn btn-warning btn-lg"}, "Signup")
-        ), 
-
-        "// ", React.createElement("p", null, "Need an account? ", React.createElement("a", {href: "/signup"}, "Signup"))
-      )
-    )
-  }
-});
-
-module.exports = Signup;
-
-},{"react":189}],229:[function(require,module,exports){
-var React = require('react');
-
-var TwitterLogin = React.createClass({displayName: "TwitterLogin",
-  render: function() {
-    return (
-      React.createElement("div", {className: "modal-popup modal-content"}, 
-        React.createElement("h2", {className: "modal-popup-header"}, "Login with Twitter"), 
-        React.createElement("form", {action: "/auth/twitter", method: "get"}, 
-          React.createElement("button", {type: "submit"}, "Login")
-        )
-      )
-    )
-  }
-});
-
-module.exports = TwitterLogin;
-
-},{"react":189}],230:[function(require,module,exports){
-var Reflux = require('reflux');
-var $ = require('jquery');
-var ShelterActions = require('../actions/shelterActions.jsx');
-// require action here.
-
-var shelters = [
-	{
-		'sheltername' : 'wonderdogrescue',
-		'name' : 'Wonder Dog Rescue',
-		'image_url' : 'http://i.huffpost.com/gen/1349981/images/o-ANIMAL-SHELTER-facebook.jpg',
-		'address_one' : '650 Fillmore St',
-		'address_two' : null,
-		'city' : 'San Francisco',
-		'state' : 'CA',
-		'zip' : 94140,
-		'telephone' : 4156213647,
-		'email' : 'adoption@wonderdogrescue.org',
-		'bio' : 'We are the Rockridge animal shelter',
-		'goal' : 1000,
-		'raised' : 400
-	},
-	{
-		'sheltername' : 'sanfranciscoshelter',
-		'name' : 'San Francisco Animal Shelter',
-		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
-		'address_one' : '875 Post St.',
-		'address_two' : null,
-		'city' : 'San Francisco',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4509206186,
-		'email' : 'hello@sas.org',
-		'bio' : 'We are the San Francisco animal shelter',
-		'goal' : 2100,
-		'raised' : 960
-	},
-	{
-		'sheltername' : 'westoaklandshelter',
-		'name' : 'West Oakland Animal Shelter',
-		'image_url' : 'http://extras.mnginteractive.com/live/media/site208/2012/0331/20120331_050815_bn01-commission2.jpg',
-		'address_one' : '600 Geary St.',
-		'address_two' : null,
-		'city' : 'Oakland',
-		'state' : 'ca',
-		'zip' : 94109,
-		'telephone' : 4506541234,
-		'email' : 'hello@woas.org',
-		'bio' : 'We are the West Oakland animal shelter',
-		'goal' : 1600,
-		'raised' : 870
-	}
-];
-
-var ShelterStore = Reflux.createStore({
-	shelters: [],
-	init: function(){
-		 this.shelters = shelters;
-	   this.load();
-	   this.listenTo(ShelterActions.loadShelters, this.load)
-	   this.listenTo(ShelterActions.createShelter, this.onCreate);
-	 },
-	 load: function(){
-	   var context = this;
-	     $.ajax({
-	       type: "GET",
-	       url: '/shelters',
-	       headers: {'x-access-token': "TOKEN GOES HERE"}
-	     }).done(function(data) {
-	         for (var i = 0; i < data.length; i++) {
-	         	shelters.push(data[i]);
-	         }
-					 //push data to store
-	         context.trigger(shelters);
-	     });
-	 },
-	 onCreate: function(shelter) {
-	   shelters.push(shelter);
-
-	   this.trigger(shelters);
-	 },
-	 toggle: function(e, toggled, job){
-	   console.log(e, toggled, job);
-
-	 },
-	 getShelters: function() {
-	   //req to /api/listings
-	   return shelters;
-	 },
-
-});
-
-module.exports = ShelterStore;
-
-},{"../actions/shelterActions.jsx":213,"jquery":2,"reflux":190}],231:[function(require,module,exports){
-// var Reflux = require('reflux');
-// var ShelterActions = require('../actions/shelterActions.jsx');
-
-// var Store = Reflux.createStore({
-// 	init: function() {
-// 		this.listenTo(ShelterActions.loadShelter, this.load);
-// 	},
-// 	load: function() {
-// 		this.setState({
-			
-// 		});
-// 	}
-// });
-
-// module.exports = Store;
-
-
-},{}]},{},[211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231]);
+},{}]},{},[210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230]);

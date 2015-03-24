@@ -137,7 +137,6 @@ var ShelterStore = Reflux.createStore({
 	     $.ajax({
 	       type: "GET",
 	       url: '/shelters',
-	       headers: {'x-access-token': "TOKEN GOES HERE"}
 	     }).done(function(data) {
 	         for (var i = 0; i < data.length; i++) {
 	         	shelters.push(data[i]);
