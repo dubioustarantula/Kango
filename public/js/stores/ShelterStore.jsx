@@ -53,7 +53,7 @@ var shelters = [
 	{
 		'sheltername' : 'berkeleyhumane',
 		'name' : 'Berkeley Humane',
-		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
+		'image_url' : 'http://static1.squarespace.com/static/50c8c55be4b0a1d4330d16f8/t/54ef9e64e4b093c84efb1a5f/1424989797766/',
 		'address_one' : '2700 Ninth St',
 		'address_two' : null,
 		'city' : 'Berkeley',
@@ -68,7 +68,7 @@ var shelters = [
 		{
 		'sheltername' : 'gratefuldogsrescue',
 		'name' : 'Grateful Dogs Rescue',
-		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
+		'image_url' : 'http://www.noozhawk.com/images/uploads/062411-shelter-630.jpg',
 		'address_one' : 'P.O. Box 411013',
 		'address_two' : null,
 		'city' : 'San Francisco',
@@ -83,7 +83,7 @@ var shelters = [
 		{
 		'sheltername' : 'oaklandanimalservices',
 		'name' : 'Oakland Animal Services',
-		'image_url' : 'http://latimesblogs.latimes.com/photos/uncategorized/2008/08/05/la_shelter_dogs.jpg',
+		'image_url' : 'https://www.mobilecause.com/wp-content/uploads/2014/06/shelter_volunteer.jpg',
 		'address_one' : '1101 29th Ave',
 		'address_two' : null,
 		'city' : 'Oakland',
